@@ -138,8 +138,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      controls_wrapper.appendChild(play_button);
 	      controls_wrapper.appendChild(pause_button);
-	      controls_wrapper.appendChild(next_button);
 	      controls_wrapper.appendChild(previous_button);
+	      controls_wrapper.appendChild(next_button);
 	      this.container.appendChild(controls_wrapper);
 	    }
 	  }, {
@@ -179,6 +179,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'setCurrentSong',
 	    value: function setCurrentSong(song) {
+	      console.log(this.current_song_index);
 	      this.player.setAttribute('src', song);
 	      this.player.load();
 	    }
@@ -197,7 +198,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'nextSong',
 	    value: function nextSong() {
 	      if (this.songs != undefined && this.songs.length > 1) {
-	        this.current_song_index = this.current_song_index + 1;
+	        var new_index = this.current_song_index + 1;
+	        if (this.songs.length > new_index) {
+	          this.current_song_index = new_index;
+	        } else {
+	          this.current_song_index = 0;
+	        }
 	        this.setCurrentSong(this.songs[this.current_song_index]);
 	      }
 	    }
@@ -205,7 +211,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'previousSong',
 	    value: function previousSong() {
 	      if (this.songs != undefined && this.songs.length > 1) {
-	        this.current_song_index = this.current_song_index - 1;
+	        var new_index = this.current_song_index - 1;
+	        if (new_index >= 0) {
+	          this.current_song_index = new_index;
+	        } else {
+	          this.current_song_index = this.songs.length - 1;
+	        }
 	        this.setCurrentSong(this.songs[this.current_song_index]);
 	      }
 	    }

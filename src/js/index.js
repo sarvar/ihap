@@ -65,8 +65,8 @@ export default class AudioPlayer {
 
     controls_wrapper.appendChild(play_button);
     controls_wrapper.appendChild(pause_button);
+		controls_wrapper.appendChild(previous_button);
     controls_wrapper.appendChild(next_button);
-    controls_wrapper.appendChild(previous_button);
     this.container.appendChild(controls_wrapper);
   }
 
@@ -103,6 +103,7 @@ export default class AudioPlayer {
   }
 
   setCurrentSong(song){
+		console.log(this.current_song_index)
     this.player.setAttribute('src', song);
     this.player.load();
   }
@@ -118,14 +119,24 @@ export default class AudioPlayer {
 
   nextSong() {
     if (this.songs != undefined && this.songs.length > 1){
-      this.current_song_index = this.current_song_index + 1;
+			var new_index = this.current_song_index + 1
+			if (this.songs.length > new_index) {
+				this.current_song_index = new_index
+			} else {
+				this.current_song_index = 0
+			}
       this.setCurrentSong(this.songs[this.current_song_index])
     }
   }
 
   previousSong() {
     if (this.songs != undefined && this.songs.length > 1){
-      this.current_song_index = this.current_song_index - 1;
+			var new_index = this.current_song_index - 1
+			if (new_index >= 0) {
+				this.current_song_index = new_index
+			} else {
+				this.current_song_index = this.songs.length - 1
+			}
       this.setCurrentSong(this.songs[this.current_song_index])
     }
   }
