@@ -1,14 +1,9 @@
 var webpack = require('webpack');
-var UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 var path = require('path');
-
-var libraryName = 'AudioPlayer';
+var lib_name = 'AudioPlayer';
 
 var plugins = [], outputFile;
-
-
-  outputFile = libraryName + '.js';
-
+outputFile = 'audioplayer.js';
 
 var config = {
   entry: __dirname + '/src/js/index.js',
@@ -16,7 +11,7 @@ var config = {
   output: {
     path: __dirname + '/dist',
     filename: outputFile,
-    library: libraryName,
+    library: lib_name,
     libraryTarget: 'umd',
     umdNamedDefine: true
   },

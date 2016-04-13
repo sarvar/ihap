@@ -221,4 +221,4 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-//# sourceMappingURL=AudioPlayer.js.map
+//# sourceMappingURL=audioplayer.js.map
