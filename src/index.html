@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Audioplayer</title>
+    <!-- custom styles -->
+    <link rel="stylesheet" href="css/audioplayer.css">
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="audioplayer-container"></div>
+    </div>
+    <!--<script src="audioplayer.min.js"></script>-->
+    <script src="js/audioplayer.js"></script>
+
+    <script>
+      var player = new Audioplayer("audioplayer-container", {}, ["./song.mp3"]);
+    </script>
+  </body>
+</html>
