@@ -87,6 +87,10 @@ export default class AudioPlayer {
     this.player.addEventListener('canplay', function() {
       that.refreshProgressBar();
     });
+		this.progress_bar.addEventListener('click', function(e) {
+			var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth
+			that.player.currentTime = new_time
+		})
 
     document.getElementById('play_button').addEventListener('click', function() {
       that.player.play();
@@ -119,6 +123,7 @@ export default class AudioPlayer {
 
   nextSong() {
     if (this.songs != undefined && this.songs.length > 1){
+			var playing = this.player.paused !== true
 			var new_index = this.current_song_index + 1
 			if (this.songs.length > new_index) {
 				this.current_song_index = new_index
@@ -126,11 +131,15 @@ export default class AudioPlayer {
 				this.current_song_index = 0
 			}
       this.setCurrentSong(this.songs[this.current_song_index])
+			if (playing === true) {
+				this.player.play();
+			}
     }
   }
 
   previousSong() {
     if (this.songs != undefined && this.songs.length > 1){
+			var playing = this.player.paused !== true
 			var new_index = this.current_song_index - 1
 			if (new_index >= 0) {
 				this.current_song_index = new_index
@@ -138,6 +147,9 @@ export default class AudioPlayer {
 				this.current_song_index = this.songs.length - 1
 			}
       this.setCurrentSong(this.songs[this.current_song_index])
+			if (playing === true) {
+				this.player.play();
+    	}
     }
   }
 
