@@ -11,11 +11,15 @@
     <div class="container">
       <div id="audioplayer-container"></div>
     </div>
-    <!--<script src="audioplayer.min.js"></script>-->
-    <script src="js/audioplayer.js"></script>
+    <script src="../dist/AudioPlayer.js"></script>
 
     <script>
-      var player = new Audioplayer("audioplayer-container", {}, ["./song1.mp3", "./song2.mp3"]);
+      var player = new AudioPlayer({
+        settings: {
+          container: "audioplayer-container"
+        },
+        songs: ["./song1.mp3", "./song2.mp3"]
+      });
     </script>
   </body>
 </html>
