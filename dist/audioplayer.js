@@ -162,6 +162,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.player.addEventListener('canplay', function () {
 	        that.refreshProgressBar();
 	      });
+	      this.player.addEventListener('ended', function () {
+	        that.nextSong(true);
+	      });
 	      this.progress_bar.addEventListener('click', function (e) {
 	        var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth;
 	        that.player.currentTime = new_time;
@@ -183,7 +186,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'setCurrentSong',
 	    value: function setCurrentSong(song) {
-	      console.log(this.current_song_index);
 	      this.player.setAttribute('src', song);
 	      this.player.load();
 	    }
@@ -200,9 +202,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'nextSong',
-	    value: function nextSong() {
+	    value: function nextSong(playing) {
 	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = this.player.paused !== true;
+	        var playing = this.player.paused !== true || playing;
 	        var new_index = this.current_song_index + 1;
 	        if (this.songs.length > new_index) {
 	          this.current_song_index = new_index;
