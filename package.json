@@ -4,8 +4,8 @@
   "description": "Audioplayer",
   "main": "dist/audioplayer.js",
   "scripts": {
-    "build": "webpack --mode=build",
-    "dev": "webpack --progress --colors --watch --mode=dev"
+		"start": "webpack --progress --colors --watch --mode=dev",
+    "build": "webpack --mode=build"
   },
   "devDependencies": {
     "babel": "6.3.13",
