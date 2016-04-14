@@ -70,6 +70,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _player_controls2 = _interopRequireDefault(_player_controls);
 	
+	var _playlist = __webpack_require__(4);
+	
+	var _playlist2 = _interopRequireDefault(_playlist);
+	
 	var _progress_bar = __webpack_require__(1);
 	
 	var _progress_bar2 = _interopRequireDefault(_progress_bar);
@@ -84,15 +88,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    this.settings = data.settings;
 	    this.container = document.getElementById(data.settings.container);
-	    this.songs = data.songs;
-	    this.current_song_index = null;
 	
 	    this.audio = new _audio_element2.default(this);
-	    this.progress_bar = new _progress_bar2.default(this);
 	    this.controls = new _player_controls2.default(this);
+	    this.playlist = new _playlist2.default(this, data.songs);
+	    this.progress_bar = new _progress_bar2.default(this);
 	
-	    this.play_button = null;
-	    this.pause_button = null;
 	    this.initializeAudioPlayer();
 	  }
 	
@@ -100,11 +101,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'initializeAudioPlayer',
 	    value: function initializeAudioPlayer() {
 	      this.createComponents();
-	      if (this.songs != undefined && this.songs.length != 0) {
-	        this.setCurrentSong(this.songs[0]);
+	      if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
+	        this.setCurrentSong(this.playlist.songs[0]);
 	        this.current_song_index = 0;
 	      }
 	    }
+	
+	    /**
+	     * creates the html markup
+	    */
+	
 	  }, {
 	    key: 'createComponents',
 	    value: function createComponents() {
@@ -115,8 +121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'setCurrentSong',
 	    value: function setCurrentSong(song) {
-	      this.audio.element.setAttribute('src', song.url);
-	      this.audio.element.load();
+	      this.playlist.setCurrentSong(this, song);
 	    }
 	  }, {
 	    key: 'refreshProgressBar',
@@ -132,37 +137,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'nextSong',
-	    value: function nextSong(playing) {
-	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = this.audio.element.paused !== true || playing;
-	        var new_index = this.current_song_index + 1;
-	        if (this.songs.length > new_index) {
-	          this.current_song_index = new_index;
-	        } else {
-	          this.current_song_index = 0;
-	        }
-	        this.setCurrentSong(this.songs[this.current_song_index]);
-	        if (playing === true) {
-	          this.audio.element.play();
-	        }
-	      }
+	    value: function nextSong() {
+	      this.playlist.nextSong(this);
 	    }
 	  }, {
 	    key: 'previousSong',
 	    value: function previousSong() {
-	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = this.audio.element.paused !== true;
-	        var new_index = this.current_song_index - 1;
-	        if (new_index >= 0) {
-	          this.current_song_index = new_index;
-	        } else {
-	          this.current_song_index = this.songs.length - 1;
-	        }
-	        this.setCurrentSong(this.songs[this.current_song_index]);
-	        if (playing === true) {
-	          this.audio.element.play();
-	        }
-	      }
+	      this.playlist.previousSong(this);
 	    }
 	  }]);
 	
@@ -438,6 +419,86 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 	exports.default = PlayerControls;
+	module.exports = exports['default'];
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var ProgressBar = function () {
+	  function ProgressBar(that, songs) {
+	    _classCallCheck(this, ProgressBar);
+	
+	    //this.markup = null
+	    this.songs = songs;
+	    this.current_song_index = null;
+	
+	    //this.createMarkup()
+	    this.addListeners(that);
+	  }
+	
+	  // playlist currently has no markup. not visible in fronent yet
+	  //createMarkup() {}
+	
+	  _createClass(ProgressBar, [{
+	    key: 'addListeners',
+	    value: function addListeners() {}
+	  }, {
+	    key: 'nextSong',
+	    value: function nextSong(that) {
+	      if (this.songs != undefined && this.songs.length > 1) {
+	        var playing = that.audio.element.paused !== true || playing;
+	        var new_index = this.current_song_index + 1;
+	        if (this.songs.length > new_index) {
+	          this.current_song_index = new_index;
+	        } else {
+	          this.current_song_index = 0;
+	        }
+	        this.setCurrentSong(that, this.songs[this.current_song_index]);
+	        if (playing === true) {
+	          that.audio.element.play();
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'previousSong',
+	    value: function previousSong(that) {
+	      if (this.songs != undefined && this.songs.length > 1) {
+	        var playing = that.audio.element.paused !== true;
+	        var new_index = this.current_song_index - 1;
+	        if (new_index >= 0) {
+	          this.current_song_index = new_index;
+	        } else {
+	          this.current_song_index = this.songs.length - 1;
+	        }
+	        this.setCurrentSong(that, this.songs[this.current_song_index]);
+	        if (playing === true) {
+	          that.audio.element.play();
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'setCurrentSong',
+	    value: function setCurrentSong(that, song) {
+	      that.audio.element.setAttribute('src', song.url);
+	      that.audio.element.load();
+	    }
+	  }]);
+	
+	  return ProgressBar;
+	}();
+
+	exports.default = ProgressBar;
 	module.exports = exports['default'];
 
 /***/ }
