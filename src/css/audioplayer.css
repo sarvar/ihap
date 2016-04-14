@@ -31,12 +31,10 @@ body {
   display: inline-block;
 }
 
+
 #progress_bar {
   width: 100%;
   margin: auto;
-}
-
-#song-progress {
   -webkit-apperance: none;
   background-image: -webkit-gradient(linear, 0% 0%, 100% 0%, from(blue), from(lightgrey));
 }

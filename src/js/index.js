@@ -1,3 +1,5 @@
+import ProgressBar from './modules/progress_bar'
+
 export default class AudioPlayer {
   constructor(data) {
     this.settings = data.settings
@@ -5,10 +7,9 @@ export default class AudioPlayer {
     this.songs = data.songs
     this.current_song_index = null
     this.audio = null
-    this.progress_bar = null
+    this.progress_bar = new ProgressBar(this)
     this.play_button = null
     this.pause_button = null
-
     this.initializeAudioPlayer()
   }
 
@@ -23,7 +24,7 @@ export default class AudioPlayer {
   createComponents() {
     this.createPlayer()
     this.createControls()
-    this.createProgress()
+    this.container.appendChild(this.progress_bar.markup)
     this.addEventListeners()
   }
 
@@ -68,21 +69,6 @@ export default class AudioPlayer {
     this.container.appendChild(controls_wrapper)
   }
 
-  createProgress() {
-    //'<input type="range" id="song-progress" min="0" max="360" value="0" />'
-
-    var progress_bar_wrapper = document.createElement('div')
-    progress_bar_wrapper.setAttribute('id', 'progress_bar_wrapper')
-    this.progress_bar = document.createElement('input')
-    this.progress_bar.setAttribute('id', 'song-progress')
-    this.progress_bar.setAttribute('min', '0')
-    this.progress_bar.setAttribute('value', '0')
-    this.progress_bar.setAttribute('type', 'range')
-
-    progress_bar_wrapper.appendChild(this.progress_bar)
-    this.container.appendChild(progress_bar_wrapper)
-  }
-
   addEventListeners() {
     var that = this
     this.audio.addEventListener("timeupdate", function() {
@@ -94,11 +80,6 @@ export default class AudioPlayer {
 		this.audio.addEventListener('ended', function() {
 			that.nextSong(true)
 		})
-		this.progress_bar.addEventListener('click', function(e) {
-			var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth
-			that.audio.currentTime = new_time
-		})
-
     this.play_button.addEventListener('click', function() {
       that.audio.play()
       this.className += ' disabled'
@@ -123,22 +104,13 @@ export default class AudioPlayer {
   }
 
   refreshProgressBar() {
-    this.progress_bar.setAttribute("max", this.audio.duration)
-    this.progress_bar.setAttribute("value", "0")
+    var song_duration = this.audio.duration
+    this.progress_bar.refresh(song_duration)
   }
 
   updateProgress() {
-    this.progress_bar.value = this.audio.currentTime
-    var value = this.progress_bar.value/this.progress_bar.max;
-    this.progress_bar.style.backgroundImage = [
-      '-webkit-gradient(',
-        'linear, ',
-        'left top, ',
-        'right top, ',
-        'color-stop(' + value + ', orange), ',
-        'color-stop(' + value + ', lightgrey)',
-      ')'
-    ].join('');
+    var current_time = this.audio.currentTime
+    this.progress_bar.update(current_time)
   }
 
   nextSong(playing) {
