@@ -72,8 +72,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.container = document.getElementById(data.settings.container);
 	    this.songs = data.songs;
 	    this.current_song_index = null;
-	    this.player = null;
+	    this.audio = null;
 	    this.progress_bar = null;
+	    this.play_button = null;
+	    this.pause_button = null;
 	
 	    this.initializeAudioPlayer();
 	  }
@@ -108,7 +110,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      player_wrapper.appendChild(audio_player);
 	      this.container.appendChild(player_wrapper);
 	
-	      this.player = document.getElementById('player');
+	      this.audio = document.getElementById('player');
 	    }
 	  }, {
 	    key: 'createControls',
@@ -116,28 +118,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var controls_wrapper = document.createElement('div');
 	      controls_wrapper.setAttribute('id', 'controls_wrapper');
 	      // play button
-	      var play_button = document.createElement('button');
-	      var play_text = document.createTextNode('Play');
-	      play_button.appendChild(play_text);
-	      play_button.setAttribute('id', 'play_button');
+	      this.play_button = document.createElement('i');
+	      this.play_button.setAttribute('id', 'play_button');
+	      this.play_button.setAttribute('class', 'mat-icon mat-icon-play');
 	      // pause button
-	      var pause_button = document.createElement('button');
-	      var pause_text = document.createTextNode('Pause');
-	      pause_button.appendChild(pause_text);
-	      pause_button.setAttribute('id', 'pause_button');
+	      this.pause_button = document.createElement('i');
+	      this.pause_button.setAttribute('id', 'pause_button');
+	      this.pause_button.setAttribute('class', 'mat-icon mat-icon-pause');
 	      // next button
-	      var next_button = document.createElement('button');
-	      var next_text = document.createTextNode('next');
-	      next_button.appendChild(next_text);
+	      var next_button = document.createElement('i');
 	      next_button.setAttribute('id', 'next_button');
+	      next_button.setAttribute('class', 'mat-icon mat-icon-skip_next');
 	      // previous button
-	      var previous_button = document.createElement('button');
-	      var previous_text = document.createTextNode('previous');
-	      previous_button.appendChild(previous_text);
+	      var previous_button = document.createElement('i');
 	      previous_button.setAttribute('id', 'previous_button');
+	      previous_button.setAttribute('class', 'mat-icon mat-icon-skip_previous');
 	
-	      controls_wrapper.appendChild(play_button);
-	      controls_wrapper.appendChild(pause_button);
+	      controls_wrapper.appendChild(this.play_button);
+	      controls_wrapper.appendChild(this.pause_button);
 	      controls_wrapper.appendChild(previous_button);
 	      controls_wrapper.appendChild(next_button);
 	      this.container.appendChild(controls_wrapper);
@@ -145,36 +143,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'createProgress',
 	    value: function createProgress() {
-	      this.progress_bar = document.createElement('progress');
-	      this.progress_bar.setAttribute('id', 'progress_bar');
+	      //'<input type="range" id="song-progress" min="0" max="360" value="0" />'
+	
+	      var progress_bar_wrapper = document.createElement('div');
+	      progress_bar_wrapper.setAttribute('id', 'progress_bar_wrapper');
+	      this.progress_bar = document.createElement('input');
+	      this.progress_bar.setAttribute('id', 'song-progress');
 	      this.progress_bar.setAttribute('min', '0');
 	      this.progress_bar.setAttribute('value', '0');
+	      this.progress_bar.setAttribute('type', 'range');
 	
-	      this.container.appendChild(this.progress_bar);
+	      progress_bar_wrapper.appendChild(this.progress_bar);
+	      this.container.appendChild(progress_bar_wrapper);
 	    }
 	  }, {
 	    key: 'addEventListeners',
 	    value: function addEventListeners() {
 	      var that = this;
-	      this.player.addEventListener("timeupdate", function () {
+	      this.audio.addEventListener("timeupdate", function () {
 	        that.updateProgress();
 	      });
-	      this.player.addEventListener('canplay', function () {
+	      this.audio.addEventListener('canplay', function () {
 	        that.refreshProgressBar();
 	      });
-	      this.player.addEventListener('ended', function () {
+	      this.audio.addEventListener('ended', function () {
 	        that.nextSong(true);
 	      });
 	      this.progress_bar.addEventListener('click', function (e) {
 	        var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth;
-	        that.player.currentTime = new_time;
+	        that.audio.currentTime = new_time;
 	      });
 	
-	      document.getElementById('play_button').addEventListener('click', function () {
-	        that.player.play();
+	      this.play_button.addEventListener('click', function () {
+	        that.audio.play();
+	        this.className += ' disabled';
+	        that.pause_button.className = "mat-icon mat-icon-pause";
 	      });
-	      document.getElementById('pause_button').addEventListener('click', function () {
-	        that.player.pause();
+	      this.pause_button.addEventListener('click', function () {
+	        that.audio.pause();
+	        this.className += ' disabled';
+	        that.play_button.className = "mat-icon mat-icon-play";
 	      });
 	      document.getElementById('next_button').addEventListener('click', function () {
 	        that.nextSong();
@@ -186,25 +194,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'setCurrentSong',
 	    value: function setCurrentSong(song) {
-	      this.player.setAttribute('src', song);
-	      this.player.load();
+	      this.audio.setAttribute('src', song.url);
+	      this.audio.load();
 	    }
 	  }, {
 	    key: 'refreshProgressBar',
 	    value: function refreshProgressBar() {
-	      this.progress_bar.setAttribute("max", this.player.duration);
+	      this.progress_bar.setAttribute("max", this.audio.duration);
 	      this.progress_bar.setAttribute("value", "0");
 	    }
 	  }, {
 	    key: 'updateProgress',
 	    value: function updateProgress() {
-	      this.progress_bar.setAttribute("value", this.player.currentTime);
+	      this.progress_bar.value = this.audio.currentTime;
+	      var value = this.progress_bar.value / this.progress_bar.max;
+	      this.progress_bar.style.backgroundImage = ['-webkit-gradient(', 'linear, ', 'left top, ', 'right top, ', 'color-stop(' + value + ', orange), ', 'color-stop(' + value + ', lightgrey)', ')'].join('');
 	    }
 	  }, {
 	    key: 'nextSong',
 	    value: function nextSong(playing) {
 	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = this.player.paused !== true || playing;
+	        var playing = this.audio.paused !== true || playing;
 	        var new_index = this.current_song_index + 1;
 	        if (this.songs.length > new_index) {
 	          this.current_song_index = new_index;
@@ -213,7 +223,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.setCurrentSong(this.songs[this.current_song_index]);
 	        if (playing === true) {
-	          this.player.play();
+	          this.audio.play();
 	        }
 	      }
 	    }
@@ -221,7 +231,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'previousSong',
 	    value: function previousSong() {
 	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = this.player.paused !== true;
+	        var playing = this.audio.paused !== true;
 	        var new_index = this.current_song_index - 1;
 	        if (new_index >= 0) {
 	          this.current_song_index = new_index;
@@ -230,7 +240,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.setCurrentSong(this.songs[this.current_song_index]);
 	        if (playing === true) {
-	          this.player.play();
+	          this.audio.play();
 	        }
 	      }
 	    }

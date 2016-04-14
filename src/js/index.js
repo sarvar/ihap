@@ -4,14 +4,16 @@ export default class AudioPlayer {
     this.container = document.getElementById(data.settings.container)
     this.songs = data.songs
     this.current_song_index = null
-    this.player = null
+    this.audio = null
     this.progress_bar = null
+    this.play_button = null
+    this.pause_button = null
 
-    this.initializeAudioPlayer();
+    this.initializeAudioPlayer()
   }
 
   initializeAudioPlayer() {
-    this.createComponents();
+    this.createComponents()
     if (this.songs != undefined && this.songs.length != 0){
       this.setCurrentSong(this.songs[0])
       this.current_song_index = 0
@@ -19,113 +21,129 @@ export default class AudioPlayer {
   }
 
   createComponents() {
-    this.createPlayer();
-    this.createControls();
-    this.createProgress();
-    this.addEventListeners();
+    this.createPlayer()
+    this.createControls()
+    this.createProgress()
+    this.addEventListeners()
   }
 
   createPlayer() {
-    var player_wrapper = document.createElement('div');
-    player_wrapper.setAttribute('id', 'player_wrapper');
+    var player_wrapper = document.createElement('div')
+    player_wrapper.setAttribute('id', 'player_wrapper')
 
-    var audio_player = document.createElement('audio');
-    audio_player.setAttribute('id', 'player');
-    audio_player.setAttribute('src', '');
+    var audio_player = document.createElement('audio')
+    audio_player.setAttribute('id', 'player')
+    audio_player.setAttribute('src', '')
 
-    player_wrapper.appendChild(audio_player);
-    this.container.appendChild(player_wrapper);
+    player_wrapper.appendChild(audio_player)
+    this.container.appendChild(player_wrapper)
 
-    this.player = document.getElementById('player');
+    this.audio = document.getElementById('player')
   }
 
   createControls() {
-    var controls_wrapper = document.createElement('div');
-    controls_wrapper.setAttribute('id', 'controls_wrapper');
+    var controls_wrapper = document.createElement('div')
+    controls_wrapper.setAttribute('id', 'controls_wrapper')
     // play button
-    var play_button = document.createElement('button');
-    var play_text = document.createTextNode('Play');
-    play_button.appendChild(play_text);
-    play_button.setAttribute('id', 'play_button');
+    this.play_button = document.createElement('i')
+    this.play_button.setAttribute('id', 'play_button')
+    this.play_button.setAttribute('class', 'mat-icon mat-icon-play')
     // pause button
-    var pause_button = document.createElement('button');
-    var pause_text = document.createTextNode('Pause');
-    pause_button.appendChild(pause_text);
-    pause_button.setAttribute('id', 'pause_button');
+    this.pause_button = document.createElement('i')
+    this.pause_button.setAttribute('id', 'pause_button')
+    this.pause_button.setAttribute('class', 'mat-icon mat-icon-pause')
     // next button
-    var next_button = document.createElement('button');
-    var next_text = document.createTextNode('next');
-    next_button.appendChild(next_text);
-    next_button.setAttribute('id', 'next_button');
+    var next_button = document.createElement('i')
+    next_button.setAttribute('id', 'next_button')
+    next_button.setAttribute('class', 'mat-icon mat-icon-skip_next')
     // previous button
-    var previous_button = document.createElement('button');
-    var previous_text = document.createTextNode('previous');
-    previous_button.appendChild(previous_text);
-    previous_button.setAttribute('id', 'previous_button');
+    var previous_button = document.createElement('i')
+    previous_button.setAttribute('id', 'previous_button')
+    previous_button.setAttribute('class', 'mat-icon mat-icon-skip_previous')
 
-    controls_wrapper.appendChild(play_button);
-    controls_wrapper.appendChild(pause_button);
-		controls_wrapper.appendChild(previous_button);
-    controls_wrapper.appendChild(next_button);
-    this.container.appendChild(controls_wrapper);
+    controls_wrapper.appendChild(this.play_button)
+    controls_wrapper.appendChild(this.pause_button)
+		controls_wrapper.appendChild(previous_button)
+    controls_wrapper.appendChild(next_button)
+    this.container.appendChild(controls_wrapper)
   }
 
   createProgress() {
-    this.progress_bar = document.createElement('progress');
-    this.progress_bar.setAttribute('id', 'progress_bar');
-    this.progress_bar.setAttribute('min', '0');
-    this.progress_bar.setAttribute('value', '0');
+    //'<input type="range" id="song-progress" min="0" max="360" value="0" />'
 
-    this.container.appendChild(this.progress_bar);
+    var progress_bar_wrapper = document.createElement('div')
+    progress_bar_wrapper.setAttribute('id', 'progress_bar_wrapper')
+    this.progress_bar = document.createElement('input')
+    this.progress_bar.setAttribute('id', 'song-progress')
+    this.progress_bar.setAttribute('min', '0')
+    this.progress_bar.setAttribute('value', '0')
+    this.progress_bar.setAttribute('type', 'range')
+
+    progress_bar_wrapper.appendChild(this.progress_bar)
+    this.container.appendChild(progress_bar_wrapper)
   }
 
   addEventListeners() {
     var that = this
-    this.player.addEventListener("timeupdate", function() {
+    this.audio.addEventListener("timeupdate", function() {
       that.updateProgress()
-    });
-    this.player.addEventListener('canplay', function() {
-      that.refreshProgressBar();
-    });
-		this.player.addEventListener('ended', function() {
-			that.nextSong(true);
+    })
+    this.audio.addEventListener('canplay', function() {
+      that.refreshProgressBar()
+    })
+		this.audio.addEventListener('ended', function() {
+			that.nextSong(true)
 		})
 		this.progress_bar.addEventListener('click', function(e) {
 			var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth
-			that.player.currentTime = new_time
+			that.audio.currentTime = new_time
 		})
 
-    document.getElementById('play_button').addEventListener('click', function() {
-      that.player.play();
-    });
-    document.getElementById('pause_button').addEventListener('click', function() {
-      that.player.pause();
-    });
+    this.play_button.addEventListener('click', function() {
+      that.audio.play()
+      this.className += ' disabled'
+      that.pause_button.className = "mat-icon mat-icon-pause"
+    })
+    this.pause_button.addEventListener('click', function() {
+      that.audio.pause()
+      this.className += ' disabled'
+      that.play_button.className = "mat-icon mat-icon-play"
+    })
     document.getElementById('next_button').addEventListener('click', function() {
-      that.nextSong();
-    });
+      that.nextSong()
+    })
     document.getElementById('previous_button').addEventListener('click', function() {
-      that.previousSong();
-    });
+      that.previousSong()
+    })
   }
 
   setCurrentSong(song){
-    this.player.setAttribute('src', song);
-    this.player.load();
+    this.audio.setAttribute('src', song.url)
+    this.audio.load()
   }
 
   refreshProgressBar() {
-    this.progress_bar.setAttribute("max", this.player.duration);
-    this.progress_bar.setAttribute("value", "0");
+    this.progress_bar.setAttribute("max", this.audio.duration)
+    this.progress_bar.setAttribute("value", "0")
   }
 
   updateProgress() {
-    this.progress_bar.setAttribute("value", this.player.currentTime);
+    this.progress_bar.value = this.audio.currentTime
+    var value = this.progress_bar.value/this.progress_bar.max;
+    this.progress_bar.style.backgroundImage = [
+      '-webkit-gradient(',
+        'linear, ',
+        'left top, ',
+        'right top, ',
+        'color-stop(' + value + ', orange), ',
+        'color-stop(' + value + ', lightgrey)',
+      ')'
+    ].join('');
   }
 
   nextSong(playing) {
     if (this.songs != undefined && this.songs.length > 1){
-			var playing = this.player.paused !== true || playing
+			var playing = this.audio.paused !== true || playing
 			var new_index = this.current_song_index + 1
 			if (this.songs.length > new_index) {
 				this.current_song_index = new_index
@@ -134,14 +152,14 @@ export default class AudioPlayer {
 			}
       this.setCurrentSong(this.songs[this.current_song_index])
 			if (playing === true) {
-				this.player.play();
+				this.audio.play()
 			}
     }
   }
 
   previousSong() {
     if (this.songs != undefined && this.songs.length > 1){
-			var playing = this.player.paused !== true
+			var playing = this.audio.paused !== true
 			var new_index = this.current_song_index - 1
 			if (new_index >= 0) {
 				this.current_song_index = new_index
@@ -150,7 +168,7 @@ export default class AudioPlayer {
 			}
       this.setCurrentSong(this.songs[this.current_song_index])
 			if (playing === true) {
-				this.player.play();
+				this.audio.play()
     	}
     }
   }

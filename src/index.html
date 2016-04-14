@@ -5,6 +5,7 @@
     <title>Audioplayer</title>
     <!-- custom styles -->
     <link rel="stylesheet" href="css/audioplayer.css">
+    <link rel="stylesheet" href="css/material.css">
   </head>
 
   <body>
@@ -19,10 +20,16 @@
           container: "audioplayer-container"
         },
         songs: [
-					"./songs/01 - To War.mp3",
-					"./songs/02 - Winter Bane.mp3",
-					"./songs/03 - Ashes Of The Damned.mp3",
-					"http://www.html5tutorial.info/media/vincent.mp3"]
+          {title: "Song 01",
+            id: "1",
+            url: "./songs/01 - To War.mp3"},
+          {title: "Song 02",
+            id: "2",
+            url: "./songs/02 - Winter Bane.mp3"},
+          {title: "Starry night",
+            id: "3",
+            url: "http://www.html5tutorial.info/media/vincent.mp3"}
+        ]
       });
     </script>
   </body>

@@ -13,16 +13,57 @@ body {
   height: 60px;
 }
 
+#audioplayer-container:hover input[type=range]::-webkit-slider-thumb{
+  /*visibility: visible;*/
+  height: 14px;
+  width: 14px;
+  margin-top: 8px;
+  transition: height 0.1s, width 0.1s, margin-top 0.1s;
+}
+
+#controls_wrapper {
+  display: inline-block;
+  width: 25%;
+}
+
+#progress_bar_wrapper {
+  width: 50%;
+  display: inline-block;
+}
+
 #progress_bar {
   width: 100%;
+  margin: auto;
 }
 
-#progress_bar:before {
-  display: block;
-  content: attr(value);
+#song-progress {
+  -webkit-apperance: none;
+  background-image: -webkit-gradient(linear, 0% 0%, 100% 0%, from(blue), from(lightgrey));
 }
 
-#progress_bar:after {
-  display: block;
-  content: attr(max);
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 7px 0;
+  height: 4px
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 30px;
+  cursor: pointer;
+  border: 0px solid #010101;
+}
+input[type=range]::-webkit-slider-thumb {
+  height: 8px;
+  width: 8px;
+  border-radius: 22px;
+  background: orange;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: 11px;
+  /*visibility: hidden;*/
+  transition: height 0.1s, width 0.1s, margin-top 0.1s;
 }
