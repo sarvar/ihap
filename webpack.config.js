@@ -1,13 +1,13 @@
+var debug = process.env.NODE_ENV !== "production";
 var webpack = require('webpack');
 var path = require('path');
 var lib_name = 'AudioPlayer';
 
-var plugins = [], outputFile;
-outputFile = 'audioplayer.js';
+var outputFile = debug ? 'audioplayer.js' : 'audioplayer.min.js';
 
 var config = {
   entry: __dirname + '/src/js/index.js',
-  devtool: 'source-map',
+  devtool: debug ? 'source-map' : false,
   output: {
     path: __dirname + '/dist',
     filename: outputFile,
@@ -27,8 +27,12 @@ var config = {
   resolve: {
     root: path.resolve('./src'),
     extensions: ['', '.js']
-  },
-  plugins: plugins
+	},
+	plugins: debug ? [] : [
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false })
+	  ]
 };
 
 module.exports = config;

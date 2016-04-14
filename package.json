@@ -5,7 +5,7 @@
   "main": "dist/audioplayer.js",
   "scripts": {
 		"start": "webpack --progress --colors --watch --mode=dev",
-    "build": "webpack --mode=build"
+    "build": "NODE_ENV=production webpack"
   },
   "devDependencies": {
     "babel": "6.3.13",
