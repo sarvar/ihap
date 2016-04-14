@@ -1,5 +1,6 @@
-import ProgressBar from './modules/progress_bar'
 import AudioElement from './modules/audio_element'
+import PlayerControls from './modules/player_controls'
+import ProgressBar from './modules/progress_bar'
 
 export default class AudioPlayer {
   constructor(data) {
@@ -10,6 +11,8 @@ export default class AudioPlayer {
 
     this.audio = new AudioElement(this)
     this.progress_bar = new ProgressBar(this)
+    this.controls = new PlayerControls(this)
+
     this.play_button = null
     this.pause_button = null
     this.initializeAudioPlayer()
@@ -25,57 +28,8 @@ export default class AudioPlayer {
 
   createComponents() {
     this.container.appendChild(this.audio.markup)
-    this.createControls()
+    this.container.appendChild(this.controls.markup)
     this.container.appendChild(this.progress_bar.markup)
-    this.addEventListeners()
-  }
-
-  createControls() {
-    var controls_wrapper = document.createElement('div')
-    controls_wrapper.setAttribute('id', 'controls_wrapper')
-    // play button
-    this.play_button = document.createElement('i')
-    this.play_button.setAttribute('id', 'play_button')
-    this.play_button.setAttribute('class', 'mat-icon mat-icon-play')
-    // pause button
-    this.pause_button = document.createElement('i')
-    this.pause_button.setAttribute('id', 'pause_button')
-    this.pause_button.setAttribute('class', 'mat-icon mat-icon-pause')
-    // next button
-    var next_button = document.createElement('i')
-    next_button.setAttribute('id', 'next_button')
-    next_button.setAttribute('class', 'mat-icon mat-icon-skip_next')
-    // previous button
-    var previous_button = document.createElement('i')
-    previous_button.setAttribute('id', 'previous_button')
-    previous_button.setAttribute('class', 'mat-icon mat-icon-skip_previous')
-
-    controls_wrapper.appendChild(this.play_button)
-    controls_wrapper.appendChild(this.pause_button)
-		controls_wrapper.appendChild(previous_button)
-    controls_wrapper.appendChild(next_button)
-    this.container.appendChild(controls_wrapper)
-  }
-
-  addEventListeners() {
-    var that = this
-
-    this.play_button.addEventListener('click', function() {
-      that.audio.element.play()
-      this.className += ' disabled'
-      that.pause_button.className = "mat-icon mat-icon-pause"
-    })
-    this.pause_button.addEventListener('click', function() {
-      that.audio.element.pause()
-      this.className += ' disabled'
-      that.play_button.className = "mat-icon mat-icon-play"
-    })
-    document.getElementById('next_button').addEventListener('click', function() {
-      that.nextSong()
-    })
-    document.getElementById('previous_button').addEventListener('click', function() {
-      that.previousSong()
-    })
   }
 
   setCurrentSong(song){

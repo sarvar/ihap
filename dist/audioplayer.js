@@ -62,13 +62,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _progress_bar = __webpack_require__(1);
-	
-	var _progress_bar2 = _interopRequireDefault(_progress_bar);
-	
 	var _audio_element = __webpack_require__(2);
 	
 	var _audio_element2 = _interopRequireDefault(_audio_element);
+	
+	var _player_controls = __webpack_require__(3);
+	
+	var _player_controls2 = _interopRequireDefault(_player_controls);
+	
+	var _progress_bar = __webpack_require__(1);
+	
+	var _progress_bar2 = _interopRequireDefault(_progress_bar);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -85,6 +89,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    this.audio = new _audio_element2.default(this);
 	    this.progress_bar = new _progress_bar2.default(this);
+	    this.controls = new _player_controls2.default(this);
+	
 	    this.play_button = null;
 	    this.pause_button = null;
 	    this.initializeAudioPlayer();
@@ -103,59 +109,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'createComponents',
 	    value: function createComponents() {
 	      this.container.appendChild(this.audio.markup);
-	      this.createControls();
+	      this.container.appendChild(this.controls.markup);
 	      this.container.appendChild(this.progress_bar.markup);
-	      this.addEventListeners();
-	    }
-	  }, {
-	    key: 'createControls',
-	    value: function createControls() {
-	      var controls_wrapper = document.createElement('div');
-	      controls_wrapper.setAttribute('id', 'controls_wrapper');
-	      // play button
-	      this.play_button = document.createElement('i');
-	      this.play_button.setAttribute('id', 'play_button');
-	      this.play_button.setAttribute('class', 'mat-icon mat-icon-play');
-	      // pause button
-	      this.pause_button = document.createElement('i');
-	      this.pause_button.setAttribute('id', 'pause_button');
-	      this.pause_button.setAttribute('class', 'mat-icon mat-icon-pause');
-	      // next button
-	      var next_button = document.createElement('i');
-	      next_button.setAttribute('id', 'next_button');
-	      next_button.setAttribute('class', 'mat-icon mat-icon-skip_next');
-	      // previous button
-	      var previous_button = document.createElement('i');
-	      previous_button.setAttribute('id', 'previous_button');
-	      previous_button.setAttribute('class', 'mat-icon mat-icon-skip_previous');
-	
-	      controls_wrapper.appendChild(this.play_button);
-	      controls_wrapper.appendChild(this.pause_button);
-	      controls_wrapper.appendChild(previous_button);
-	      controls_wrapper.appendChild(next_button);
-	      this.container.appendChild(controls_wrapper);
-	    }
-	  }, {
-	    key: 'addEventListeners',
-	    value: function addEventListeners() {
-	      var that = this;
-	
-	      this.play_button.addEventListener('click', function () {
-	        that.audio.element.play();
-	        this.className += ' disabled';
-	        that.pause_button.className = "mat-icon mat-icon-pause";
-	      });
-	      this.pause_button.addEventListener('click', function () {
-	        that.audio.element.pause();
-	        this.className += ' disabled';
-	        that.play_button.className = "mat-icon mat-icon-play";
-	      });
-	      document.getElementById('next_button').addEventListener('click', function () {
-	        that.nextSong();
-	      });
-	      document.getElementById('previous_button').addEventListener('click', function () {
-	        that.previousSong();
-	      });
 	    }
 	  }, {
 	    key: 'setCurrentSong',
@@ -386,6 +341,103 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 	exports.default = AudioElement;
+	module.exports = exports['default'];
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var PlayerControls = function () {
+	  function PlayerControls(that) {
+	    _classCallCheck(this, PlayerControls);
+	
+	    this.markup = null;
+	    this.buttons = {
+	      play: null,
+	      pause: null,
+	      skip_next: null,
+	      skip_previous: null
+	    };
+	
+	    this.createMarkup();
+	    this.addListeners(that);
+	  }
+	
+	  /**
+	   * create the basic html for the controls
+	   */
+	
+	
+	  _createClass(PlayerControls, [{
+	    key: 'createMarkup',
+	    value: function createMarkup() {
+	      var controls_wrapper = document.createElement('div');
+	      controls_wrapper.setAttribute('id', 'controls_wrapper');
+	      // play button
+	      var play_button = document.createElement('i');
+	      play_button.setAttribute('id', 'play_button');
+	      play_button.setAttribute('class', 'mat-icon mat-icon-play');
+	      // pause button
+	      var pause_button = document.createElement('i');
+	      pause_button.setAttribute('id', 'pause_button');
+	      pause_button.setAttribute('class', 'mat-icon mat-icon-pause');
+	      // next button
+	      var next_button = document.createElement('i');
+	      next_button.setAttribute('id', 'next_button');
+	      next_button.setAttribute('class', 'mat-icon mat-icon-skip_next');
+	      // previous button
+	      var previous_button = document.createElement('i');
+	      previous_button.setAttribute('id', 'previous_button');
+	      previous_button.setAttribute('class', 'mat-icon mat-icon-skip_previous');
+	
+	      controls_wrapper.appendChild(play_button);
+	      controls_wrapper.appendChild(pause_button);
+	      controls_wrapper.appendChild(previous_button);
+	      controls_wrapper.appendChild(next_button);
+	
+	      this.buttons.play = play_button;
+	      this.buttons.pause = pause_button;
+	      this.buttons.skip_next = next_button;
+	      this.buttons.skip_previous = previous_button;
+	
+	      this.markup = controls_wrapper;
+	    }
+	  }, {
+	    key: 'addListeners',
+	    value: function addListeners(that) {
+	      this.buttons.play.addEventListener('click', function () {
+	        that.audio.element.play();
+	        this.className += ' disabled';
+	        //that.pause_button.className = "mat-icon mat-icon-pause"
+	      });
+	      this.buttons.pause.addEventListener('click', function () {
+	        that.audio.element.pause();
+	        this.className += ' disabled';
+	        //  that.play_button.className = "mat-icon mat-icon-play"
+	      });
+	      this.buttons.skip_next.addEventListener('click', function () {
+	        that.nextSong();
+	      });
+	      this.buttons.skip_previous.addEventListener('click', function () {
+	        that.previousSong();
+	      });
+	    }
+	  }]);
+	
+	  return PlayerControls;
+	}();
+
+	exports.default = PlayerControls;
 	module.exports = exports['default'];
 
 /***/ }
