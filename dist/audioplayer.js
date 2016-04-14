@@ -66,6 +66,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _progress_bar2 = _interopRequireDefault(_progress_bar);
 	
+	var _audio_element = __webpack_require__(2);
+	
+	var _audio_element2 = _interopRequireDefault(_audio_element);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -78,7 +82,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.container = document.getElementById(data.settings.container);
 	    this.songs = data.songs;
 	    this.current_song_index = null;
-	    this.audio = null;
+	
+	    this.audio = new _audio_element2.default(this);
 	    this.progress_bar = new _progress_bar2.default(this);
 	    this.play_button = null;
 	    this.pause_button = null;
@@ -97,25 +102,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'createComponents',
 	    value: function createComponents() {
-	      this.createPlayer();
+	      this.container.appendChild(this.audio.markup);
 	      this.createControls();
 	      this.container.appendChild(this.progress_bar.markup);
 	      this.addEventListeners();
-	    }
-	  }, {
-	    key: 'createPlayer',
-	    value: function createPlayer() {
-	      var player_wrapper = document.createElement('div');
-	      player_wrapper.setAttribute('id', 'player_wrapper');
-	
-	      var audio_player = document.createElement('audio');
-	      audio_player.setAttribute('id', 'player');
-	      audio_player.setAttribute('src', '');
-	
-	      player_wrapper.appendChild(audio_player);
-	      this.container.appendChild(player_wrapper);
-	
-	      this.audio = document.getElementById('player');
 	    }
 	  }, {
 	    key: 'createControls',
@@ -149,22 +139,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'addEventListeners',
 	    value: function addEventListeners() {
 	      var that = this;
-	      this.audio.addEventListener("timeupdate", function () {
-	        that.updateProgress();
-	      });
-	      this.audio.addEventListener('canplay', function () {
-	        that.refreshProgressBar();
-	      });
-	      this.audio.addEventListener('ended', function () {
-	        that.nextSong(true);
-	      });
+	
 	      this.play_button.addEventListener('click', function () {
-	        that.audio.play();
+	        that.audio.element.play();
 	        this.className += ' disabled';
 	        that.pause_button.className = "mat-icon mat-icon-pause";
 	      });
 	      this.pause_button.addEventListener('click', function () {
-	        that.audio.pause();
+	        that.audio.element.pause();
 	        this.className += ' disabled';
 	        that.play_button.className = "mat-icon mat-icon-play";
 	      });
@@ -178,26 +160,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'setCurrentSong',
 	    value: function setCurrentSong(song) {
-	      this.audio.setAttribute('src', song.url);
-	      this.audio.load();
+	      this.audio.element.setAttribute('src', song.url);
+	      this.audio.element.load();
 	    }
 	  }, {
 	    key: 'refreshProgressBar',
 	    value: function refreshProgressBar() {
-	      var song_duration = this.audio.duration;
+	      var song_duration = this.audio.element.duration;
 	      this.progress_bar.refresh(song_duration);
 	    }
 	  }, {
 	    key: 'updateProgress',
 	    value: function updateProgress() {
-	      var current_time = this.audio.currentTime;
+	      var current_time = this.audio.element.currentTime;
 	      this.progress_bar.update(current_time);
 	    }
 	  }, {
 	    key: 'nextSong',
 	    value: function nextSong(playing) {
 	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = this.audio.paused !== true || playing;
+	        var playing = this.audio.element.paused !== true || playing;
 	        var new_index = this.current_song_index + 1;
 	        if (this.songs.length > new_index) {
 	          this.current_song_index = new_index;
@@ -206,7 +188,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.setCurrentSong(this.songs[this.current_song_index]);
 	        if (playing === true) {
-	          this.audio.play();
+	          this.audio.element.play();
 	        }
 	      }
 	    }
@@ -214,7 +196,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'previousSong',
 	    value: function previousSong() {
 	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = this.audio.paused !== true;
+	        var playing = this.audio.element.paused !== true;
 	        var new_index = this.current_song_index - 1;
 	        if (new_index >= 0) {
 	          this.current_song_index = new_index;
@@ -223,7 +205,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.setCurrentSong(this.songs[this.current_song_index]);
 	        if (playing === true) {
-	          this.audio.play();
+	          this.audio.element.play();
 	        }
 	      }
 	    }
@@ -286,6 +268,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * adds the event listeners for the progress bar
+	     * @param {Object} that: the AudioPlayer parent object
 	     */
 	
 	  }, {
@@ -293,7 +276,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function addListeners(that) {
 	      this.element.addEventListener('click', function (e) {
 	        //var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth
-	        that.audio.currentTime = this.value;
+	        that.audio.element.currentTime = this.value;
 	      });
 	    }
 	
@@ -327,6 +310,82 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 	exports.default = ProgressBar;
+	module.exports = exports['default'];
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	// name to avoid naming conflicts with the actual 'Audio' class
+	
+	var AudioElement = function () {
+	  function AudioElement(that) {
+	    _classCallCheck(this, AudioElement);
+	
+	    this.markup = null;
+	    this.element = null;
+	
+	    this.createMarkup();
+	    this.addListeners(that);
+	  }
+	
+	  /**
+	   * create the basic html for the audio element
+	   */
+	
+	
+	  _createClass(AudioElement, [{
+	    key: 'createMarkup',
+	    value: function createMarkup() {
+	      // wrapper
+	      var player_wrapper = document.createElement('div');
+	      player_wrapper.setAttribute('id', 'player_wrapper');
+	
+	      // actual audio element
+	      var audio_player = document.createElement('audio');
+	      audio_player.setAttribute('id', 'player');
+	      audio_player.setAttribute('src', '');
+	
+	      player_wrapper.appendChild(audio_player);
+	
+	      this.markup = player_wrapper;
+	      this.element = audio_player;
+	    }
+	
+	    /**
+	     * adds the event listeners for the audio element
+	     * @param {Object} that: the AudioPlayer parent object
+	     */
+	
+	  }, {
+	    key: 'addListeners',
+	    value: function addListeners(that) {
+	      this.element.addEventListener("timeupdate", function () {
+	        that.updateProgress();
+	      });
+	      this.element.addEventListener('canplay', function () {
+	        that.refreshProgressBar();
+	      });
+	      this.element.addEventListener('ended', function () {
+	        that.nextSong(true);
+	      });
+	    }
+	  }]);
+	
+	  return AudioElement;
+	}();
+
+	exports.default = AudioElement;
 	module.exports = exports['default'];
 
 /***/ }

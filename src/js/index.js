@@ -1,4 +1,5 @@
 import ProgressBar from './modules/progress_bar'
+import AudioElement from './modules/audio_element'
 
 export default class AudioPlayer {
   constructor(data) {
@@ -6,7 +7,8 @@ export default class AudioPlayer {
     this.container = document.getElementById(data.settings.container)
     this.songs = data.songs
     this.current_song_index = null
-    this.audio = null
+
+    this.audio = new AudioElement(this)
     this.progress_bar = new ProgressBar(this)
     this.play_button = null
     this.pause_button = null
@@ -22,24 +24,10 @@ export default class AudioPlayer {
   }
 
   createComponents() {
-    this.createPlayer()
+    this.container.appendChild(this.audio.markup)
     this.createControls()
     this.container.appendChild(this.progress_bar.markup)
     this.addEventListeners()
-  }
-
-  createPlayer() {
-    var player_wrapper = document.createElement('div')
-    player_wrapper.setAttribute('id', 'player_wrapper')
-
-    var audio_player = document.createElement('audio')
-    audio_player.setAttribute('id', 'player')
-    audio_player.setAttribute('src', '')
-
-    player_wrapper.appendChild(audio_player)
-    this.container.appendChild(player_wrapper)
-
-    this.audio = document.getElementById('player')
   }
 
   createControls() {
@@ -71,22 +59,14 @@ export default class AudioPlayer {
 
   addEventListeners() {
     var that = this
-    this.audio.addEventListener("timeupdate", function() {
-      that.updateProgress()
-    })
-    this.audio.addEventListener('canplay', function() {
-      that.refreshProgressBar()
-    })
-		this.audio.addEventListener('ended', function() {
-			that.nextSong(true)
-		})
+
     this.play_button.addEventListener('click', function() {
-      that.audio.play()
+      that.audio.element.play()
       this.className += ' disabled'
       that.pause_button.className = "mat-icon mat-icon-pause"
     })
     this.pause_button.addEventListener('click', function() {
-      that.audio.pause()
+      that.audio.element.pause()
       this.className += ' disabled'
       that.play_button.className = "mat-icon mat-icon-play"
     })
@@ -99,23 +79,23 @@ export default class AudioPlayer {
   }
 
   setCurrentSong(song){
-    this.audio.setAttribute('src', song.url)
-    this.audio.load()
+    this.audio.element.setAttribute('src', song.url)
+    this.audio.element.load()
   }
 
   refreshProgressBar() {
-    var song_duration = this.audio.duration
+    var song_duration = this.audio.element.duration
     this.progress_bar.refresh(song_duration)
   }
 
   updateProgress() {
-    var current_time = this.audio.currentTime
+    var current_time = this.audio.element.currentTime
     this.progress_bar.update(current_time)
   }
 
   nextSong(playing) {
     if (this.songs != undefined && this.songs.length > 1){
-			var playing = this.audio.paused !== true || playing
+			var playing = this.audio.element.paused !== true || playing
 			var new_index = this.current_song_index + 1
 			if (this.songs.length > new_index) {
 				this.current_song_index = new_index
@@ -124,14 +104,14 @@ export default class AudioPlayer {
 			}
       this.setCurrentSong(this.songs[this.current_song_index])
 			if (playing === true) {
-				this.audio.play()
+				this.audio.element.play()
 			}
     }
   }
 
   previousSong() {
     if (this.songs != undefined && this.songs.length > 1){
-			var playing = this.audio.paused !== true
+			var playing = this.audio.element.paused !== true
 			var new_index = this.current_song_index - 1
 			if (new_index >= 0) {
 				this.current_song_index = new_index
@@ -140,7 +120,7 @@ export default class AudioPlayer {
 			}
       this.setCurrentSong(this.songs[this.current_song_index])
 			if (playing === true) {
-				this.audio.play()
+				this.audio.element.play()
     	}
     }
   }

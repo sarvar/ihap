@@ -29,11 +29,12 @@ export default class ProgressBar {
 
   /**
    * adds the event listeners for the progress bar
+   * @param {Object} that: the AudioPlayer parent object
    */
   addListeners(that) {
     this.element.addEventListener('click', function(e) {
       //var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth
-      that.audio.currentTime = this.value
+      that.audio.element.currentTime = this.value
     })
   }
 
