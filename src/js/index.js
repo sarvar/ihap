@@ -1,5 +1,5 @@
 import AudioPlayerAudio from './modules/audio_player_audio'
-import PlayerControls from './modules/player_controls'
+import AudioPlayerControls from './modules/audio_player_controls'
 import Playlist from './modules/playlist'
 import ProgressBar from './modules/progress_bar'
 
@@ -9,7 +9,7 @@ export default class AudioPlayer {
     this.container = document.getElementById(data.settings.container)
 
     this.audio = new AudioPlayerAudio(this)
-    this.controls = new PlayerControls(this)
+    this.controls = new AudioPlayerControls(this)
     this.playlist = new Playlist(this, data.songs)
     this.progress_bar = new ProgressBar(this)
 

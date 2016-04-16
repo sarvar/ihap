@@ -66,9 +66,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _audio_player_audio2 = _interopRequireDefault(_audio_player_audio);
 	
-	var _player_controls = __webpack_require__(2);
+	var _audio_player_controls = __webpack_require__(6);
 	
-	var _player_controls2 = _interopRequireDefault(_player_controls);
+	var _audio_player_controls2 = _interopRequireDefault(_audio_player_controls);
 	
 	var _playlist = __webpack_require__(3);
 	
@@ -90,7 +90,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.container = document.getElementById(data.settings.container);
 	
 	    this.audio = new _audio_player_audio2.default(this);
-	    this.controls = new _player_controls2.default(this);
+	    this.controls = new _audio_player_controls2.default(this);
 	    this.playlist = new _playlist2.default(this, data.songs);
 	    this.progress_bar = new _progress_bar2.default(this);
 	
@@ -155,103 +155,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 1 */,
-/* 2 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var PlayerControls = function () {
-	  function PlayerControls(that) {
-	    _classCallCheck(this, PlayerControls);
-	
-	    this.markup = null;
-	    this.buttons = {
-	      play: null,
-	      pause: null,
-	      skip_next: null,
-	      skip_previous: null
-	    };
-	
-	    this.createMarkup();
-	    this.addListeners(that);
-	  }
-	
-	  /**
-	   * create the basic html for the controls
-	   */
-	
-	
-	  _createClass(PlayerControls, [{
-	    key: 'createMarkup',
-	    value: function createMarkup() {
-	      var controls_wrapper = document.createElement('div');
-	      controls_wrapper.setAttribute('id', 'controls_wrapper');
-	      // play button
-	      var play_button = document.createElement('i');
-	      play_button.setAttribute('id', 'play_button');
-	      play_button.setAttribute('class', 'mat-icon mat-icon-play');
-	      // pause button
-	      var pause_button = document.createElement('i');
-	      pause_button.setAttribute('id', 'pause_button');
-	      pause_button.setAttribute('class', 'mat-icon mat-icon-pause');
-	      // next button
-	      var next_button = document.createElement('i');
-	      next_button.setAttribute('id', 'next_button');
-	      next_button.setAttribute('class', 'mat-icon mat-icon-skip_next');
-	      // previous button
-	      var previous_button = document.createElement('i');
-	      previous_button.setAttribute('id', 'previous_button');
-	      previous_button.setAttribute('class', 'mat-icon mat-icon-skip_previous');
-	
-	      controls_wrapper.appendChild(play_button);
-	      controls_wrapper.appendChild(pause_button);
-	      controls_wrapper.appendChild(previous_button);
-	      controls_wrapper.appendChild(next_button);
-	
-	      this.buttons.play = play_button;
-	      this.buttons.pause = pause_button;
-	      this.buttons.skip_next = next_button;
-	      this.buttons.skip_previous = previous_button;
-	
-	      this.markup = controls_wrapper;
-	    }
-	  }, {
-	    key: 'addListeners',
-	    value: function addListeners(that) {
-	      this.buttons.play.addEventListener('click', function () {
-	        that.audio.element.play();
-	        this.className += ' disabled';
-	        //that.pause_button.className = "mat-icon mat-icon-pause"
-	      });
-	      this.buttons.pause.addEventListener('click', function () {
-	        that.audio.element.pause();
-	        this.className += ' disabled';
-	        //  that.play_button.className = "mat-icon mat-icon-play"
-	      });
-	      this.buttons.skip_next.addEventListener('click', function () {
-	        that.nextSong();
-	      });
-	      this.buttons.skip_previous.addEventListener('click', function () {
-	        that.previousSong();
-	      });
-	    }
-	  }]);
-	
-	  return PlayerControls;
-	}();
-
-	exports.default = PlayerControls;
-	module.exports = exports['default'];
-
-/***/ },
+/* 2 */,
 /* 3 */
 /***/ function(module, exports) {
 
@@ -498,6 +402,103 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 	exports.default = AudioPlayerAudio;
+	module.exports = exports['default'];
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var PlayerControls = function () {
+	  function PlayerControls(that) {
+	    _classCallCheck(this, PlayerControls);
+	
+	    this.markup = null;
+	    this.buttons = {
+	      play: null,
+	      pause: null,
+	      skip_next: null,
+	      skip_previous: null
+	    };
+	
+	    this.createMarkup();
+	    this.addListeners(that);
+	  }
+	
+	  /**
+	   * create the basic html for the controls
+	   */
+	
+	
+	  _createClass(PlayerControls, [{
+	    key: 'createMarkup',
+	    value: function createMarkup() {
+	      var controls_wrapper = document.createElement('div');
+	      controls_wrapper.setAttribute('id', 'controls_wrapper');
+	      // play button
+	      var play_button = document.createElement('i');
+	      play_button.setAttribute('id', 'play_button');
+	      play_button.setAttribute('class', 'mat-icon mat-icon-play');
+	      // pause button
+	      var pause_button = document.createElement('i');
+	      pause_button.setAttribute('id', 'pause_button');
+	      pause_button.setAttribute('class', 'mat-icon mat-icon-pause');
+	      // next button
+	      var next_button = document.createElement('i');
+	      next_button.setAttribute('id', 'next_button');
+	      next_button.setAttribute('class', 'mat-icon mat-icon-skip_next');
+	      // previous button
+	      var previous_button = document.createElement('i');
+	      previous_button.setAttribute('id', 'previous_button');
+	      previous_button.setAttribute('class', 'mat-icon mat-icon-skip_previous');
+	
+	      controls_wrapper.appendChild(play_button);
+	      controls_wrapper.appendChild(pause_button);
+	      controls_wrapper.appendChild(previous_button);
+	      controls_wrapper.appendChild(next_button);
+	
+	      this.buttons.play = play_button;
+	      this.buttons.pause = pause_button;
+	      this.buttons.skip_next = next_button;
+	      this.buttons.skip_previous = previous_button;
+	
+	      this.markup = controls_wrapper;
+	    }
+	  }, {
+	    key: 'addListeners',
+	    value: function addListeners(that) {
+	      this.buttons.play.addEventListener('click', function () {
+	        that.audio.element.play();
+	        this.className += ' disabled';
+	        //that.pause_button.className = "mat-icon mat-icon-pause"
+	      });
+	      this.buttons.pause.addEventListener('click', function () {
+	        that.audio.element.pause();
+	        this.className += ' disabled';
+	        //  that.play_button.className = "mat-icon mat-icon-play"
+	      });
+	      this.buttons.skip_next.addEventListener('click', function () {
+	        that.nextSong();
+	      });
+	      this.buttons.skip_previous.addEventListener('click', function () {
+	        that.previousSong();
+	      });
+	    }
+	  }]);
+	
+	  return PlayerControls;
+	}();
+
+	exports.default = PlayerControls;
 	module.exports = exports['default'];
 
 /***/ }
