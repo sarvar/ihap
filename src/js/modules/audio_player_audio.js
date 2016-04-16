@@ -1,5 +1,4 @@
-// name to avoid naming conflicts with the actual 'Audio' class
-export default class AudioElement {
+export default class AudioPlayerAudio {
   constructor(that) {
     this.markup = null
     this.element = null
