@@ -1,4 +1,4 @@
-export default class ProgressBar {
+export default class AudioPlayerPlaylist {
   constructor(that, songs) {
     //this.markup = null
     this.songs = songs

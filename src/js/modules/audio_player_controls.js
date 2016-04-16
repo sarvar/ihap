@@ -1,4 +1,4 @@
-export default class PlayerControls {
+export default class AudioPlayerControls {
   constructor(that) {
     this.markup = null
     this.buttons = {

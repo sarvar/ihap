@@ -1,7 +1,7 @@
 import AudioPlayerAudio from './modules/audio_player_audio'
 import AudioPlayerControls from './modules/audio_player_controls'
-import Playlist from './modules/playlist'
-import ProgressBar from './modules/progress_bar'
+import AudioPlayerPlaylist from './modules/audio_player_playlist'
+import AudioPlayerProgressBar from './modules/audio_player_progress_bar'
 
 export default class AudioPlayer {
   constructor(data) {
@@ -10,8 +10,8 @@ export default class AudioPlayer {
 
     this.audio = new AudioPlayerAudio(this)
     this.controls = new AudioPlayerControls(this)
-    this.playlist = new Playlist(this, data.songs)
-    this.progress_bar = new ProgressBar(this)
+    this.playlist = new AudioPlayerPlaylist(this, data.songs)
+    this.progress_bar = new AudioPlayerProgressBar(this)
 
     this.initializeAudioPlayer()
   }

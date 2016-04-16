@@ -70,13 +70,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _audio_player_controls2 = _interopRequireDefault(_audio_player_controls);
 	
-	var _playlist = __webpack_require__(3);
+	var _audio_player_playlist = __webpack_require__(7);
 	
-	var _playlist2 = _interopRequireDefault(_playlist);
+	var _audio_player_playlist2 = _interopRequireDefault(_audio_player_playlist);
 	
-	var _progress_bar = __webpack_require__(4);
+	var _audio_player_progress_bar = __webpack_require__(8);
 	
-	var _progress_bar2 = _interopRequireDefault(_progress_bar);
+	var _audio_player_progress_bar2 = _interopRequireDefault(_audio_player_progress_bar);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -91,8 +91,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    this.audio = new _audio_player_audio2.default(this);
 	    this.controls = new _audio_player_controls2.default(this);
-	    this.playlist = new _playlist2.default(this, data.songs);
-	    this.progress_bar = new _progress_bar2.default(this);
+	    this.playlist = new _audio_player_playlist2.default(this, data.songs);
+	    this.progress_bar = new _audio_player_progress_bar2.default(this);
 	
 	    this.initializeAudioPlayer();
 	  }
@@ -156,181 +156,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ },
 /* 1 */,
 /* 2 */,
-/* 3 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var ProgressBar = function () {
-	  function ProgressBar(that, songs) {
-	    _classCallCheck(this, ProgressBar);
-	
-	    //this.markup = null
-	    this.songs = songs;
-	    this.current_song_index = null;
-	
-	    //this.createMarkup()
-	    this.addListeners(that);
-	  }
-	
-	  // playlist currently has no markup. not visible in fronent yet
-	  //createMarkup() {}
-	
-	  _createClass(ProgressBar, [{
-	    key: 'addListeners',
-	    value: function addListeners() {}
-	  }, {
-	    key: 'nextSong',
-	    value: function nextSong(that) {
-	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = that.audio.element.paused !== true || playing;
-	        var new_index = this.current_song_index + 1;
-	        if (this.songs.length > new_index) {
-	          this.current_song_index = new_index;
-	        } else {
-	          this.current_song_index = 0;
-	        }
-	        this.setCurrentSong(that, this.songs[this.current_song_index]);
-	        if (playing === true) {
-	          that.audio.element.play();
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'previousSong',
-	    value: function previousSong(that) {
-	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = that.audio.element.paused !== true;
-	        var new_index = this.current_song_index - 1;
-	        if (new_index >= 0) {
-	          this.current_song_index = new_index;
-	        } else {
-	          this.current_song_index = this.songs.length - 1;
-	        }
-	        this.setCurrentSong(that, this.songs[this.current_song_index]);
-	        if (playing === true) {
-	          that.audio.element.play();
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'setCurrentSong',
-	    value: function setCurrentSong(that, song) {
-	      that.audio.element.setAttribute('src', song.url);
-	      that.audio.element.load();
-	    }
-	  }]);
-	
-	  return ProgressBar;
-	}();
-
-	exports.default = ProgressBar;
-	module.exports = exports['default'];
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var ProgressBar = function () {
-	  function ProgressBar(that) {
-	    _classCallCheck(this, ProgressBar);
-	
-	    this.markup = null;
-	    this.element = null;
-	
-	    this.createMarkup();
-	    this.addListeners(that);
-	  }
-	
-	  /**
-	   * create the basic html for the progress bar. wrapper & input with type=range
-	   */
-	
-	
-	  _createClass(ProgressBar, [{
-	    key: 'createMarkup',
-	    value: function createMarkup() {
-	      // wrapper
-	      var progress_bar_wrapper = document.createElement('div');
-	      progress_bar_wrapper.setAttribute('id', 'progress_bar_wrapper');
-	
-	      // actual bar
-	      var progress_bar = document.createElement('input');
-	      progress_bar.setAttribute('id', 'progress_bar');
-	      progress_bar.setAttribute('min', '0');
-	      progress_bar.setAttribute('value', '0');
-	      progress_bar.setAttribute('type', 'range');
-	
-	      progress_bar_wrapper.appendChild(progress_bar);
-	      this.markup = progress_bar_wrapper;
-	      this.element = progress_bar;
-	    }
-	
-	    /**
-	     * adds the event listeners for the progress bar
-	     * @param {Object} that: the AudioPlayer parent object
-	     */
-	
-	  }, {
-	    key: 'addListeners',
-	    value: function addListeners(that) {
-	      this.element.addEventListener('click', function (e) {
-	        //var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth
-	        that.audio.element.currentTime = this.value;
-	      });
-	    }
-	
-	    /**
-	     * refreshes max value and current value of the progress bar to match the new song
-	     * @param {Float} song_duration: the duration of the song currenty playing
-	    */
-	
-	  }, {
-	    key: 'refresh',
-	    value: function refresh(song_duration) {
-	      this.element.setAttribute("max", song_duration);
-	      this.element.setAttribute("value", "0");
-	    }
-	
-	    /**
-	     * updates the progress bar visually, moves the left background to the right
-	     * @param {Float} current_time: the current time the song is playing at
-	    */
-	
-	  }, {
-	    key: 'update',
-	    value: function update(current_time) {
-	      this.element.value = current_time;
-	      var value = this.element.value / this.element.max;
-	      this.element.style.backgroundImage = ['-webkit-gradient(', 'linear, ', 'left top, ', 'right top, ', 'color-stop(' + value + ', orange), ', 'color-stop(' + value + ', lightgrey)', ')'].join('');
-	    }
-	  }]);
-	
-	  return ProgressBar;
-	}();
-
-	exports.default = ProgressBar;
-	module.exports = exports['default'];
-
-/***/ },
+/* 3 */,
+/* 4 */,
 /* 5 */
 /***/ function(module, exports) {
 
@@ -418,9 +245,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var PlayerControls = function () {
-	  function PlayerControls(that) {
-	    _classCallCheck(this, PlayerControls);
+	var AudioPlayerControls = function () {
+	  function AudioPlayerControls(that) {
+	    _classCallCheck(this, AudioPlayerControls);
 	
 	    this.markup = null;
 	    this.buttons = {
@@ -439,7 +266,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 	
 	
-	  _createClass(PlayerControls, [{
+	  _createClass(AudioPlayerControls, [{
 	    key: 'createMarkup',
 	    value: function createMarkup() {
 	      var controls_wrapper = document.createElement('div');
@@ -495,10 +322,185 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }]);
 	
-	  return PlayerControls;
+	  return AudioPlayerControls;
 	}();
 
-	exports.default = PlayerControls;
+	exports.default = AudioPlayerControls;
+	module.exports = exports['default'];
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var AudioPlayerPlaylist = function () {
+	  function AudioPlayerPlaylist(that, songs) {
+	    _classCallCheck(this, AudioPlayerPlaylist);
+	
+	    //this.markup = null
+	    this.songs = songs;
+	    this.current_song_index = null;
+	
+	    //this.createMarkup()
+	    this.addListeners(that);
+	  }
+	
+	  // playlist currently has no markup. not visible in fronent yet
+	  //createMarkup() {}
+	
+	  _createClass(AudioPlayerPlaylist, [{
+	    key: 'addListeners',
+	    value: function addListeners() {}
+	  }, {
+	    key: 'nextSong',
+	    value: function nextSong(that) {
+	      if (this.songs != undefined && this.songs.length > 1) {
+	        var playing = that.audio.element.paused !== true || playing;
+	        var new_index = this.current_song_index + 1;
+	        if (this.songs.length > new_index) {
+	          this.current_song_index = new_index;
+	        } else {
+	          this.current_song_index = 0;
+	        }
+	        this.setCurrentSong(that, this.songs[this.current_song_index]);
+	        if (playing === true) {
+	          that.audio.element.play();
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'previousSong',
+	    value: function previousSong(that) {
+	      if (this.songs != undefined && this.songs.length > 1) {
+	        var playing = that.audio.element.paused !== true;
+	        var new_index = this.current_song_index - 1;
+	        if (new_index >= 0) {
+	          this.current_song_index = new_index;
+	        } else {
+	          this.current_song_index = this.songs.length - 1;
+	        }
+	        this.setCurrentSong(that, this.songs[this.current_song_index]);
+	        if (playing === true) {
+	          that.audio.element.play();
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'setCurrentSong',
+	    value: function setCurrentSong(that, song) {
+	      that.audio.element.setAttribute('src', song.url);
+	      that.audio.element.load();
+	    }
+	  }]);
+	
+	  return AudioPlayerPlaylist;
+	}();
+
+	exports.default = AudioPlayerPlaylist;
+	module.exports = exports['default'];
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var AudioPlayerProgressBar = function () {
+	  function AudioPlayerProgressBar(that) {
+	    _classCallCheck(this, AudioPlayerProgressBar);
+	
+	    this.markup = null;
+	    this.element = null;
+	
+	    this.createMarkup();
+	    this.addListeners(that);
+	  }
+	
+	  /**
+	   * create the basic html for the progress bar. wrapper & input with type=range
+	   */
+	
+	
+	  _createClass(AudioPlayerProgressBar, [{
+	    key: 'createMarkup',
+	    value: function createMarkup() {
+	      // wrapper
+	      var progress_bar_wrapper = document.createElement('div');
+	      progress_bar_wrapper.setAttribute('id', 'progress_bar_wrapper');
+	
+	      // actual bar
+	      var progress_bar = document.createElement('input');
+	      progress_bar.setAttribute('id', 'progress_bar');
+	      progress_bar.setAttribute('min', '0');
+	      progress_bar.setAttribute('value', '0');
+	      progress_bar.setAttribute('type', 'range');
+	
+	      progress_bar_wrapper.appendChild(progress_bar);
+	      this.markup = progress_bar_wrapper;
+	      this.element = progress_bar;
+	    }
+	
+	    /**
+	     * adds the event listeners for the progress bar
+	     * @param {Object} that: the AudioPlayer parent object
+	     */
+	
+	  }, {
+	    key: 'addListeners',
+	    value: function addListeners(that) {
+	      this.element.addEventListener('click', function (e) {
+	        //var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth
+	        that.audio.element.currentTime = this.value;
+	      });
+	    }
+	
+	    /**
+	     * refreshes max value and current value of the progress bar to match the new song
+	     * @param {Float} song_duration: the duration of the song currenty playing
+	    */
+	
+	  }, {
+	    key: 'refresh',
+	    value: function refresh(song_duration) {
+	      this.element.setAttribute("max", song_duration);
+	      this.element.setAttribute("value", "0");
+	    }
+	
+	    /**
+	     * updates the progress bar visually, moves the left background to the right
+	     * @param {Float} current_time: the current time the song is playing at
+	    */
+	
+	  }, {
+	    key: 'update',
+	    value: function update(current_time) {
+	      this.element.value = current_time;
+	      var value = this.element.value / this.element.max;
+	      this.element.style.backgroundImage = ['-webkit-gradient(', 'linear, ', 'left top, ', 'right top, ', 'color-stop(' + value + ', orange), ', 'color-stop(' + value + ', lightgrey)', ')'].join('');
+	    }
+	  }]);
+	
+	  return AudioPlayerProgressBar;
+	}();
+
+	exports.default = AudioPlayerProgressBar;
 	module.exports = exports['default'];
 
 /***/ }

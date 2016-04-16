@@ -1,4 +1,4 @@
-export default class ProgressBar {
+export default class AudioPlayerProgressBar {
   constructor(that) {
     this.markup = null
     this.element = null
