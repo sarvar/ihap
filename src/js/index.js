@@ -44,7 +44,7 @@ export default class AudioPlayer {
     this.progress_bar.refresh(song_duration)
   }
 
-  updateProgress() {
+	updateProgress() {
     var current_time = this.audio.element.currentTime
     this.progress_bar.update(current_time)
   }
@@ -74,12 +74,12 @@ export default class AudioPlayer {
 		this.controls.buttons.play.addEventListener('click', function() {
 			that.audio.element.play()
 			this.className += ' disabled'
-			//that.pause_button.className = "mat-icon mat-icon-pause"
+			that.controls.buttons.pause.className = "mat-icon mat-icon-pause"
 		})
 		this.controls.buttons.pause.addEventListener('click', function() {
 			that.audio.element.pause()
 			this.className += ' disabled'
-		//  that.play_button.className = "mat-icon mat-icon-play"
+		  that.controls.buttons.play.className = "mat-icon mat-icon-play"
 		})
 		this.controls.buttons.skip_next.addEventListener('click', function() {
 			that.nextSong()
@@ -89,8 +89,7 @@ export default class AudioPlayer {
 		})
 
 		//=== progress ===//
-		this.progress_bar.element.addEventListener('click', function(e) {
-			//var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth
+		this.progress_bar.element.addEventListener('click', function() {
 			that.audio.element.currentTime = this.value
 		})
 	}

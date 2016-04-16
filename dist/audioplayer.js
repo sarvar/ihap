@@ -166,12 +166,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.controls.buttons.play.addEventListener('click', function () {
 	        that.audio.element.play();
 	        this.className += ' disabled';
-	        //that.pause_button.className = "mat-icon mat-icon-pause"
+	        that.controls.buttons.pause.className = "mat-icon mat-icon-pause";
 	      });
 	      this.controls.buttons.pause.addEventListener('click', function () {
 	        that.audio.element.pause();
 	        this.className += ' disabled';
-	        //  that.play_button.className = "mat-icon mat-icon-play"
+	        that.controls.buttons.play.className = "mat-icon mat-icon-play";
 	      });
 	      this.controls.buttons.skip_next.addEventListener('click', function () {
 	        that.nextSong();
@@ -181,8 +181,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	
 	      //=== progress ===//
-	      this.progress_bar.element.addEventListener('click', function (e) {
-	        //var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth
+	      this.progress_bar.element.addEventListener('click', function () {
 	        that.audio.element.currentTime = this.value;
 	      });
 	    }
