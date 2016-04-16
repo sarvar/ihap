@@ -62,19 +62,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _audio_player_audio = __webpack_require__(5);
+	var _audio_player_audio = __webpack_require__(1);
 	
 	var _audio_player_audio2 = _interopRequireDefault(_audio_player_audio);
 	
-	var _audio_player_controls = __webpack_require__(6);
+	var _audio_player_controls = __webpack_require__(2);
 	
 	var _audio_player_controls2 = _interopRequireDefault(_audio_player_controls);
 	
-	var _audio_player_playlist = __webpack_require__(7);
+	var _audio_player_playlist = __webpack_require__(3);
 	
 	var _audio_player_playlist2 = _interopRequireDefault(_audio_player_playlist);
 	
-	var _audio_player_progress_bar = __webpack_require__(8);
+	var _audio_player_progress_bar = __webpack_require__(4);
 	
 	var _audio_player_progress_bar2 = _interopRequireDefault(_audio_player_progress_bar);
 	
@@ -89,10 +89,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.settings = data.settings;
 	    this.container = document.getElementById(data.settings.container);
 	
-	    this.audio = new _audio_player_audio2.default(this);
-	    this.controls = new _audio_player_controls2.default(this);
-	    this.playlist = new _audio_player_playlist2.default(this, data.songs);
-	    this.progress_bar = new _audio_player_progress_bar2.default(this);
+	    this.audio = new _audio_player_audio2.default();
+	    this.controls = new _audio_player_controls2.default();
+	    this.playlist = new _audio_player_playlist2.default(data.songs);
+	    this.progress_bar = new _audio_player_progress_bar2.default();
 	
 	    this.initializeAudioPlayer();
 	  }
@@ -117,6 +117,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.container.appendChild(this.audio.markup);
 	      this.container.appendChild(this.controls.markup);
 	      this.container.appendChild(this.progress_bar.markup);
+	
+	      this.addListeners();
 	    }
 	  }, {
 	    key: 'setCurrentSong',
@@ -145,6 +147,45 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function previousSong() {
 	      this.playlist.previousSong(this);
 	    }
+	  }, {
+	    key: 'addListeners',
+	    value: function addListeners() {
+	      var that = this;
+	      //=== audio ===//
+	      this.audio.element.addEventListener("timeupdate", function () {
+	        that.updateProgress();
+	      });
+	      this.audio.element.addEventListener('canplay', function () {
+	        that.refreshProgressBar();
+	      });
+	      this.audio.element.addEventListener('ended', function () {
+	        that.nextSong(true);
+	      });
+	
+	      //=== controls ===//
+	      this.controls.buttons.play.addEventListener('click', function () {
+	        that.audio.element.play();
+	        this.className += ' disabled';
+	        //that.pause_button.className = "mat-icon mat-icon-pause"
+	      });
+	      this.controls.buttons.pause.addEventListener('click', function () {
+	        that.audio.element.pause();
+	        this.className += ' disabled';
+	        //  that.play_button.className = "mat-icon mat-icon-play"
+	      });
+	      this.controls.buttons.skip_next.addEventListener('click', function () {
+	        that.nextSong();
+	      });
+	      this.controls.buttons.skip_previous.addEventListener('click', function () {
+	        that.previousSong();
+	      });
+	
+	      //=== progress ===//
+	      this.progress_bar.element.addEventListener('click', function (e) {
+	        //var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth
+	        that.audio.element.currentTime = this.value;
+	      });
+	    }
 	  }]);
 	
 	  return AudioPlayer;
@@ -154,11 +195,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */
+/* 1 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -172,14 +209,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var AudioPlayerAudio = function () {
-	  function AudioPlayerAudio(that) {
+	  function AudioPlayerAudio() {
 	    _classCallCheck(this, AudioPlayerAudio);
 	
 	    this.markup = null;
 	    this.element = null;
 	
 	    this.createMarkup();
-	    this.addListeners(that);
 	  }
 	
 	  /**
@@ -204,25 +240,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.markup = player_wrapper;
 	      this.element = audio_player;
 	    }
-	
-	    /**
-	     * adds the event listeners for the audio element
-	     * @param {Object} that: the AudioPlayer parent object
-	     */
-	
-	  }, {
-	    key: 'addListeners',
-	    value: function addListeners(that) {
-	      this.element.addEventListener("timeupdate", function () {
-	        that.updateProgress();
-	      });
-	      this.element.addEventListener('canplay', function () {
-	        that.refreshProgressBar();
-	      });
-	      this.element.addEventListener('ended', function () {
-	        that.nextSong(true);
-	      });
-	    }
 	  }]);
 	
 	  return AudioPlayerAudio;
@@ -232,7 +249,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 6 */
+/* 2 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -246,7 +263,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var AudioPlayerControls = function () {
-	  function AudioPlayerControls(that) {
+	  function AudioPlayerControls() {
 	    _classCallCheck(this, AudioPlayerControls);
 	
 	    this.markup = null;
@@ -258,7 +275,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	
 	    this.createMarkup();
-	    this.addListeners(that);
 	  }
 	
 	  /**
@@ -300,26 +316,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      this.markup = controls_wrapper;
 	    }
-	  }, {
-	    key: 'addListeners',
-	    value: function addListeners(that) {
-	      this.buttons.play.addEventListener('click', function () {
-	        that.audio.element.play();
-	        this.className += ' disabled';
-	        //that.pause_button.className = "mat-icon mat-icon-pause"
-	      });
-	      this.buttons.pause.addEventListener('click', function () {
-	        that.audio.element.pause();
-	        this.className += ' disabled';
-	        //  that.play_button.className = "mat-icon mat-icon-play"
-	      });
-	      this.buttons.skip_next.addEventListener('click', function () {
-	        that.nextSong();
-	      });
-	      this.buttons.skip_previous.addEventListener('click', function () {
-	        that.previousSong();
-	      });
-	    }
 	  }]);
 	
 	  return AudioPlayerControls;
@@ -329,7 +325,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 7 */
+/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -343,7 +339,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var AudioPlayerPlaylist = function () {
-	  function AudioPlayerPlaylist(that, songs) {
+	  function AudioPlayerPlaylist(songs) {
 	    _classCallCheck(this, AudioPlayerPlaylist);
 	
 	    //this.markup = null
@@ -351,16 +347,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.current_song_index = null;
 	
 	    //this.createMarkup()
-	    this.addListeners(that);
 	  }
 	
 	  // playlist currently has no markup. not visible in fronent yet
 	  //createMarkup() {}
 	
 	  _createClass(AudioPlayerPlaylist, [{
-	    key: 'addListeners',
-	    value: function addListeners() {}
-	  }, {
 	    key: 'nextSong',
 	    value: function nextSong(that) {
 	      if (this.songs != undefined && this.songs.length > 1) {
@@ -409,7 +401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 8 */
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -423,14 +415,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var AudioPlayerProgressBar = function () {
-	  function AudioPlayerProgressBar(that) {
+	  function AudioPlayerProgressBar() {
 	    _classCallCheck(this, AudioPlayerProgressBar);
 	
 	    this.markup = null;
 	    this.element = null;
 	
 	    this.createMarkup();
-	    this.addListeners(that);
 	  }
 	
 	  /**
@@ -455,20 +446,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      progress_bar_wrapper.appendChild(progress_bar);
 	      this.markup = progress_bar_wrapper;
 	      this.element = progress_bar;
-	    }
-	
-	    /**
-	     * adds the event listeners for the progress bar
-	     * @param {Object} that: the AudioPlayer parent object
-	     */
-	
-	  }, {
-	    key: 'addListeners',
-	    value: function addListeners(that) {
-	      this.element.addEventListener('click', function (e) {
-	        //var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth
-	        that.audio.element.currentTime = this.value;
-	      });
 	    }
 	
 	    /**

@@ -1,5 +1,5 @@
 export default class AudioPlayerControls {
-  constructor(that) {
+  constructor() {
     this.markup = null
     this.buttons = {
       play: null,
@@ -9,7 +9,6 @@ export default class AudioPlayerControls {
     }
 
     this.createMarkup()
-    this.addListeners(that)
   }
 
   /**
@@ -46,24 +45,5 @@ export default class AudioPlayerControls {
     this.buttons.skip_previous = previous_button
 
     this.markup = controls_wrapper
-  }
-
-  addListeners(that) {
-    this.buttons.play.addEventListener('click', function() {
-      that.audio.element.play()
-      this.className += ' disabled'
-      //that.pause_button.className = "mat-icon mat-icon-pause"
-    })
-    this.buttons.pause.addEventListener('click', function() {
-      that.audio.element.pause()
-      this.className += ' disabled'
-    //  that.play_button.className = "mat-icon mat-icon-play"
-    })
-    this.buttons.skip_next.addEventListener('click', function() {
-      that.nextSong()
-    })
-    this.buttons.skip_previous.addEventListener('click', function() {
-      that.previousSong()
-    })
   }
 }

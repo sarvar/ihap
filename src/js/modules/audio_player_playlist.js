@@ -1,17 +1,14 @@
 export default class AudioPlayerPlaylist {
-  constructor(that, songs) {
+  constructor(songs) {
     //this.markup = null
     this.songs = songs
     this.current_song_index = null
 
     //this.createMarkup()
-    this.addListeners(that)
   }
 
   // playlist currently has no markup. not visible in fronent yet
   //createMarkup() {}
-
-  addListeners() {}
 
   nextSong(that) {
     if (this.songs != undefined && this.songs.length > 1){

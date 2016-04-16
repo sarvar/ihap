@@ -8,10 +8,10 @@ export default class AudioPlayer {
     this.settings = data.settings
     this.container = document.getElementById(data.settings.container)
 
-    this.audio = new AudioPlayerAudio(this)
-    this.controls = new AudioPlayerControls(this)
-    this.playlist = new AudioPlayerPlaylist(this, data.songs)
-    this.progress_bar = new AudioPlayerProgressBar(this)
+    this.audio = new AudioPlayerAudio()
+    this.controls = new AudioPlayerControls()
+    this.playlist = new AudioPlayerPlaylist(data.songs)
+    this.progress_bar = new AudioPlayerProgressBar()
 
     this.initializeAudioPlayer()
   }
@@ -31,6 +31,8 @@ export default class AudioPlayer {
     this.container.appendChild(this.audio.markup)
     this.container.appendChild(this.controls.markup)
     this.container.appendChild(this.progress_bar.markup)
+
+		this.addListeners()
   }
 
   setCurrentSong(song){
@@ -54,5 +56,43 @@ export default class AudioPlayer {
   previousSong() {
     this.playlist.previousSong(this)
   }
+
+	addListeners() {
+		var that = this
+		//=== audio ===//
+		this.audio.element.addEventListener("timeupdate", function() {
+			that.updateProgress()
+		})
+		this.audio.element.addEventListener('canplay', function() {
+			that.refreshProgressBar()
+		})
+		this.audio.element.addEventListener('ended', function() {
+			that.nextSong(true)
+		})
+
+		//=== controls ===//
+		this.controls.buttons.play.addEventListener('click', function() {
+			that.audio.element.play()
+			this.className += ' disabled'
+			//that.pause_button.className = "mat-icon mat-icon-pause"
+		})
+		this.controls.buttons.pause.addEventListener('click', function() {
+			that.audio.element.pause()
+			this.className += ' disabled'
+		//  that.play_button.className = "mat-icon mat-icon-play"
+		})
+		this.controls.buttons.skip_next.addEventListener('click', function() {
+			that.nextSong()
+		})
+		this.controls.buttons.skip_previous.addEventListener('click', function() {
+			that.previousSong()
+		})
+
+		//=== progress ===//
+		this.progress_bar.element.addEventListener('click', function(e) {
+			//var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth
+			that.audio.element.currentTime = this.value
+		})
+	}
 
 }

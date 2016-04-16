@@ -1,10 +1,9 @@
 export default class AudioPlayerProgressBar {
-  constructor(that) {
+  constructor() {
     this.markup = null
     this.element = null
 
     this.createMarkup()
-    this.addListeners(that)
   }
 
   /**
@@ -25,17 +24,6 @@ export default class AudioPlayerProgressBar {
     progress_bar_wrapper.appendChild(progress_bar)
     this.markup = progress_bar_wrapper
     this.element = progress_bar
-  }
-
-  /**
-   * adds the event listeners for the progress bar
-   * @param {Object} that: the AudioPlayer parent object
-   */
-  addListeners(that) {
-    this.element.addEventListener('click', function(e) {
-      //var new_time = (e.pageX - this.offsetLeft) * this.max / this.offsetWidth
-      that.audio.element.currentTime = this.value
-    })
   }
 
   /**

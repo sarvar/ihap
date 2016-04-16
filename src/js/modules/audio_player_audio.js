@@ -1,10 +1,9 @@
 export default class AudioPlayerAudio {
-  constructor(that) {
+  constructor() {
     this.markup = null
     this.element = null
 
     this.createMarkup()
-    this.addListeners(that)
   }
 
   /**
@@ -24,21 +23,5 @@ export default class AudioPlayerAudio {
 
     this.markup = player_wrapper
     this.element = audio_player
-  }
-
-  /**
-   * adds the event listeners for the audio element
-   * @param {Object} that: the AudioPlayer parent object
-   */
-  addListeners(that) {
-    this.element.addEventListener("timeupdate", function() {
-      that.updateProgress()
-    })
-    this.element.addEventListener('canplay', function() {
-      that.refreshProgressBar()
-    })
-		this.element.addEventListener('ended', function() {
-			that.nextSong(true)
-		})
   }
 }
