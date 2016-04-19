@@ -12,6 +12,7 @@ export default class AudioPlayer {
     this.controls = new AudioPlayerControls()
     this.playlist = new AudioPlayerPlaylist(data.songs)
     this.progress_bar = new AudioPlayerProgressBar()
+    this.current_song_index = 0
 
     this.initializeAudioPlayer()
   }
@@ -20,7 +21,6 @@ export default class AudioPlayer {
     this.createComponents()
     if (this.playlist.songs != undefined && this.playlist.songs.length != 0){
       this.setCurrentSong(this.playlist.songs[0])
-      this.current_song_index = 0
     }
   }
 

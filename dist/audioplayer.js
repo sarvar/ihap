@@ -93,6 +93,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.controls = new _audio_player_controls2.default();
 	    this.playlist = new _audio_player_playlist2.default(data.songs);
 	    this.progress_bar = new _audio_player_progress_bar2.default();
+	    this.current_song_index = 0;
 	
 	    this.initializeAudioPlayer();
 	  }
@@ -103,7 +104,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.createComponents();
 	      if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
 	        this.setCurrentSong(this.playlist.songs[0]);
-	        this.current_song_index = 0;
 	      }
 	    }
 	
