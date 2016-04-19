@@ -132,28 +132,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.progress_bar.refresh(song_duration);
 	    }
 	  }, {
-	    key: 'updateProgress',
-	    value: function updateProgress() {
+	    key: 'updateProgressThumb',
+	    value: function updateProgressThumb() {
 	      var current_time = this.audio.element.currentTime;
-	      this.progress_bar.update(current_time);
+	      this.progress_bar.updateThumb(current_time);
+	    }
+	  }, {
+	    key: 'updateProgressBar',
+	    value: function updateProgressBar() {
+	      var current_time = this.audio.element.currentTime;
+	      this.progress_bar.updateBar(current_time);
 	    }
 	  }, {
 	    key: 'nextSong',
 	    value: function nextSong() {
+	      this.audio.element.currentTime = 0;
 	      this.playlist.nextSong(this);
 	    }
 	  }, {
 	    key: 'previousSong',
 	    value: function previousSong() {
+	      this.audio.element.currentTime = 0;
 	      this.playlist.previousSong(this);
 	    }
 	  }, {
 	    key: 'addListeners',
 	    value: function addListeners() {
+	      var _this = this;
+	
 	      var that = this;
 	      //=== audio ===//
+	      var onTimeUpdate = function onTimeUpdate(_) {
+	        if (!_this) return;
+	        _this.updateProgressThumb();
+	      };
+	      this.audio.element.addEventListener("timeupdate", onTimeUpdate);
 	      this.audio.element.addEventListener("timeupdate", function () {
-	        that.updateProgress();
+	        that.updateProgressBar();
 	      });
 	      this.audio.element.addEventListener('canplay', function () {
 	        that.refreshProgressBar();
@@ -183,6 +198,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      //=== progress ===//
 	      this.progress_bar.element.addEventListener('click', function () {
 	        that.audio.element.currentTime = this.value;
+	      });
+	
+	      this.progress_bar.element.addEventListener('mousedown', function () {
+	        that.audio.element.removeEventListener('timeupdate', onTimeUpdate);
+	      });
+	
+	      this.progress_bar.element.addEventListener('mouseup', function () {
+	        that.audio.element.addEventListener('timeupdate', onTimeUpdate);
 	      });
 	    }
 	  }]);
@@ -458,16 +481,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.element.setAttribute("max", song_duration);
 	      this.element.setAttribute("value", "0");
 	    }
-	
-	    /**
-	     * updates the progress bar visually, moves the left background to the right
-	     * @param {Float} current_time: the current time the song is playing at
-	    */
-	
 	  }, {
-	    key: 'update',
-	    value: function update(current_time) {
+	    key: 'updateThumb',
+	    value: function updateThumb(current_time) {
 	      this.element.value = current_time;
+	    }
+	  }, {
+	    key: 'updateBar',
+	    value: function updateBar(current_time) {
 	      var value = this.element.value / this.element.max;
 	      this.element.style.backgroundImage = ['-webkit-gradient(', 'linear, ', 'left top, ', 'right top, ', 'color-stop(' + value + ', orange), ', 'color-stop(' + value + ', lightgrey)', ')'].join('');
 	    }

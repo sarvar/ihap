@@ -44,25 +44,38 @@ export default class AudioPlayer {
     this.progress_bar.refresh(song_duration)
   }
 
-	updateProgress() {
+	updateProgressThumb() {
     var current_time = this.audio.element.currentTime
-    this.progress_bar.update(current_time)
+    this.progress_bar.updateThumb(current_time)
+  }
+
+  updateProgressBar() {
+    var current_time = this.audio.element.currentTime
+    this.progress_bar.updateBar(current_time)
   }
 
   nextSong() {
+    this.audio.element.currentTime = 0
     this.playlist.nextSong(this)
   }
 
   previousSong() {
+    this.audio.element.currentTime = 0
     this.playlist.previousSong(this)
   }
 
 	addListeners() {
 		var that = this
 		//=== audio ===//
+    const onTimeUpdate = _ => {
+      if(!this)
+        return
+      this.updateProgressThumb()
+    }
+		this.audio.element.addEventListener("timeupdate", onTimeUpdate)
 		this.audio.element.addEventListener("timeupdate", function() {
-			that.updateProgress()
-		})
+      that.updateProgressBar()
+    })
 		this.audio.element.addEventListener('canplay', function() {
 			that.refreshProgressBar()
 		})
@@ -92,6 +105,13 @@ export default class AudioPlayer {
 		this.progress_bar.element.addEventListener('click', function() {
 			that.audio.element.currentTime = this.value
 		})
-	}
 
+    this.progress_bar.element.addEventListener('mousedown', function() {
+      that.audio.element.removeEventListener('timeupdate', onTimeUpdate)
+    })
+
+    this.progress_bar.element.addEventListener('mouseup', function() {
+      that.audio.element.addEventListener('timeupdate', onTimeUpdate)
+    })
+  }
 }

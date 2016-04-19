@@ -35,12 +35,11 @@ export default class AudioPlayerProgressBar {
     this.element.setAttribute("value", "0")
   }
 
-  /**
-   * updates the progress bar visually, moves the left background to the right
-   * @param {Float} current_time: the current time the song is playing at
-  */
-  update(current_time) {
+  updateThumb(current_time) {
     this.element.value = current_time
+  }
+
+  updateBar(current_time) {
     var value = this.element.value/this.element.max;
     this.element.style.backgroundImage = [
       '-webkit-gradient(',
