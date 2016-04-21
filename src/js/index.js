@@ -40,13 +40,12 @@ export default class AudioPlayer {
     this.playlist.setCurrentSong(this, song)
   }
 
-  refreshProgressBar() {
+  reloadProgressBar() {
     var song_duration = this.audio.element.duration
     this.progress_bar.refresh(song_duration)
   }
 
   updateProgressBar(current_time) {
-    var current_time = this.audio.element.currentTime
     this.progress_bar.updateBar(current_time)
   }
 
@@ -64,10 +63,11 @@ export default class AudioPlayer {
 		var that = this
 		//=== audio ===//
 		this.audio.element.addEventListener("timeupdate", function() {
-      that.updateProgressBar()
+      var current_time = that.audio.element.currentTime
+      that.updateProgressBar(current_time)
     })
 		this.audio.element.addEventListener('canplay', function() {
-			that.refreshProgressBar()
+			that.reloadProgressBar()
 		})
 		this.audio.element.addEventListener('ended', function() {
 			that.nextSong(true)
@@ -92,33 +92,26 @@ export default class AudioPlayer {
 		})
 
 		//=== progress ===//
-		// this.progress_bar.element.addEventListener('click', function() {
-		// 	that.audio.element.currentTime = this.value
-		// })
-
     this.progress_bar.markup.addEventListener('mousedown', function(e) {
-      //that.audio.element.removeEventListener('timeupdate', onTimeUpdate)
       if(e.preventDefault) e.preventDefault()
-      console.log('mousedown!')
       that.moving_progress = true
-      var x = e.pageX - this.offsetLeft
-      var p = (x/this.offsetWidth)
-      that.progress_bar.element.style.width = p*100 + '%'
     })
 
     this.progress_bar.markup.addEventListener('mousemove', function(e) {
-      if(that.moving_progress)
-        console.log('moving!')
+      if(that.moving_progress){
         var x = e.pageX - this.offsetLeft
         var p = ((e.pageX - this.offsetLeft)/this.offsetWidth)
         var duration = that.progress_bar.element.getAttribute('aria-valuemax')
         that.updateProgressBar(duration*p)
+      }
     })
 
-    this.progress_bar.markup.addEventListener('mouseup', function() {
-      //that.audio.element.addEventListener('timeupdate', onTimeUpdate)
-      console.log('mouseup!')
+    this.progress_bar.markup.addEventListener('mouseup', function(e) {
+      var x = e.pageX - this.offsetLeft
+      var p = ((e.pageX - this.offsetLeft)/this.offsetWidth)
+      var duration = that.progress_bar.element.getAttribute('aria-valuemax')
       that.moving_progress = false
+      that.audio.element.currentTime = duration*p
     })
   }
 }
