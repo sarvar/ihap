@@ -2,6 +2,7 @@ var debug = process.env.NODE_ENV !== "production";
 var webpack = require('webpack');
 var path = require('path');
 var lib_name = 'AudioPlayer';
+var ClosureCompilerPlugin = require('webpack-closure-compiler');
 
 var outputFile = debug ? 'audioplayer.js' : 'audioplayer.min.js';
 
@@ -31,8 +32,16 @@ var config = {
 	plugins: debug ? [] : [
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false })
-	  ]
+    //new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
+    new ClosureCompilerPlugin({
+          compiler: {
+            language_in: 'ECMASCRIPT6',
+            language_out: 'ECMASCRIPT5',
+            compilation_level: 'ADVANCED'
+          },
+          concurrency: 1,
+    })
+  ]
 };
 
 module.exports = config;

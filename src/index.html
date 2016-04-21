@@ -7,6 +7,33 @@
     <link rel="stylesheet" href="css/audioplayer.css">
     <link rel="stylesheet" href="css/material.css">
   </head>
+  <style>
+    .neuerPlayer{
+      height: 50px;
+      width: 800px;
+      background-color: grey;
+      padding-top: 10px;
+      margin-left: 200px;
+    }
+
+    .barWrapper {
+      height: 15px;
+      background-color: lightgrey;
+      cursor: pointer;
+      padding-top: 5px;
+    }
+
+    .bar {
+      height: 5px;
+      background-color: red;
+      width: 10%;
+    }
+
+    body {
+      height: 2000px;
+    }
+
+  </style>
 
   <body>
     <div class="container">
@@ -15,6 +42,38 @@
     <script src="../dist/audioplayer.js"></script>
 
     <script>
+      // var barWrapper = document.getElementById('barWrapper')
+      // var bar = document.getElementById('bar')
+      // var value = document.getElementById('value')
+      // var clicked = false
+      // barWrapper.addEventListener('mousedown', function(e) {
+      //   if(e.preventDefault) e.preventDefault();
+      //   clicked = true
+      // })
+      //
+      // document.body.addEventListener('mousemove', function(ev) {
+      //   if(clicked){
+      //     var x = ev.pageX - barWrapper.offsetLeft
+      //     var p = (x/barWrapper.offsetWidth)
+      //     if(p <= 1){
+      //       bar.style.width = p*100 + '%'
+      //       value.innerHTML = ((p*190)/60).toFixed(2)
+      //     }
+      //   }
+      // })
+      //
+      // document.body.addEventListener('mouseup', function(e) {
+      //   clicked = false
+      // })
+      //
+      // barWrapper.addEventListener('click', function(ev) {
+      //   ev.preventDefault()
+      //   var x = ev.pageX - this.offsetLeft
+      //   var p = (x/this.offsetWidth)*100
+      //   bar.style.width = p + '%'
+      // })
+
+
       var player = new AudioPlayer({
         settings: {
           container: "audioplayer-container"

@@ -94,6 +94,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.playlist = new _audio_player_playlist2.default(data.songs);
 	    this.progress_bar = new _audio_player_progress_bar2.default();
 	    this.current_song_index = 0;
+	    this.moving_progress = false;
 	
 	    this.initializeAudioPlayer();
 	  }
@@ -132,14 +133,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.progress_bar.refresh(song_duration);
 	    }
 	  }, {
-	    key: 'updateProgressThumb',
-	    value: function updateProgressThumb() {
-	      var current_time = this.audio.element.currentTime;
-	      this.progress_bar.updateThumb(current_time);
-	    }
-	  }, {
 	    key: 'updateProgressBar',
-	    value: function updateProgressBar() {
+	    value: function updateProgressBar(current_time) {
 	      var current_time = this.audio.element.currentTime;
 	      this.progress_bar.updateBar(current_time);
 	    }
@@ -158,15 +153,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'addListeners',
 	    value: function addListeners() {
-	      var _this = this;
-	
 	      var that = this;
 	      //=== audio ===//
-	      var onTimeUpdate = function onTimeUpdate(_) {
-	        if (!_this) return;
-	        _this.updateProgressThumb();
-	      };
-	      this.audio.element.addEventListener("timeupdate", onTimeUpdate);
 	      this.audio.element.addEventListener("timeupdate", function () {
 	        that.updateProgressBar();
 	      });
@@ -196,16 +184,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	
 	      //=== progress ===//
-	      this.progress_bar.element.addEventListener('click', function () {
-	        that.audio.element.currentTime = this.value;
+	      // this.progress_bar.element.addEventListener('click', function() {
+	      // 	that.audio.element.currentTime = this.value
+	      // })
+	
+	      this.progress_bar.markup.addEventListener('mousedown', function (e) {
+	        //that.audio.element.removeEventListener('timeupdate', onTimeUpdate)
+	        if (e.preventDefault) e.preventDefault();
+	        console.log('mousedown!');
+	        that.moving_progress = true;
+	        var x = e.pageX - this.offsetLeft;
+	        var p = x / this.offsetWidth;
+	        that.progress_bar.element.style.width = p * 100 + '%';
 	      });
 	
-	      this.progress_bar.element.addEventListener('mousedown', function () {
-	        that.audio.element.removeEventListener('timeupdate', onTimeUpdate);
+	      this.progress_bar.markup.addEventListener('mousemove', function (e) {
+	        if (that.moving_progress) console.log('moving!');
+	        var x = e.pageX - this.offsetLeft;
+	        var p = (e.pageX - this.offsetLeft) / this.offsetWidth;
+	        var duration = that.progress_bar.element.getAttribute('aria-valuemax');
+	        that.updateProgressBar(duration * p);
 	      });
 	
-	      this.progress_bar.element.addEventListener('mouseup', function () {
-	        that.audio.element.addEventListener('timeupdate', onTimeUpdate);
+	      this.progress_bar.markup.addEventListener('mouseup', function () {
+	        //that.audio.element.addEventListener('timeupdate', onTimeUpdate)
+	        console.log('mouseup!');
+	        that.moving_progress = false;
 	      });
 	    }
 	  }]);
@@ -459,11 +463,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      progress_bar_wrapper.setAttribute('id', 'progress_bar_wrapper');
 	
 	      // actual bar
-	      var progress_bar = document.createElement('input');
+	      var progress_bar = document.createElement('div');
 	      progress_bar.setAttribute('id', 'progress_bar');
-	      progress_bar.setAttribute('min', '0');
-	      progress_bar.setAttribute('value', '0');
-	      progress_bar.setAttribute('type', 'range');
+	      progress_bar.setAttribute('aria-valuenow', '0');
+	      progress_bar.setAttribute('aria-valuemin', '0');
 	
 	      progress_bar_wrapper.appendChild(progress_bar);
 	      this.markup = progress_bar_wrapper;
@@ -478,19 +481,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'refresh',
 	    value: function refresh(song_duration) {
-	      this.element.setAttribute("max", song_duration);
-	      this.element.setAttribute("value", "0");
-	    }
-	  }, {
-	    key: 'updateThumb',
-	    value: function updateThumb(current_time) {
-	      this.element.value = current_time;
+	      this.element.setAttribute("aria-valuemax", song_duration);
+	      this.element.setAttribute("aria-valuenow", "0");
 	    }
 	  }, {
 	    key: 'updateBar',
 	    value: function updateBar(current_time) {
-	      var value = this.element.value / this.element.max;
-	      this.element.style.backgroundImage = ['-webkit-gradient(', 'linear, ', 'left top, ', 'right top, ', 'color-stop(' + value + ', orange), ', 'color-stop(' + value + ', lightgrey)', ')'].join('');
+	      this.element.setAttribute("aria-valuenow", current_time);
+	      var p = current_time / parseInt(this.element.getAttribute('aria-valuemax')) * 100;
+	      this.element.style.width = p + '%';
 	    }
 	  }]);
 	

@@ -15,11 +15,10 @@ export default class AudioPlayerProgressBar {
     progress_bar_wrapper.setAttribute('id', 'progress_bar_wrapper')
 
     // actual bar
-    var progress_bar = document.createElement('input')
+    var progress_bar = document.createElement('div')
     progress_bar.setAttribute('id', 'progress_bar')
-    progress_bar.setAttribute('min', '0')
-    progress_bar.setAttribute('value', '0')
-    progress_bar.setAttribute('type', 'range')
+    progress_bar.setAttribute('aria-valuenow', '0')
+    progress_bar.setAttribute('aria-valuemin', '0')
 
     progress_bar_wrapper.appendChild(progress_bar)
     this.markup = progress_bar_wrapper
@@ -31,24 +30,13 @@ export default class AudioPlayerProgressBar {
    * @param {Float} song_duration: the duration of the song currenty playing
   */
   refresh(song_duration) {
-    this.element.setAttribute("max", song_duration)
-    this.element.setAttribute("value", "0")
-  }
-
-  updateThumb(current_time) {
-    this.element.value = current_time
+    this.element.setAttribute("aria-valuemax", song_duration)
+    this.element.setAttribute("aria-valuenow", "0")
   }
 
   updateBar(current_time) {
-    var value = this.element.value/this.element.max;
-    this.element.style.backgroundImage = [
-      '-webkit-gradient(',
-        'linear, ',
-        'left top, ',
-        'right top, ',
-        'color-stop(' + value + ', orange), ',
-        'color-stop(' + value + ', lightgrey)',
-      ')'
-    ].join('');
+    this.element.setAttribute("aria-valuenow", current_time)
+    var p = (current_time / parseInt(this.element.getAttribute('aria-valuemax'))) * 100
+    this.element.style.width = p + '%'
   }
 }
