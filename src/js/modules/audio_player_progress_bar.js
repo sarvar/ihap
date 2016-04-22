@@ -38,9 +38,13 @@ export default class AudioPlayerProgressBar {
     this.element.setAttribute("aria-valuenow", "0")
   }
 
+	/**
+   * @param {Float} current_time: the current time of the song
+	*/
   updateBar(current_time) {
     this.element.setAttribute("aria-valuenow", current_time)
-    var p = (current_time / parseInt(this.element.getAttribute('aria-valuemax'))) * 100
+		let song_duration = this.element.getAttribute('aria-valuemax')
+    let p = (current_time / parseInt(song_duration)) * 100
     this.element.style.width = p + '%'
   }
 }

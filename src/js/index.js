@@ -62,8 +62,13 @@ export default class AudioPlayer {
   }
 
 	addListeners() {
+		this.addAudioListeners()
+		this.addControlsListeners()
+		this.addProgressListeners()
+  }
+
+	addAudioListeners() {
 		var that = this
-		//=== audio ===//
 		this.audio.element.addEventListener("timeupdate", function() {
       var current_time = that.audio.element.currentTime
       that.updateProgressBar(current_time)
@@ -74,8 +79,10 @@ export default class AudioPlayer {
 		this.audio.element.addEventListener('ended', function() {
 			that.nextSong(true)
 		})
+	}
 
-		//=== controls ===//
+	addControlsListeners() {
+		var that = this
 		this.controls.buttons.play.addEventListener('click', function() {
 			that.audio.element.play()
 			this.className += ' disabled'
@@ -92,28 +99,30 @@ export default class AudioPlayer {
 		this.controls.buttons.skip_previous.addEventListener('click', function() {
 			that.previousSong()
 		})
+	}
 
-		//=== progress ===//
-    this.progress_bar.markup.addEventListener('mousedown', function(e) {
-      if(e.preventDefault) e.preventDefault()
-      that.moving_progress = true
-    })
+	addProgressListeners() {
+		var that = this
+		this.progress_bar.markup.addEventListener('mousedown', function(e) {
+			if(e.preventDefault) e.preventDefault()
+			that.moving_progress = true
+		})
 
-    this.progress_bar.markup.addEventListener('mousemove', function(e) {
-      if(that.moving_progress){
-        var x = e.pageX - this.offsetLeft
-        var p = ((e.pageX - this.offsetLeft)/this.offsetWidth)
-        var duration = that.progress_bar.element.getAttribute('aria-valuemax')
-        that.updateProgressBar(duration*p)
-      }
-    })
+		this.progress_bar.markup.addEventListener('mousemove', function(e) {
+			if(that.moving_progress){
+				var x = e.pageX - this.offsetLeft
+				var p = ((e.pageX - this.offsetLeft)/this.offsetWidth)
+				var duration = that.progress_bar.element.getAttribute('aria-valuemax')
+				that.updateProgressBar(duration*p)
+			}
+		})
 
-    this.progress_bar.markup.addEventListener('mouseup', function(e) {
-      var x = e.pageX - this.offsetLeft
-      var p = ((e.pageX - this.offsetLeft)/this.offsetWidth)
-      var duration = that.progress_bar.element.getAttribute('aria-valuemax')
-      that.moving_progress = false
-      that.audio.element.currentTime = duration*p
-    })
-  }
+		this.progress_bar.markup.addEventListener('mouseup', function(e) {
+			var x = e.pageX - this.offsetLeft
+			var p = ((e.pageX - this.offsetLeft)/this.offsetWidth)
+			var duration = that.progress_bar.element.getAttribute('aria-valuemax')
+			that.moving_progress = false
+			that.audio.element.currentTime = duration*p
+		})
+	}
 }

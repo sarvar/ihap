@@ -57,7 +57,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+		value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -83,134 +83,146 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var AudioPlayer = function () {
-	  function AudioPlayer(data) {
-	    _classCallCheck(this, AudioPlayer);
+		function AudioPlayer(data) {
+			_classCallCheck(this, AudioPlayer);
 	
-	    this.settings = data.settings;
-	    this.container = document.getElementById(data.settings.container);
+			this.settings = data.settings;
+			this.container = document.getElementById(data.settings.container);
 	
-	    this.audio = new _audio_player_audio2.default();
-	    this.controls = new _audio_player_controls2.default();
-	    this.playlist = new _audio_player_playlist2.default(data.songs);
-	    this.progress_bar = new _audio_player_progress_bar2.default();
-	    this.current_song_index = 0;
-	    this.moving_progress = false;
+			this.audio = new _audio_player_audio2.default();
+			this.controls = new _audio_player_controls2.default();
+			this.playlist = new _audio_player_playlist2.default(data.songs);
+			this.progress_bar = new _audio_player_progress_bar2.default();
+			this.current_song_index = 0;
+			this.moving_progress = false;
 	
-	    this.initializeAudioPlayer();
-	  }
+			this.initializeAudioPlayer();
+		}
 	
-	  _createClass(AudioPlayer, [{
-	    key: 'initializeAudioPlayer',
-	    value: function initializeAudioPlayer() {
-	      this.createComponents();
-	      if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
-	        this.setCurrentSong(this.playlist.songs[0]);
-	      }
-	    }
+		_createClass(AudioPlayer, [{
+			key: 'initializeAudioPlayer',
+			value: function initializeAudioPlayer() {
+				this.createComponents();
+				if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
+					this.setCurrentSong(this.playlist.songs[0]);
+				}
+			}
 	
-	    /**
-	     * creates the html markup
-	    */
+			/**
+	   * creates the html markup
+	  */
 	
-	  }, {
-	    key: 'createComponents',
-	    value: function createComponents() {
-	      this.container.appendChild(this.audio.markup);
-	      this.container.appendChild(this.controls.markup);
-	      this.container.appendChild(this.progress_bar.markup);
+		}, {
+			key: 'createComponents',
+			value: function createComponents() {
+				this.container.appendChild(this.audio.markup);
+				this.container.appendChild(this.controls.markup);
+				this.container.appendChild(this.progress_bar.markup);
 	
-	      this.addListeners();
-	    }
-	  }, {
-	    key: 'setCurrentSong',
-	    value: function setCurrentSong(song) {
-	      this.playlist.setCurrentSong(this, song);
-	    }
-	  }, {
-	    key: 'reloadProgressBar',
-	    value: function reloadProgressBar() {
-	      var song_duration = this.audio.element.duration;
-	      this.progress_bar.refresh(song_duration);
-	    }
-	  }, {
-	    key: 'updateProgressBar',
-	    value: function updateProgressBar(current_time) {
-	      this.progress_bar.updateBar(current_time);
-	    }
-	  }, {
-	    key: 'nextSong',
-	    value: function nextSong() {
-	      this.audio.element.currentTime = 0;
-	      this.updateProgressBar(0);
-	      this.playlist.nextSong(this);
-	    }
-	  }, {
-	    key: 'previousSong',
-	    value: function previousSong() {
-	      this.audio.element.currentTime = 0;
-	      this.updateProgressBar(0);
-	      this.playlist.previousSong(this);
-	    }
-	  }, {
-	    key: 'addListeners',
-	    value: function addListeners() {
-	      var that = this;
-	      //=== audio ===//
-	      this.audio.element.addEventListener("timeupdate", function () {
-	        var current_time = that.audio.element.currentTime;
-	        that.updateProgressBar(current_time);
-	      });
-	      this.audio.element.addEventListener('canplay', function () {
-	        that.reloadProgressBar();
-	      });
-	      this.audio.element.addEventListener('ended', function () {
-	        that.nextSong(true);
-	      });
+				this.addListeners();
+			}
+		}, {
+			key: 'setCurrentSong',
+			value: function setCurrentSong(song) {
+				this.playlist.setCurrentSong(this, song);
+			}
+		}, {
+			key: 'reloadProgressBar',
+			value: function reloadProgressBar() {
+				var song_duration = this.audio.element.duration;
+				this.progress_bar.refresh(song_duration);
+			}
+		}, {
+			key: 'updateProgressBar',
+			value: function updateProgressBar(current_time) {
+				this.progress_bar.updateBar(current_time);
+			}
+		}, {
+			key: 'nextSong',
+			value: function nextSong() {
+				this.audio.element.currentTime = 0;
+				this.updateProgressBar(0);
+				this.playlist.nextSong(this);
+			}
+		}, {
+			key: 'previousSong',
+			value: function previousSong() {
+				this.audio.element.currentTime = 0;
+				this.updateProgressBar(0);
+				this.playlist.previousSong(this);
+			}
+		}, {
+			key: 'addListeners',
+			value: function addListeners() {
+				this.addAudioListeners();
+				this.addControlsListeners();
+				this.addProgressListeners();
+			}
+		}, {
+			key: 'addAudioListeners',
+			value: function addAudioListeners() {
+				var that = this;
+				this.audio.element.addEventListener("timeupdate", function () {
+					var current_time = that.audio.element.currentTime;
+					that.updateProgressBar(current_time);
+				});
+				this.audio.element.addEventListener('canplay', function () {
+					that.reloadProgressBar();
+				});
+				this.audio.element.addEventListener('ended', function () {
+					that.nextSong(true);
+				});
+			}
+		}, {
+			key: 'addControlsListeners',
+			value: function addControlsListeners() {
+				var that = this;
+				this.controls.buttons.play.addEventListener('click', function () {
+					that.audio.element.play();
+					this.className += ' disabled';
+					that.controls.buttons.pause.className = "mat-icon mat-icon-pause";
+				});
+				this.controls.buttons.pause.addEventListener('click', function () {
+					that.audio.element.pause();
+					this.className += ' disabled';
+					that.controls.buttons.play.className = "mat-icon mat-icon-play";
+				});
+				this.controls.buttons.skip_next.addEventListener('click', function () {
+					that.nextSong();
+				});
+				this.controls.buttons.skip_previous.addEventListener('click', function () {
+					that.previousSong();
+				});
+			}
+		}, {
+			key: 'addProgressListeners',
+			value: function addProgressListeners() {
+				var that = this;
+				this.progress_bar.markup.addEventListener('mousedown', function (e) {
+					if (e.preventDefault) e.preventDefault();
+					that.moving_progress = true;
+				});
 	
-	      //=== controls ===//
-	      this.controls.buttons.play.addEventListener('click', function () {
-	        that.audio.element.play();
-	        this.className += ' disabled';
-	        that.controls.buttons.pause.className = "mat-icon mat-icon-pause";
-	      });
-	      this.controls.buttons.pause.addEventListener('click', function () {
-	        that.audio.element.pause();
-	        this.className += ' disabled';
-	        that.controls.buttons.play.className = "mat-icon mat-icon-play";
-	      });
-	      this.controls.buttons.skip_next.addEventListener('click', function () {
-	        that.nextSong();
-	      });
-	      this.controls.buttons.skip_previous.addEventListener('click', function () {
-	        that.previousSong();
-	      });
+				this.progress_bar.markup.addEventListener('mousemove', function (e) {
+					if (that.moving_progress) {
+						var x = e.pageX - this.offsetLeft;
+						var p = (e.pageX - this.offsetLeft) / this.offsetWidth;
+						var duration = that.progress_bar.element.getAttribute('aria-valuemax');
+						that.updateProgressBar(duration * p);
+					}
+				});
 	
-	      //=== progress ===//
-	      this.progress_bar.markup.addEventListener('mousedown', function (e) {
-	        if (e.preventDefault) e.preventDefault();
-	        that.moving_progress = true;
-	      });
+				this.progress_bar.markup.addEventListener('mouseup', function (e) {
+					var x = e.pageX - this.offsetLeft;
+					var p = (e.pageX - this.offsetLeft) / this.offsetWidth;
+					var duration = that.progress_bar.element.getAttribute('aria-valuemax');
+					that.moving_progress = false;
+					that.audio.element.currentTime = duration * p;
+				});
+			}
+		}]);
 	
-	      this.progress_bar.markup.addEventListener('mousemove', function (e) {
-	        if (that.moving_progress) {
-	          var x = e.pageX - this.offsetLeft;
-	          var p = (e.pageX - this.offsetLeft) / this.offsetWidth;
-	          var duration = that.progress_bar.element.getAttribute('aria-valuemax');
-	          that.updateProgressBar(duration * p);
-	        }
-	      });
-	
-	      this.progress_bar.markup.addEventListener('mouseup', function (e) {
-	        var x = e.pageX - this.offsetLeft;
-	        var p = (e.pageX - this.offsetLeft) / this.offsetWidth;
-	        var duration = that.progress_bar.element.getAttribute('aria-valuemax');
-	        that.moving_progress = false;
-	        that.audio.element.currentTime = duration * p;
-	      });
-	    }
-	  }]);
-	
-	  return AudioPlayer;
+		return AudioPlayer;
 	}();
 
 	exports.default = AudioPlayer;
@@ -484,11 +496,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.element.setAttribute("aria-valuemax", song_duration);
 	      this.element.setAttribute("aria-valuenow", "0");
 	    }
+	
+	    /**
+	      * @param {Float} current_time: the current time of the song
+	    */
+	
 	  }, {
 	    key: 'updateBar',
 	    value: function updateBar(current_time) {
 	      this.element.setAttribute("aria-valuenow", current_time);
-	      var p = current_time / parseInt(this.element.getAttribute('aria-valuemax')) * 100;
+	      var song_duration = this.element.getAttribute('aria-valuemax');
+	      var p = current_time / parseInt(song_duration) * 100;
 	      this.element.style.width = p + '%';
 	    }
 	  }]);
