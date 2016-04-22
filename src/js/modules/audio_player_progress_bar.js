@@ -20,6 +20,7 @@ export default class AudioPlayerProgressBar {
     progress_bar.setAttribute('aria-valuenow', '0')
     progress_bar.setAttribute('aria-valuemin', '0')
 
+		// grey background
 		let progress_bar_background = document.createElement('div')
 		progress_bar_background.setAttribute('id', 'progress_bar_background')
 		progress_bar_background.appendChild(progress_bar)

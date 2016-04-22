@@ -13,6 +13,16 @@ body {
   display: inline-block;
   width: 25%;
   margin-top: 11px;
+	text-align: center;
+}
+
+#song_information_wrapper {
+	display: inline-block;
+	width: 25%;
+	height: 30px;
+	vertical-align: top;
+	padding: 15px 0 15px 0;
+	text-align: center;
 }
 
 #progress_bar_wrapper {
@@ -22,7 +32,6 @@ body {
   vertical-align: top;
   margin-top: 15px;
   cursor: pointer;
-	border: 1px solid purple;
 }
 
 #progress_bar_background {

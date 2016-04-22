@@ -78,6 +78,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _audio_player_progress_bar2 = _interopRequireDefault(_audio_player_progress_bar);
 	
+	var _audio_player_song_information = __webpack_require__(5);
+	
+	var _audio_player_song_information2 = _interopRequireDefault(_audio_player_song_information);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -93,6 +97,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			this.controls = new _audio_player_controls2.default();
 			this.playlist = new _audio_player_playlist2.default(data.songs);
 			this.progress_bar = new _audio_player_progress_bar2.default();
+			this.song_information = new _audio_player_song_information2.default();
 			this.current_song_index = 0;
 			this.moving_progress = false;
 	
@@ -118,6 +123,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				this.container.appendChild(this.audio.markup);
 				this.container.appendChild(this.controls.markup);
 				this.container.appendChild(this.progress_bar.markup);
+				this.container.appendChild(this.song_information.markup);
 	
 				this.addListeners();
 			}
@@ -180,6 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 				// reload the progress_bar after the song changed
 				this.audio.element.addEventListener('canplay', function () {
 					that.resetProgressBar();
+					that.updateSongInformation();
 				});
 				// autoplay next song on finishing one
 				this.audio.element.addEventListener('ended', function () {
@@ -237,6 +244,14 @@ return /******/ (function(modules) { // webpackBootstrap
 					that.moving_progress = false;
 					that.audio.element.currentTime = duration * p;
 				});
+			}
+		}, {
+			key: 'updateSongInformation',
+			value: function updateSongInformation() {
+				var song = this.playlist.songs[this.current_song_index];
+				var title = song.title;
+				var artist = song.artist;
+				this.song_information.element.innerHTML = artist + ' - ' + title;
 			}
 		}]);
 	
@@ -409,13 +424,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function nextSong(that) {
 	      if (this.songs != undefined && this.songs.length > 1) {
 	        var playing = that.audio.element.paused !== true || playing;
-	        var new_index = this.current_song_index + 1;
+	        var new_index = that.current_song_index + 1;
 	        if (this.songs.length > new_index) {
-	          this.current_song_index = new_index;
+	          that.current_song_index = new_index;
 	        } else {
-	          this.current_song_index = 0;
+	          that.current_song_index = 0;
 	        }
-	        this.setCurrentSong(that, this.songs[this.current_song_index]);
+	        this.setCurrentSong(that, this.songs[that.current_song_index]);
 	        if (playing === true) {
 	          that.audio.element.play();
 	        }
@@ -426,13 +441,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function previousSong(that) {
 	      if (this.songs != undefined && this.songs.length > 1) {
 	        var playing = that.audio.element.paused !== true;
-	        var new_index = this.current_song_index - 1;
+	        var new_index = that.current_song_index - 1;
 	        if (new_index >= 0) {
-	          this.current_song_index = new_index;
+	          that.current_song_index = new_index;
 	        } else {
-	          this.current_song_index = this.songs.length - 1;
+	          that.current_song_index = this.songs.length - 1;
 	        }
-	        this.setCurrentSong(that, this.songs[this.current_song_index]);
+	        this.setCurrentSong(that, this.songs[that.current_song_index]);
 	        if (playing === true) {
 	          that.audio.element.play();
 	        }
@@ -494,6 +509,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      progress_bar.setAttribute('aria-valuenow', '0');
 	      progress_bar.setAttribute('aria-valuemin', '0');
 	
+	      // grey background
 	      var progress_bar_background = document.createElement('div');
 	      progress_bar_background.setAttribute('id', 'progress_bar_background');
 	      progress_bar_background.appendChild(progress_bar);
@@ -533,6 +549,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 	exports.default = AudioPlayerProgressBar;
+	module.exports = exports['default'];
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var AudioPlayerSongInformation = function () {
+		function AudioPlayerSongInformation() {
+			_classCallCheck(this, AudioPlayerSongInformation);
+	
+			this.markup = null;
+			this.element = null;
+	
+			this.createMarkup();
+		}
+	
+		_createClass(AudioPlayerSongInformation, [{
+			key: 'createMarkup',
+			value: function createMarkup() {
+				var song_information_wrapper = document.createElement('div');
+				song_information_wrapper.setAttribute('id', 'song_information_wrapper');
+	
+				var song_information = document.createElement('div');
+				song_information.setAttribute('id', 'song_information_title');
+	
+				song_information_wrapper.appendChild(song_information);
+				this.element = song_information;
+				this.markup = song_information_wrapper;
+			}
+		}]);
+	
+		return AudioPlayerSongInformation;
+	}();
+
+	exports.default = AudioPlayerSongInformation;
 	module.exports = exports['default'];
 
 /***/ }

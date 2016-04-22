@@ -2,6 +2,7 @@ import AudioPlayerAudio from './modules/audio_player_audio'
 import AudioPlayerControls from './modules/audio_player_controls'
 import AudioPlayerPlaylist from './modules/audio_player_playlist'
 import AudioPlayerProgressBar from './modules/audio_player_progress_bar'
+import AudioPlayerSongInformation from './modules/audio_player_song_information'
 
 export default class AudioPlayer {
   constructor(data) {
@@ -12,6 +13,7 @@ export default class AudioPlayer {
     this.controls = new AudioPlayerControls()
     this.playlist = new AudioPlayerPlaylist(data.songs)
     this.progress_bar = new AudioPlayerProgressBar()
+		this.song_information = new AudioPlayerSongInformation()
     this.current_song_index = 0
     this.moving_progress = false
 
@@ -32,6 +34,7 @@ export default class AudioPlayer {
     this.container.appendChild(this.audio.markup)
     this.container.appendChild(this.controls.markup)
     this.container.appendChild(this.progress_bar.markup)
+		this.container.appendChild(this.song_information.markup)
 
 		this.addListeners()
   }
@@ -83,6 +86,7 @@ export default class AudioPlayer {
 		// reload the progress_bar after the song changed
 		this.audio.element.addEventListener('canplay', function() {
 			that.resetProgressBar()
+			that.updateSongInformation()
 		})
 		// autoplay next song on finishing one
 		this.audio.element.addEventListener('ended', function() {
@@ -138,5 +142,11 @@ export default class AudioPlayer {
 		})
 	}
 
+	updateSongInformation() {
+		let song = this.playlist.songs[this.current_song_index]
+		let title = song.title
+		let artist = song.artist
+		this.song_information.element.innerHTML = artist + ' - ' + title
+	}
 
 }
