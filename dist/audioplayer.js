@@ -141,12 +141,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'nextSong',
 	    value: function nextSong() {
 	      this.audio.element.currentTime = 0;
+	      this.updateProgressBar(0);
 	      this.playlist.nextSong(this);
 	    }
 	  }, {
 	    key: 'previousSong',
 	    value: function previousSong() {
 	      this.audio.element.currentTime = 0;
+	      this.updateProgressBar(0);
 	      this.playlist.previousSong(this);
 	    }
 	  }, {

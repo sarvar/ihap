@@ -51,11 +51,13 @@ export default class AudioPlayer {
 
   nextSong() {
     this.audio.element.currentTime = 0
+		this.updateProgressBar(0)
     this.playlist.nextSong(this)
   }
 
   previousSong() {
     this.audio.element.currentTime = 0
+		this.updateProgressBar(0)
     this.playlist.previousSong(this)
   }
 
