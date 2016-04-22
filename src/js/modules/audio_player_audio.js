@@ -11,11 +11,11 @@ export default class AudioPlayerAudio {
    */
   createMarkup() {
     // wrapper
-    var player_wrapper = document.createElement('div')
+    let player_wrapper = document.createElement('div')
     player_wrapper.setAttribute('id', 'player_wrapper')
 
     // actual audio element
-    var audio_player = document.createElement('audio')
+    let audio_player = document.createElement('audio')
     audio_player.setAttribute('id', 'player')
     audio_player.setAttribute('src', '')
 

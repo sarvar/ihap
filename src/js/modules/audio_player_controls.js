@@ -15,22 +15,22 @@ export default class AudioPlayerControls {
    * create the basic html for the controls
    */
   createMarkup() {
-    var controls_wrapper = document.createElement('div')
+    let controls_wrapper = document.createElement('div')
     controls_wrapper.setAttribute('id', 'controls_wrapper')
     // play button
-    var play_button = document.createElement('i')
+    let play_button = document.createElement('i')
     play_button.setAttribute('id', 'play_button')
     play_button.setAttribute('class', 'mat-icon mat-icon-play')
     // pause button
-    var pause_button = document.createElement('i')
+    let pause_button = document.createElement('i')
     pause_button.setAttribute('id', 'pause_button')
     pause_button.setAttribute('class', 'mat-icon mat-icon-pause')
     // next button
-    var next_button = document.createElement('i')
+    let next_button = document.createElement('i')
     next_button.setAttribute('id', 'next_button')
     next_button.setAttribute('class', 'mat-icon mat-icon-skip_next')
     // previous button
-    var previous_button = document.createElement('i')
+    let previous_button = document.createElement('i')
     previous_button.setAttribute('id', 'previous_button')
     previous_button.setAttribute('class', 'mat-icon mat-icon-skip_previous')
 

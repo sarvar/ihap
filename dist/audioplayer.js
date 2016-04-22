@@ -127,11 +127,17 @@ return /******/ (function(modules) { // webpackBootstrap
 				this.playlist.setCurrentSong(this, song);
 			}
 		}, {
-			key: 'reloadProgressBar',
-			value: function reloadProgressBar() {
+			key: 'resetProgressBar',
+			value: function resetProgressBar() {
 				var song_duration = this.audio.element.duration;
 				this.progress_bar.refresh(song_duration);
 			}
+	
+			/**
+	   * updates the progress_bar visually (adjusts the width)
+	   * @param {Float} current_time: the current time playing
+	  */
+	
 		}, {
 			key: 'updateProgressBar',
 			value: function updateProgressBar(current_time) {
@@ -158,21 +164,33 @@ return /******/ (function(modules) { // webpackBootstrap
 				this.addControlsListeners();
 				this.addProgressListeners();
 			}
+	
+			/**
+	   * adds listeners for the audio element
+	  */
+	
 		}, {
 			key: 'addAudioListeners',
 			value: function addAudioListeners() {
 				var that = this;
+				// update the progress_bar to match the current timestamp
 				this.audio.element.addEventListener("timeupdate", function () {
-					var current_time = that.audio.element.currentTime;
-					that.updateProgressBar(current_time);
+					that.updateProgressBar(this.currentTime);
 				});
+				// reload the progress_bar after the song changed
 				this.audio.element.addEventListener('canplay', function () {
-					that.reloadProgressBar();
+					that.resetProgressBar();
 				});
+				// autoplay next song on finishing one
 				this.audio.element.addEventListener('ended', function () {
 					that.nextSong(true);
 				});
 			}
+	
+			/**
+	   *	adds listeners for the controls (button)
+	  */
+	
 		}, {
 			key: 'addControlsListeners',
 			value: function addControlsListeners() {

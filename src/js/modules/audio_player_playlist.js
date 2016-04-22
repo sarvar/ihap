@@ -12,8 +12,8 @@ export default class AudioPlayerPlaylist {
 
   nextSong(that) {
     if (this.songs != undefined && this.songs.length > 1){
-			var playing = that.audio.element.paused !== true || playing
-			var new_index = this.current_song_index + 1
+			let playing = that.audio.element.paused !== true || playing
+			let new_index = this.current_song_index + 1
 			if (this.songs.length > new_index) {
 				this.current_song_index = new_index
 			} else {
@@ -28,8 +28,8 @@ export default class AudioPlayerPlaylist {
 
   previousSong(that) {
     if (this.songs != undefined && this.songs.length > 1){
-      var playing = that.audio.element.paused !== true
-      var new_index = this.current_song_index - 1
+      let playing = that.audio.element.paused !== true
+      let new_index = this.current_song_index - 1
       if (new_index >= 0) {
         this.current_song_index = new_index
       } else {
