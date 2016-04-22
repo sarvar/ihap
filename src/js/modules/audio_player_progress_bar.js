@@ -11,16 +11,20 @@ export default class AudioPlayerProgressBar {
    */
   createMarkup() {
     // wrapper
-    var progress_bar_wrapper = document.createElement('div')
+    let progress_bar_wrapper = document.createElement('div')
     progress_bar_wrapper.setAttribute('id', 'progress_bar_wrapper')
 
     // actual bar
-    var progress_bar = document.createElement('div')
+    let progress_bar = document.createElement('div')
     progress_bar.setAttribute('id', 'progress_bar')
     progress_bar.setAttribute('aria-valuenow', '0')
     progress_bar.setAttribute('aria-valuemin', '0')
 
-    progress_bar_wrapper.appendChild(progress_bar)
+		let progress_bar_background = document.createElement('div')
+		progress_bar_background.setAttribute('id', 'progress_bar_background')
+		progress_bar_background.appendChild(progress_bar)
+
+    progress_bar_wrapper.appendChild(progress_bar_background)
     this.markup = progress_bar_wrapper
     this.element = progress_bar
   }
