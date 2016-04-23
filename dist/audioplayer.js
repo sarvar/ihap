@@ -181,7 +181,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				var that = this;
 				// update the progress_bar to match the current timestamp
 				this.audio.element.addEventListener("timeupdate", function () {
-					that.updateProgressBar(this.currentTime);
+					if (that.moving_progress == false) {
+						that.updateProgressBar(this.currentTime);
+					}
 				});
 				// reload the progress_bar after the song changed
 				this.audio.element.addEventListener('canplay', function () {
