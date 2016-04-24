@@ -103,13 +103,9 @@ export default class AudioPlayer {
 		let that = this
 		this.controls.buttons.play.addEventListener('click', function() {
 			that.audio.element.play()
-			this.className += ' disabled'
-			that.controls.buttons.pause.className = "mat-icon mat-icon-pause"
 		})
 		this.controls.buttons.pause.addEventListener('click', function() {
 			that.audio.element.pause()
-			this.className += ' disabled'
-		  that.controls.buttons.play.className = "mat-icon mat-icon-play"
 		})
 		this.controls.buttons.skip_next.addEventListener('click', function() {
 			that.nextSong()

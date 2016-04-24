@@ -206,13 +206,9 @@ return /******/ (function(modules) { // webpackBootstrap
 				var that = this;
 				this.controls.buttons.play.addEventListener('click', function () {
 					that.audio.element.play();
-					this.className += ' disabled';
-					that.controls.buttons.pause.className = "mat-icon mat-icon-pause";
 				});
 				this.controls.buttons.pause.addEventListener('click', function () {
 					that.audio.element.pause();
-					this.className += ' disabled';
-					that.controls.buttons.play.className = "mat-icon mat-icon-play";
 				});
 				this.controls.buttons.skip_next.addEventListener('click', function () {
 					that.nextSong();
@@ -359,19 +355,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // play button
 	      var play_button = document.createElement('i');
 	      play_button.setAttribute('id', 'play_button');
-	      play_button.setAttribute('class', 'mat-icon mat-icon-play');
+	      play_button.setAttribute('class', 'material-icons');
+	      play_button.innerHTML = 'play_arrow';
 	      // pause button
 	      var pause_button = document.createElement('i');
 	      pause_button.setAttribute('id', 'pause_button');
-	      pause_button.setAttribute('class', 'mat-icon mat-icon-pause');
+	      pause_button.setAttribute('class', 'material-icons');
+	      pause_button.innerHTML = 'pause';
 	      // next button
 	      var next_button = document.createElement('i');
 	      next_button.setAttribute('id', 'next_button');
-	      next_button.setAttribute('class', 'mat-icon mat-icon-skip_next');
+	      next_button.setAttribute('class', 'material-icons');
+	      next_button.innerHTML = 'skip_next';
 	      // previous button
 	      var previous_button = document.createElement('i');
 	      previous_button.setAttribute('id', 'previous_button');
-	      previous_button.setAttribute('class', 'mat-icon mat-icon-skip_previous');
+	      previous_button.setAttribute('class', 'material-icons');
+	      previous_button.innerHTML = 'skip_previous';
 	
 	      controls_wrapper.appendChild(play_button);
 	      controls_wrapper.appendChild(pause_button);

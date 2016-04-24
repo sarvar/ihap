@@ -1,0 +1,43 @@
+body {
+  background-color: #efefef;
+  margin: 0; }
+
+#audioplayer-container {
+  background-color: #fff;
+  width: 100%;
+  height: 60px; }
+
+#controls_wrapper {
+  display: inline-block;
+  width: 25%;
+  margin-top: 11px;
+  text-align: center; }
+
+#song_information_wrapper {
+  display: inline-block;
+  width: 25%;
+  height: 30px;
+  vertical-align: top;
+  padding: 15px 0 15px 0;
+  text-align: center; }
+
+#progress_bar_wrapper {
+  display: inline-block;
+  width: 50%;
+  height: 30px;
+  vertical-align: top;
+  margin-top: 15px;
+  cursor: pointer; }
+
+#progress_bar_background {
+  background-color: lightgrey;
+  border-radius: 2px; }
+
+#progress_bar {
+  width: 0;
+  background-color: red;
+  height: 10px;
+  margin-top: 10px;
+  border-radius: 2px; }
+
+/*# sourceMappingURL=audioplayer.css.map */
