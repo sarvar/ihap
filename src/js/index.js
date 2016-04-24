@@ -124,16 +124,14 @@ export default class AudioPlayer {
 
 		this.progress_bar.markup.addEventListener('mousemove', function(e) {
 			if(that.moving_progress){
-				let x = e.pageX - this.offsetLeft
-				let p = ((e.pageX - this.offsetLeft)/this.offsetWidth)
+				let p = ((e.layerX - this.offsetLeft)/this.offsetWidth)
 				let duration = that.progress_bar.element.getAttribute('aria-valuemax')
 				that.updateProgressBar(duration*p)
 			}
 		})
 
 		this.progress_bar.markup.addEventListener('mouseup', function(e) {
-			let x = e.pageX - this.offsetLeft
-			let p = ((e.pageX - this.offsetLeft)/this.offsetWidth)
+			let p = ((e.layerX - this.offsetLeft)/this.offsetWidth)
 			let duration = that.progress_bar.element.getAttribute('aria-valuemax')
 			that.moving_progress = false
 			that.audio.element.currentTime = duration*p

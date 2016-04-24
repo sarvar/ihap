@@ -228,16 +228,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 				this.progress_bar.markup.addEventListener('mousemove', function (e) {
 					if (that.moving_progress) {
-						var x = e.pageX - this.offsetLeft;
-						var p = (e.pageX - this.offsetLeft) / this.offsetWidth;
+						var p = (e.layerX - this.offsetLeft) / this.offsetWidth;
 						var duration = that.progress_bar.element.getAttribute('aria-valuemax');
 						that.updateProgressBar(duration * p);
 					}
 				});
 	
 				this.progress_bar.markup.addEventListener('mouseup', function (e) {
-					var x = e.pageX - this.offsetLeft;
-					var p = (e.pageX - this.offsetLeft) / this.offsetWidth;
+					var p = (e.layerX - this.offsetLeft) / this.offsetWidth;
 					var duration = that.progress_bar.element.getAttribute('aria-valuemax');
 					that.moving_progress = false;
 					that.audio.element.currentTime = duration * p;
