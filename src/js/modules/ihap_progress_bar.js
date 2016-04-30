@@ -1,4 +1,4 @@
-export default class AudioPlayerProgressBar {
+export default class ihapProgressBar {
   constructor() {
     this.markup = null
     this.element = null

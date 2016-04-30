@@ -2,11 +2,11 @@
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define("AudioPlayer", [], factory);
+		define("ihap", [], factory);
 	else if(typeof exports === 'object')
-		exports["AudioPlayer"] = factory();
+		exports["ihap"] = factory();
 	else
-		root["AudioPlayer"] = factory();
+		root["ihap"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -62,51 +62,51 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _audio_player_audio = __webpack_require__(1);
+	var _ihap_audio = __webpack_require__(1);
 	
-	var _audio_player_audio2 = _interopRequireDefault(_audio_player_audio);
+	var _ihap_audio2 = _interopRequireDefault(_ihap_audio);
 	
-	var _audio_player_controls = __webpack_require__(2);
+	var _ihap_controls = __webpack_require__(2);
 	
-	var _audio_player_controls2 = _interopRequireDefault(_audio_player_controls);
+	var _ihap_controls2 = _interopRequireDefault(_ihap_controls);
 	
-	var _audio_player_playlist = __webpack_require__(3);
+	var _ihap_playlist = __webpack_require__(3);
 	
-	var _audio_player_playlist2 = _interopRequireDefault(_audio_player_playlist);
+	var _ihap_playlist2 = _interopRequireDefault(_ihap_playlist);
 	
-	var _audio_player_progress_bar = __webpack_require__(4);
+	var _ihap_progress_bar = __webpack_require__(4);
 	
-	var _audio_player_progress_bar2 = _interopRequireDefault(_audio_player_progress_bar);
+	var _ihap_progress_bar2 = _interopRequireDefault(_ihap_progress_bar);
 	
-	var _audio_player_song_information = __webpack_require__(5);
+	var _ihap_song_information = __webpack_require__(5);
 	
-	var _audio_player_song_information2 = _interopRequireDefault(_audio_player_song_information);
+	var _ihap_song_information2 = _interopRequireDefault(_ihap_song_information);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var AudioPlayer = function () {
-		function AudioPlayer(data) {
-			_classCallCheck(this, AudioPlayer);
+	var ihap = function () {
+		function ihap(data) {
+			_classCallCheck(this, ihap);
 	
 			this.settings = data.settings;
 			this.container = document.getElementById(data.settings.container);
 	
-			this.audio = new _audio_player_audio2.default();
-			this.controls = new _audio_player_controls2.default();
-			this.playlist = new _audio_player_playlist2.default(data.songs);
-			this.progress_bar = new _audio_player_progress_bar2.default();
-			this.song_information = new _audio_player_song_information2.default();
+			this.audio = new _ihap_audio2.default();
+			this.controls = new _ihap_controls2.default();
+			this.playlist = new _ihap_playlist2.default(data.songs);
+			this.progress_bar = new _ihap_progress_bar2.default();
+			this.song_information = new _ihap_song_information2.default();
 			this.current_song_index = 0;
 			this.moving_progress = false;
 	
-			this.initializeAudioPlayer();
+			this.initializeihap();
 		}
 	
-		_createClass(AudioPlayer, [{
-			key: 'initializeAudioPlayer',
-			value: function initializeAudioPlayer() {
+		_createClass(ihap, [{
+			key: 'initializeihap',
+			value: function initializeihap() {
 				this.createComponents();
 				if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
 					this.setCurrentSong(this.playlist.songs[0]);
@@ -251,10 +251,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 		}]);
 	
-		return AudioPlayer;
+		return ihap;
 	}();
 
-	exports.default = AudioPlayer;
+	exports.default = ihap;
 	module.exports = exports['default'];
 
 /***/ },
@@ -271,9 +271,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var AudioPlayerAudio = function () {
-	  function AudioPlayerAudio() {
-	    _classCallCheck(this, AudioPlayerAudio);
+	var ihapAudio = function () {
+	  function ihapAudio() {
+	    _classCallCheck(this, ihapAudio);
 	
 	    this.markup = null;
 	    this.element = null;
@@ -286,7 +286,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 	
 	
-	  _createClass(AudioPlayerAudio, [{
+	  _createClass(ihapAudio, [{
 	    key: 'createMarkup',
 	    value: function createMarkup() {
 	      // wrapper
@@ -305,10 +305,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }]);
 	
-	  return AudioPlayerAudio;
+	  return ihapAudio;
 	}();
 
-	exports.default = AudioPlayerAudio;
+	exports.default = ihapAudio;
 	module.exports = exports['default'];
 
 /***/ },
@@ -325,9 +325,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var AudioPlayerControls = function () {
-	  function AudioPlayerControls() {
-	    _classCallCheck(this, AudioPlayerControls);
+	var ihapControls = function () {
+	  function ihapControls() {
+	    _classCallCheck(this, ihapControls);
 	
 	    this.markup = null;
 	    this.buttons = {
@@ -345,7 +345,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 	
 	
-	  _createClass(AudioPlayerControls, [{
+	  _createClass(ihapControls, [{
 	    key: 'createMarkup',
 	    value: function createMarkup() {
 	      var controls_wrapper = document.createElement('div');
@@ -385,10 +385,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }]);
 	
-	  return AudioPlayerControls;
+	  return ihapControls;
 	}();
 
-	exports.default = AudioPlayerControls;
+	exports.default = ihapControls;
 	module.exports = exports['default'];
 
 /***/ },
@@ -405,9 +405,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var AudioPlayerPlaylist = function () {
-	  function AudioPlayerPlaylist(songs) {
-	    _classCallCheck(this, AudioPlayerPlaylist);
+	var ihapPlaylist = function () {
+	  function ihapPlaylist(songs) {
+	    _classCallCheck(this, ihapPlaylist);
 	
 	    //this.markup = null
 	    this.songs = songs;
@@ -419,7 +419,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // playlist currently has no markup. not visible in fronent yet
 	  //createMarkup() {}
 	
-	  _createClass(AudioPlayerPlaylist, [{
+	  _createClass(ihapPlaylist, [{
 	    key: 'nextSong',
 	    value: function nextSong(that) {
 	      if (this.songs != undefined && this.songs.length > 1) {
@@ -461,10 +461,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }]);
 	
-	  return AudioPlayerPlaylist;
+	  return ihapPlaylist;
 	}();
 
-	exports.default = AudioPlayerPlaylist;
+	exports.default = ihapPlaylist;
 	module.exports = exports['default'];
 
 /***/ },
@@ -481,9 +481,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var AudioPlayerProgressBar = function () {
-	  function AudioPlayerProgressBar() {
-	    _classCallCheck(this, AudioPlayerProgressBar);
+	var ihapProgressBar = function () {
+	  function ihapProgressBar() {
+	    _classCallCheck(this, ihapProgressBar);
 	
 	    this.markup = null;
 	    this.element = null;
@@ -496,7 +496,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 	
 	
-	  _createClass(AudioPlayerProgressBar, [{
+	  _createClass(ihapProgressBar, [{
 	    key: 'createMarkup',
 	    value: function createMarkup() {
 	      // wrapper
@@ -545,10 +545,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }]);
 	
-	  return AudioPlayerProgressBar;
+	  return ihapProgressBar;
 	}();
 
-	exports.default = AudioPlayerProgressBar;
+	exports.default = ihapProgressBar;
 	module.exports = exports['default'];
 
 /***/ },
@@ -565,9 +565,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var AudioPlayerSongInformation = function () {
-		function AudioPlayerSongInformation() {
-			_classCallCheck(this, AudioPlayerSongInformation);
+	var ihapSongInformation = function () {
+		function ihapSongInformation() {
+			_classCallCheck(this, ihapSongInformation);
 	
 			this.markup = null;
 			this.element = null;
@@ -575,7 +575,7 @@ return /******/ (function(modules) { // webpackBootstrap
 			this.createMarkup();
 		}
 	
-		_createClass(AudioPlayerSongInformation, [{
+		_createClass(ihapSongInformation, [{
 			key: 'createMarkup',
 			value: function createMarkup() {
 				var song_information_wrapper = document.createElement('div');
@@ -590,14 +590,14 @@ return /******/ (function(modules) { // webpackBootstrap
 			}
 		}]);
 	
-		return AudioPlayerSongInformation;
+		return ihapSongInformation;
 	}();
 
-	exports.default = AudioPlayerSongInformation;
+	exports.default = ihapSongInformation;
 	module.exports = exports['default'];
 
 /***/ }
 /******/ ])
 });
 ;
-//# sourceMappingURL=audioplayer.js.map
+//# sourceMappingURL=ihap.js.map

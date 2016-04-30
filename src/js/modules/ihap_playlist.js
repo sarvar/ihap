@@ -1,4 +1,4 @@
-export default class AudioPlayerPlaylist {
+export default class ihapPlaylist {
   constructor(songs) {
     //this.markup = null
     this.songs = songs

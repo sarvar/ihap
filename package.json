@@ -5,8 +5,8 @@
   "main": "dist/audioplayer.js",
   "scripts": {
 		"dev": "webpack --progress --colors --watch --mode=dev",
-    "css": "sass --watch src/css/app.scss:dist/css/audioplayer.css",
-    "build": "NODE_ENV=production webpack && sass src/css/app.scss:dist/css/audioplayer.css"
+    "css": "sass --watch src/css/app.scss:dist/css/ihap.css",
+    "build": "NODE_ENV=production webpack && sass src/css/app.scss:dist/css/ihap.css"
   },
   "devDependencies": {
     "babel": "^6.3.13",

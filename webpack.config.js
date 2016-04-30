@@ -1,10 +1,10 @@
 var debug = process.env.NODE_ENV !== "production";
 var webpack = require('webpack');
 var path = require('path');
-var lib_name = 'AudioPlayer';
+var lib_name = 'ihap';
 var ClosureCompilerPlugin = require('webpack-closure-compiler');
 
-var outputFile = debug ? 'audioplayer.js' : 'audioplayer.min.js';
+var outputFile = debug ? 'ihap.js' : 'ihap.min.js';
 
 var config = {
   entry: __dirname + '/src/js/index.js',

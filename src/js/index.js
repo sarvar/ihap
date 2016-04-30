@@ -1,26 +1,26 @@
-import AudioPlayerAudio from './modules/audio_player_audio'
-import AudioPlayerControls from './modules/audio_player_controls'
-import AudioPlayerPlaylist from './modules/audio_player_playlist'
-import AudioPlayerProgressBar from './modules/audio_player_progress_bar'
-import AudioPlayerSongInformation from './modules/audio_player_song_information'
+import ihapAudio from './modules/ihap_audio'
+import ihapControls from './modules/ihap_controls'
+import ihapPlaylist from './modules/ihap_playlist'
+import ihapProgressBar from './modules/ihap_progress_bar'
+import ihapSongInformation from './modules/ihap_song_information'
 
-export default class AudioPlayer {
+export default class ihap {
   constructor(data) {
     this.settings = data.settings
     this.container = document.getElementById(data.settings.container)
 
-    this.audio = new AudioPlayerAudio()
-    this.controls = new AudioPlayerControls()
-    this.playlist = new AudioPlayerPlaylist(data.songs)
-    this.progress_bar = new AudioPlayerProgressBar()
-		this.song_information = new AudioPlayerSongInformation()
+    this.audio = new ihapAudio()
+    this.controls = new ihapControls()
+    this.playlist = new ihapPlaylist(data.songs)
+    this.progress_bar = new ihapProgressBar()
+		this.song_information = new ihapSongInformation()
     this.current_song_index = 0
     this.moving_progress = false
 
-    this.initializeAudioPlayer()
+    this.initializeihap()
   }
 
-  initializeAudioPlayer() {
+  initializeihap() {
     this.createComponents()
     if (this.playlist.songs != undefined && this.playlist.songs.length != 0){
       this.setCurrentSong(this.playlist.songs[0])

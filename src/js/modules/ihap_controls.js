@@ -1,4 +1,4 @@
-export default class AudioPlayerControls {
+export default class ihapControls {
   constructor() {
     this.markup = null
     this.buttons = {
