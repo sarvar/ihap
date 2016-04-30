@@ -18,4 +18,4 @@ I needed an audioplayer without any annoying dependencies (especially jquery) th
 2. Create your feature branch (`git checkout -b feature`)
 3. Commit your changes (`git commit -am 'added new feature'`)
 4. Push the branch (`git push origin feature`)
-5. Create a new pull rRequest
+5. Create a new pull request
