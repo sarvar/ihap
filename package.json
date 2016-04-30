@@ -4,18 +4,18 @@
   "description": "independent html5 audio player",
   "main": "dist/audioplayer.js",
   "scripts": {
-		"dev": "webpack --progress --colors --watch --mode=dev",
-    "css": "sass --watch src/css/app.scss:dist/css/ihap.css",
-    "build": "NODE_ENV=production webpack && sass src/css/app.scss:dist/css/ihap.css"
+    "dev": "webpack --progress --colors --watch --mode=dev",
+    "build": "NODE_ENV=production webpack && cp src/css/ihap.css dist/css/"
   },
-  "devDependencies": {
+  "dependencies": {
     "babel": "^6.3.13",
     "babel-core": "^6.1.18",
     "babel-loader": "^6.1.0",
     "babel-plugin-add-module-exports": "^0.1.2",
     "babel-preset-es2015": "^6.3.13",
+    "extract-text-webpack-plugin": "^1.0.1",
     "webpack": "^1.12.9",
     "webpack-closure-compiler": "^2.0.2",
-    "node-sass": "^3.5.3"
+    "webpack-dev-server": "^1.14.1"
   }
 }

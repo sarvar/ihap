@@ -253,7 +253,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 		return ihap;
 	}();
-
+	
 	exports.default = ihap;
 	module.exports = exports['default'];
 
@@ -307,7 +307,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  return ihapAudio;
 	}();
-
+	
 	exports.default = ihapAudio;
 	module.exports = exports['default'];
 
@@ -387,7 +387,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  return ihapControls;
 	}();
-
+	
 	exports.default = ihapControls;
 	module.exports = exports['default'];
 
@@ -463,7 +463,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  return ihapPlaylist;
 	}();
-
+	
 	exports.default = ihapPlaylist;
 	module.exports = exports['default'];
 
@@ -547,7 +547,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  return ihapProgressBar;
 	}();
-
+	
 	exports.default = ihapProgressBar;
 	module.exports = exports['default'];
 
@@ -592,7 +592,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 		return ihapSongInformation;
 	}();
-
+	
 	exports.default = ihapSongInformation;
 	module.exports = exports['default'];
 
