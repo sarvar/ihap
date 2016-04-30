@@ -1,6 +1,6 @@
 {
   "name": "ihap",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "independent html5 audio player",
   "main": "dist/audioplayer.js",
   "scripts": {
