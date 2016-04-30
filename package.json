@@ -1,7 +1,7 @@
 {
-  "name": "audioplayer",
+  "name": "ihap",
   "version": "0.0.0",
-  "description": "Audioplayer",
+  "description": "independent html5 audio player",
   "main": "dist/audioplayer.js",
   "scripts": {
 		"dev": "webpack --progress --colors --watch --mode=dev",
