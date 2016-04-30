@@ -14,8 +14,8 @@ I needed an audioplayer without any annoying dependencies (especially jquery) th
 
 
 # Contributing
-1. Fork it ( https://github.com/cars10/ihap/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+1. Fork the project ( https://github.com/cars10/ihap/fork )
+2. Create your feature branch (`git checkout -b feature`)
+3. Commit your changes (`git commit -am 'added new feature'`)
+4. Push the branch (`git push origin feature`)
+5. Create a new pull rRequest
