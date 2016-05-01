@@ -1,8 +1,8 @@
 {
   "name": "ihap",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "independent html5 audio player",
-  "main": "dist/audioplayer.js",
+  "main": "dist/js/ihap.js",
   "scripts": {
     "dev": "webpack --progress --colors --watch --mode=dev",
     "build": "NODE_ENV=production webpack && cp src/css/ihap.css dist/css/"
