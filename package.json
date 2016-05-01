@@ -19,6 +19,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "author": "Carsten König",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/cars10/ihap"
