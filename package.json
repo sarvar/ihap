@@ -1,6 +1,6 @@
 {
   "name": "ihap",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "independent html5 audio player",
   "main": "dist/js/ihap.js",
   "scripts": {
@@ -19,6 +19,7 @@
     "webpack-dev-server": "^1.14.1"
   },
   "author": "Carsten König",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/cars10/ihap"
