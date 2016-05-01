@@ -17,5 +17,11 @@
     "webpack": "^1.12.9",
     "webpack-closure-compiler": "^2.0.2",
     "webpack-dev-server": "^1.14.1"
+  },
+  "author": "Carsten König",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cars10/ihap"
   }
+
 }
