@@ -45,7 +45,7 @@ export default class ihapProgressBar {
   updateBar(current_time) {
     this.element.setAttribute("aria-valuenow", current_time)
 		let song_duration = this.element.getAttribute('aria-valuemax')
-    let p = (current_time / parseInt(song_duration)) * 100
+    let p = (current_time / parseFloat(song_duration)) * 100
     this.element.style.width = p + '%'
   }
 }
