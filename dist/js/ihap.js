@@ -540,7 +540,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function updateBar(current_time) {
 	      this.element.setAttribute("aria-valuenow", current_time);
 	      var song_duration = this.element.getAttribute('aria-valuemax');
-	      var p = current_time / parseInt(song_duration) * 100;
+	      var p = current_time / parseFloat(song_duration) * 100;
 	      this.element.style.width = p + '%';
 	    }
 	  }]);
