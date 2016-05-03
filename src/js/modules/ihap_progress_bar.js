@@ -12,17 +12,20 @@ export default class ihapProgressBar {
   createMarkup() {
     // wrapper
     let progress_bar_wrapper = document.createElement('div')
-    progress_bar_wrapper.setAttribute('id', 'progress_bar_wrapper')
+    progress_bar_wrapper.setAttribute('id', 'ihap_progress_bar_wrapper')
+    progress_bar_wrapper.setAttribute('class', 'ihap_progress_bar_wrapper')
 
     // actual bar
     let progress_bar = document.createElement('div')
-    progress_bar.setAttribute('id', 'progress_bar')
+    progress_bar.setAttribute('id', 'ihap_progress_bar')
+    progress_bar.setAttribute('class', 'ihap_progress_bar')
     progress_bar.setAttribute('aria-valuenow', '0')
     progress_bar.setAttribute('aria-valuemin', '0')
 
 		// grey background
 		let progress_bar_background = document.createElement('div')
-		progress_bar_background.setAttribute('id', 'progress_bar_background')
+		progress_bar_background.setAttribute('id', 'ihap_progress_bar_background')
+		progress_bar_background.setAttribute('class', 'ihap_progress_bar_background')
 		progress_bar_background.appendChild(progress_bar)
 
     progress_bar_wrapper.appendChild(progress_bar_background)

@@ -291,7 +291,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function createMarkup() {
 	      // wrapper
 	      var player_wrapper = document.createElement('div');
-	      player_wrapper.setAttribute('id', 'player_wrapper');
+	      player_wrapper.setAttribute('id', 'ihap_player_wrapper');
 	
 	      // actual audio element
 	      var audio_player = document.createElement('audio');
@@ -349,26 +349,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'createMarkup',
 	    value: function createMarkup() {
 	      var controls_wrapper = document.createElement('div');
-	      controls_wrapper.setAttribute('id', 'controls_wrapper');
+	      controls_wrapper.setAttribute('id', 'ihap_controls_wrapper');
+	      controls_wrapper.setAttribute('class', 'ihap_controls_wrapper');
 	      // play button
 	      var play_button = document.createElement('i');
-	      play_button.setAttribute('id', 'play_button');
-	      play_button.setAttribute('class', 'material-icons');
+	      play_button.setAttribute('id', 'ihap_controls_play_button');
+	      play_button.setAttribute('class', 'material-icons ihap_controls_play_button');
 	      play_button.innerHTML = 'play_arrow';
 	      // pause button
 	      var pause_button = document.createElement('i');
-	      pause_button.setAttribute('id', 'pause_button');
-	      pause_button.setAttribute('class', 'material-icons');
+	      pause_button.setAttribute('id', 'ihap_controls_pause_button');
+	      pause_button.setAttribute('class', 'material-icons ihap_controls_pause_button');
 	      pause_button.innerHTML = 'pause';
 	      // next button
 	      var next_button = document.createElement('i');
-	      next_button.setAttribute('id', 'next_button');
-	      next_button.setAttribute('class', 'material-icons');
+	      next_button.setAttribute('id', 'ihap_controls_next_button');
+	      next_button.setAttribute('class', 'material-icons ihap_controls_next_button');
 	      next_button.innerHTML = 'skip_next';
 	      // previous button
 	      var previous_button = document.createElement('i');
-	      previous_button.setAttribute('id', 'previous_button');
-	      previous_button.setAttribute('class', 'material-icons');
+	      previous_button.setAttribute('id', 'ihap_controls_previous_button');
+	      previous_button.setAttribute('class', 'material-icons ihap_controls_previous_button');
 	      previous_button.innerHTML = 'skip_previous';
 	
 	      controls_wrapper.appendChild(play_button);
@@ -501,17 +502,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function createMarkup() {
 	      // wrapper
 	      var progress_bar_wrapper = document.createElement('div');
-	      progress_bar_wrapper.setAttribute('id', 'progress_bar_wrapper');
+	      progress_bar_wrapper.setAttribute('id', 'ihap_progress_bar_wrapper');
+	      progress_bar_wrapper.setAttribute('class', 'ihap_progress_bar_wrapper');
 	
 	      // actual bar
 	      var progress_bar = document.createElement('div');
-	      progress_bar.setAttribute('id', 'progress_bar');
+	      progress_bar.setAttribute('id', 'ihap_progress_bar');
+	      progress_bar.setAttribute('class', 'ihap_progress_bar');
 	      progress_bar.setAttribute('aria-valuenow', '0');
 	      progress_bar.setAttribute('aria-valuemin', '0');
 	
 	      // grey background
 	      var progress_bar_background = document.createElement('div');
-	      progress_bar_background.setAttribute('id', 'progress_bar_background');
+	      progress_bar_background.setAttribute('id', 'ihap_progress_bar_background');
+	      progress_bar_background.setAttribute('class', 'ihap_progress_bar_background');
 	      progress_bar_background.appendChild(progress_bar);
 	
 	      progress_bar_wrapper.appendChild(progress_bar_background);
@@ -579,10 +583,12 @@ return /******/ (function(modules) { // webpackBootstrap
 			key: 'createMarkup',
 			value: function createMarkup() {
 				var song_information_wrapper = document.createElement('div');
-				song_information_wrapper.setAttribute('id', 'song_information_wrapper');
+				song_information_wrapper.setAttribute('id', 'ihap_song_information_wrapper');
+				song_information_wrapper.setAttribute('class', 'ihap_song_information_wrapper');
 	
 				var song_information = document.createElement('div');
-				song_information.setAttribute('id', 'song_information_title');
+				song_information.setAttribute('id', 'ihap_song_information_title');
+				song_information.setAttribute('class', 'ihap_song_information_title');
 	
 				song_information_wrapper.appendChild(song_information);
 				this.element = song_information;

@@ -12,7 +12,7 @@ export default class ihapAudio {
   createMarkup() {
     // wrapper
     let player_wrapper = document.createElement('div')
-    player_wrapper.setAttribute('id', 'player_wrapper')
+    player_wrapper.setAttribute('id', 'ihap_player_wrapper')
 
     // actual audio element
     let audio_player = document.createElement('audio')

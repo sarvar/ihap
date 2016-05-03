@@ -16,26 +16,27 @@ export default class ihapControls {
    */
   createMarkup() {
     let controls_wrapper = document.createElement('div')
-    controls_wrapper.setAttribute('id', 'controls_wrapper')
+    controls_wrapper.setAttribute('id', 'ihap_controls_wrapper')
+    controls_wrapper.setAttribute('class', 'ihap_controls_wrapper')
     // play button
     let play_button = document.createElement('i')
-    play_button.setAttribute('id', 'play_button')
-    play_button.setAttribute('class', 'material-icons')
+    play_button.setAttribute('id', 'ihap_controls_play_button')
+    play_button.setAttribute('class', 'material-icons ihap_controls_play_button')
     play_button.innerHTML = 'play_arrow'
     // pause button
     let pause_button = document.createElement('i')
-    pause_button.setAttribute('id', 'pause_button')
-    pause_button.setAttribute('class', 'material-icons')
+    pause_button.setAttribute('id', 'ihap_controls_pause_button')
+    pause_button.setAttribute('class', 'material-icons ihap_controls_pause_button')
     pause_button.innerHTML = 'pause'
     // next button
     let next_button = document.createElement('i')
-    next_button.setAttribute('id', 'next_button')
-    next_button.setAttribute('class', 'material-icons')
+    next_button.setAttribute('id', 'ihap_controls_next_button')
+    next_button.setAttribute('class', 'material-icons ihap_controls_next_button')
     next_button.innerHTML = 'skip_next'
     // previous button
     let previous_button = document.createElement('i')
-    previous_button.setAttribute('id', 'previous_button')
-    previous_button.setAttribute('class', 'material-icons')
+    previous_button.setAttribute('id', 'ihap_controls_previous_button')
+    previous_button.setAttribute('class', 'material-icons ihap_controls_previous_button')
     previous_button.innerHTML = 'skip_previous'
 
     controls_wrapper.appendChild(play_button)
