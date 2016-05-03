@@ -228,17 +228,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 				this.progress_bar.markup.addEventListener('mousemove', function (e) {
 					if (that.moving_progress) {
-						var p = (e.layerX - this.offsetLeft) / this.offsetWidth;
 						var duration = that.progress_bar.element.getAttribute('aria-valuemax');
-						that.updateProgressBar(duration * p);
+						var progress = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration);
+						that.updateProgressBar(progress);
 					}
 				});
 	
 				this.progress_bar.markup.addEventListener('mouseup', function (e) {
-					var p = (e.layerX - this.offsetLeft) / this.offsetWidth;
 					var duration = that.progress_bar.element.getAttribute('aria-valuemax');
+					var progress = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration);
+					that.audio.element.currentTime = progress;
 					that.moving_progress = false;
-					that.audio.element.currentTime = duration * p;
 				});
 			}
 		}, {
@@ -255,6 +255,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = ihap;
+	
+	
+	function calculate_progress(layerX, offsetLeft, offsetWidth, duration) {
+		var p = (layerX - offsetLeft) / offsetWidth;
+		return duration * p;
+	}
 	module.exports = exports['default'];
 
 /***/ },
