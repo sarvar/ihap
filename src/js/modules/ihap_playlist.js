@@ -11,24 +11,24 @@ export default class ihapPlaylist {
   //createMarkup() {}
 
   nextSong(that) {
-    if (this.songs != undefined && this.songs.length > 1){
-			let playing = that.audio.element.paused !== true || playing
-			let new_index = that.current_song_index + 1
-			if (this.songs.length > new_index) {
-				that.current_song_index = new_index
-			} else {
-				that.current_song_index = 0
-			}
+    if (this.songs != undefined && this.songs.length > 1) {
+      let playing = that.audio.playing
+      let new_index = that.current_song_index + 1
+      if (this.songs.length > new_index) {
+        that.current_song_index = new_index
+      } else {
+        that.current_song_index = 0
+      }
       this.setCurrentSong(that, this.songs[that.current_song_index])
-			if (playing === true) {
-				that.audio.element.play()
-			}
+      if (playing === true) {
+        that.audio.element.play()
+      }
     }
   }
 
   previousSong(that) {
-    if (this.songs != undefined && this.songs.length > 1){
-      let playing = that.audio.element.paused !== true
+    if (this.songs != undefined && this.songs.length > 1) {
+      let playing = that.audio.playing
       let new_index = that.current_song_index - 1
       if (new_index >= 0) {
         that.current_song_index = new_index
@@ -42,7 +42,7 @@ export default class ihapPlaylist {
     }
   }
 
-  setCurrentSong(that, song){
+  setCurrentSong(that, song) {
     that.audio.element.setAttribute('src', song.url)
     that.audio.element.load()
   }

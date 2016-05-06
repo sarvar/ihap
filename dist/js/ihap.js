@@ -157,6 +157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'nextSong',
 	    value: function nextSong() {
 	      this.audio.element.currentTime = 0;
+	      //this.audio.setSong(song)
 	      this.updateProgressBar(0);
 	      this.playlist.nextSong(this);
 	    }
@@ -287,6 +288,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    this.markup = null;
 	    this.element = null;
+	    this.playing = false;
 	
 	    this.createMarkup();
 	  }
@@ -299,21 +301,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(ihapAudio, [{
 	    key: 'createMarkup',
 	    value: function createMarkup() {
-	      // wrapper
-	      var player_wrapper = document.createElement('div');
-	      player_wrapper.setAttribute('id', 'ihap_player_wrapper');
+	      try {
+	        // wrapper
+	        var player_wrapper = document.createElement('div');
+	        player_wrapper.setAttribute('id', 'ihap_player_wrapper');
 	
-	      // actual audio element
-	      var audio_player = document.createElement('audio');
-	      audio_player.setAttribute('id', 'player');
-	      audio_player.setAttribute('src', '');
+	        // actual audio element
+	        var audio_player = document.createElement('audio');
+	        audio_player.setAttribute('id', 'player');
+	        audio_player.setAttribute('src', '');
 	
-	      // combine wrapper & audio element
-	      player_wrapper.appendChild(audio_player);
+	        // combine wrapper & audio element
+	        player_wrapper.appendChild(audio_player);
 	
-	      // set object properties
-	      this.markup = player_wrapper;
-	      this.element = audio_player;
+	        // set object properties
+	        this.markup = player_wrapper;
+	        this.element = audio_player;
+	      } catch (e) {
+	        console.log("Could not create markup for audio element: " + e);
+	      }
 	    }
 	
 	    /**
@@ -323,7 +329,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'play',
 	    value: function play() {
-	      this.element.play();
+	      try {
+	        this.element.play();
+	        this.playing = true;
+	      } catch (e) {
+	        console.log("Could not play: " + e);
+	      }
 	    }
 	
 	    /**
@@ -333,7 +344,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'pause',
 	    value: function pause() {
-	      this.element.pause();
+	      try {
+	        this.element.pause();
+	        this.playing = false;
+	      } catch (e) {
+	        console.log("Could not pause: " + e);
+	      }
+	    }
+	
+	    /**
+	     * sets a new song to the audioplayer and loads it
+	     * @param {Song} song: the song that should be set
+	     */
+	
+	  }, {
+	    key: 'setSong',
+	    value: function setSong(song) {
+	      try {
+	        this.element.setAttribute('src', song.url);
+	        this.element.load();
+	      } catch (e) {
+	        console.log("Could not set song: " + e);
+	      }
 	    }
 	  }]);
 	
@@ -456,7 +488,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'nextSong',
 	    value: function nextSong(that) {
 	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = that.audio.element.paused !== true || playing;
+	        var playing = that.audio.playing;
 	        var new_index = that.current_song_index + 1;
 	        if (this.songs.length > new_index) {
 	          that.current_song_index = new_index;
@@ -473,7 +505,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'previousSong',
 	    value: function previousSong(that) {
 	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = that.audio.element.paused !== true;
+	        var playing = that.audio.playing;
 	        var new_index = that.current_song_index - 1;
 	        if (new_index >= 0) {
 	          that.current_song_index = new_index;

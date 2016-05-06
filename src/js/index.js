@@ -62,6 +62,7 @@ export default class ihap {
 
   nextSong() {
     this.audio.element.currentTime = 0
+    //this.audio.setSong(song)
     this.updateProgressBar(0)
     this.playlist.nextSong(this)
   }
