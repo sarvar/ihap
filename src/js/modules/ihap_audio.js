@@ -19,9 +19,25 @@ export default class ihapAudio {
     audio_player.setAttribute('id', 'player')
     audio_player.setAttribute('src', '')
 
+    // combine wrapper & audio element
     player_wrapper.appendChild(audio_player)
 
+    // set object properties
     this.markup = player_wrapper
     this.element = audio_player
+  }
+
+  /**
+   * play the current song
+   */
+  play() {
+    this.element.play()
+  }
+
+  /**
+   * pause the current song
+   */
+  pause() {
+    this.element.pause()
   }
 }

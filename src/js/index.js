@@ -102,10 +102,10 @@ export default class ihap {
 	addControlsListeners() {
 		let that = this
 		this.controls.buttons.play.addEventListener('click', function() {
-			that.audio.element.play()
+			that.audio.play()
 		})
 		this.controls.buttons.pause.addEventListener('click', function() {
-			that.audio.element.pause()
+			that.audio.pause()
 		})
 		this.controls.buttons.skip_next.addEventListener('click', function() {
 			that.nextSong()

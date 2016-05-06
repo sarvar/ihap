@@ -205,10 +205,10 @@ return /******/ (function(modules) { // webpackBootstrap
 			value: function addControlsListeners() {
 				var that = this;
 				this.controls.buttons.play.addEventListener('click', function () {
-					that.audio.element.play();
+					that.audio.play();
 				});
 				this.controls.buttons.pause.addEventListener('click', function () {
-					that.audio.element.pause();
+					that.audio.pause();
 				});
 				this.controls.buttons.skip_next.addEventListener('click', function () {
 					that.nextSong();
@@ -304,10 +304,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	      audio_player.setAttribute('id', 'player');
 	      audio_player.setAttribute('src', '');
 	
+	      // combine wrapper & audio element
 	      player_wrapper.appendChild(audio_player);
 	
+	      // set object properties
 	      this.markup = player_wrapper;
 	      this.element = audio_player;
+	    }
+	
+	    /**
+	     * play the current song
+	     */
+	
+	  }, {
+	    key: 'play',
+	    value: function play() {
+	      this.element.play();
+	    }
+	
+	    /**
+	     * pause the current song
+	     */
+	
+	  }, {
+	    key: 'pause',
+	    value: function pause() {
+	      this.element.pause();
 	    }
 	  }]);
 	
