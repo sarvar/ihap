@@ -444,7 +444,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -469,7 +469,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  //createMarkup() {}
 	
 	  _createClass(ihapPlaylist, [{
-	    key: 'getNextSong',
+	    key: "getNextSong",
 	    value: function getNextSong() {
 	      if (this.songs != undefined && this.songs != []) {
 	        var new_index = this.current_song_index + 1;
@@ -482,7 +482,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.songs[id];
 	    }
 	  }, {
-	    key: 'getPreviousSong',
+	    key: "getPreviousSong",
 	    value: function getPreviousSong() {
 	      if (this.songs != undefined && this.songs != []) {
 	        var new_index = this.current_song_index - 1;
@@ -493,12 +493,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	      return this.songs[id];
-	    }
-	  }, {
-	    key: 'setCurrentSong',
-	    value: function setCurrentSong(that, song) {
-	      that.audio.element.setAttribute('src', song.url);
-	      that.audio.element.load();
 	    }
 	  }]);
 	

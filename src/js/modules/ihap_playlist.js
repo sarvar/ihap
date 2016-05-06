@@ -33,9 +33,4 @@ export default class ihapPlaylist {
     }
     return this.songs[id]
   }
-
-  setCurrentSong(that, song) {
-    that.audio.element.setAttribute('src', song.url)
-    that.audio.element.load()
-  }
 }
