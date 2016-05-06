@@ -98,7 +98,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.playlist = new _ihap_playlist2.default(data.songs);
 	    this.progress_bar = new _ihap_progress_bar2.default();
 	    this.song_information = new _ihap_song_information2.default();
-	    this.current_song_index = 0;
 	    this.moving_progress = false;
 	
 	    this.initializeihap();
@@ -134,7 +133,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'setCurrentSong',
 	    value: function setCurrentSong(song) {
-	      this.playlist.setCurrentSong(this, song);
+	      this.playlist.current_song_index = this.playlist.songs.indexOf(song);
+	      this.audio.setSong(song);
+	      this.updateProgressBar(0);
+	      if (this.audio.playing) this.audio.play();
 	    }
 	  }, {
 	    key: 'resetProgressBar',
@@ -156,17 +158,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'nextSong',
 	    value: function nextSong() {
-	      this.audio.element.currentTime = 0;
-	      //this.audio.setSong(song)
-	      this.updateProgressBar(0);
-	      this.playlist.nextSong(this);
+	      var next_song = this.playlist.getNextSong();
+	      this.setCurrentSong(next_song);
 	    }
 	  }, {
 	    key: 'previousSong',
 	    value: function previousSong() {
-	      this.audio.element.currentTime = 0;
-	      this.updateProgressBar(0);
-	      this.playlist.previousSong(this);
+	      var previous_song = this.playlist.getPreviousSong();
+	      this.setCurrentSong(previous_song);
 	    }
 	  }, {
 	    key: 'addListeners',
@@ -197,7 +196,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	      // autoplay next song on finishing one
 	      this.audio.element.addEventListener('ended', function () {
-	        that.nextSong(true);
+	        that.nextSong();
 	      });
 	    }
 	
@@ -249,7 +248,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'updateSongInformation',
 	    value: function updateSongInformation() {
-	      var song = this.playlist.songs[this.current_song_index];
+	      var song = this.playlist.songs[this.playlist.current_song_index];
 	      var title = song.title;
 	      var artist = song.artist;
 	      this.song_information.element.innerHTML = artist + ' - ' + title;
@@ -301,25 +300,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(ihapAudio, [{
 	    key: 'createMarkup',
 	    value: function createMarkup() {
-	      try {
-	        // wrapper
-	        var player_wrapper = document.createElement('div');
-	        player_wrapper.setAttribute('id', 'ihap_player_wrapper');
+	      // wrapper
+	      var player_wrapper = document.createElement('div');
+	      player_wrapper.setAttribute('id', 'ihap_player_wrapper');
 	
-	        // actual audio element
-	        var audio_player = document.createElement('audio');
-	        audio_player.setAttribute('id', 'player');
-	        audio_player.setAttribute('src', '');
+	      // actual audio element
+	      var audio_player = document.createElement('audio');
+	      audio_player.setAttribute('id', 'player');
+	      audio_player.setAttribute('src', '');
 	
-	        // combine wrapper & audio element
-	        player_wrapper.appendChild(audio_player);
+	      // combine wrapper & audio element
+	      player_wrapper.appendChild(audio_player);
 	
-	        // set object properties
-	        this.markup = player_wrapper;
-	        this.element = audio_player;
-	      } catch (e) {
-	        console.log("Could not create markup for audio element: " + e);
-	      }
+	      // set object properties
+	      this.markup = player_wrapper;
+	      this.element = audio_player;
 	    }
 	
 	    /**
@@ -329,12 +324,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'play',
 	    value: function play() {
-	      try {
-	        this.element.play();
-	        this.playing = true;
-	      } catch (e) {
-	        console.log("Could not play: " + e);
-	      }
+	      this.element.play();
+	      this.playing = true;
 	    }
 	
 	    /**
@@ -344,12 +335,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'pause',
 	    value: function pause() {
-	      try {
-	        this.element.pause();
-	        this.playing = false;
-	      } catch (e) {
-	        console.log("Could not pause: " + e);
-	      }
+	      this.element.pause();
+	      this.playing = false;
 	    }
 	
 	    /**
@@ -360,12 +347,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'setSong',
 	    value: function setSong(song) {
-	      try {
-	        this.element.setAttribute('src', song.url);
-	        this.element.load();
-	      } catch (e) {
-	        console.log("Could not set song: " + e);
-	      }
+	      this.element.currentTime = 0;
+	      this.element.setAttribute('src', song.url);
+	      this.element.load();
 	    }
 	  }]);
 	
@@ -476,7 +460,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    //this.markup = null
 	    this.songs = songs;
-	    this.current_song_index = null;
+	    this.current_song_index = 0;
 	
 	    //this.createMarkup()
 	  }
@@ -485,38 +469,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	  //createMarkup() {}
 	
 	  _createClass(ihapPlaylist, [{
-	    key: 'nextSong',
-	    value: function nextSong(that) {
-	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = that.audio.playing;
-	        var new_index = that.current_song_index + 1;
-	        if (this.songs.length > new_index) {
-	          that.current_song_index = new_index;
+	    key: 'getNextSong',
+	    value: function getNextSong() {
+	      if (this.songs != undefined && this.songs != []) {
+	        var new_index = this.current_song_index + 1;
+	        if (this.songs.length > 1 && this.songs.length > new_index) {
+	          var id = new_index;
 	        } else {
-	          that.current_song_index = 0;
-	        }
-	        this.setCurrentSong(that, this.songs[that.current_song_index]);
-	        if (playing === true) {
-	          that.audio.element.play();
+	          var id = 0;
 	        }
 	      }
+	      return this.songs[id];
 	    }
 	  }, {
-	    key: 'previousSong',
-	    value: function previousSong(that) {
-	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = that.audio.playing;
-	        var new_index = that.current_song_index - 1;
-	        if (new_index >= 0) {
-	          that.current_song_index = new_index;
+	    key: 'getPreviousSong',
+	    value: function getPreviousSong() {
+	      if (this.songs != undefined && this.songs != []) {
+	        var new_index = this.current_song_index - 1;
+	        if (this.songs.length > 1 && new_index >= 0 && this.songs.length > new_index) {
+	          var id = new_index;
 	        } else {
-	          that.current_song_index = this.songs.length - 1;
-	        }
-	        this.setCurrentSong(that, this.songs[that.current_song_index]);
-	        if (playing === true) {
-	          that.audio.element.play();
+	          var id = this.songs.length - 1;
 	        }
 	      }
+	      return this.songs[id];
 	    }
 	  }, {
 	    key: 'setCurrentSong',

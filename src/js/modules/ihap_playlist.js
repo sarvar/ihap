@@ -2,7 +2,7 @@ export default class ihapPlaylist {
   constructor(songs) {
     //this.markup = null
     this.songs = songs
-    this.current_song_index = null
+    this.current_song_index = 0
 
     //this.createMarkup()
   }
@@ -10,36 +10,28 @@ export default class ihapPlaylist {
   // playlist currently has no markup. not visible in fronent yet
   //createMarkup() {}
 
-  nextSong(that) {
-    if (this.songs != undefined && this.songs.length > 1) {
-      let playing = that.audio.playing
-      let new_index = that.current_song_index + 1
-      if (this.songs.length > new_index) {
-        that.current_song_index = new_index
+  getNextSong() {
+    if (this.songs != undefined && this.songs != []) {
+      let new_index = this.current_song_index + 1
+      if (this.songs.length > 1 && this.songs.length > new_index) {
+        var id = new_index
       } else {
-        that.current_song_index = 0
-      }
-      this.setCurrentSong(that, this.songs[that.current_song_index])
-      if (playing === true) {
-        that.audio.element.play()
+        var id = 0
       }
     }
+    return this.songs[id]
   }
 
-  previousSong(that) {
-    if (this.songs != undefined && this.songs.length > 1) {
-      let playing = that.audio.playing
-      let new_index = that.current_song_index - 1
-      if (new_index >= 0) {
-        that.current_song_index = new_index
+  getPreviousSong() {
+    if (this.songs != undefined && this.songs != []) {
+      let new_index = this.current_song_index - 1
+      if (this.songs.length > 1 && new_index >= 0 && this.songs.length > new_index) {
+        var id = new_index
       } else {
-        that.current_song_index = this.songs.length - 1
-      }
-      this.setCurrentSong(that, this.songs[that.current_song_index])
-      if (playing === true) {
-        that.audio.element.play()
+        var id = this.songs.length - 1
       }
     }
+    return this.songs[id]
   }
 
   setCurrentSong(that, song) {
