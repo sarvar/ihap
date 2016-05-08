@@ -37,9 +37,15 @@ export default class ihapAudio {
    */
   play() {
     if (this.element.readyState == 4) {
-      this.element.play()
-      this.playing = true
+      this.onCanPlay()
+    } else {
+      this.element.addEventListener('canplay', this.onCanPlay())
     }
+  }
+
+  onCanPlay() {
+    this.element.play()
+    this.playing = true
   }
 
   /**

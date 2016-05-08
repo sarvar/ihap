@@ -151,6 +151,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function setCurrentSong(song) {
 	      this.playlist.current_song_index = this.playlist.songs.indexOf(song);
 	      this.audio.setSong(song);
+	      this.resetProgressBar();
 	      this.updateProgressBar(0);
 	      if (this.audio.playing) this.audio.play();
 	    }
@@ -425,9 +426,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'play',
 	    value: function play() {
 	      if (this.element.readyState == 4) {
-	        this.element.play();
-	        this.playing = true;
+	        this.onCanPlay();
+	      } else {
+	        this.element.addEventListener('canplay', this.onCanPlay());
 	      }
+	    }
+	  }, {
+	    key: 'onCanPlay',
+	    value: function onCanPlay() {
+	      this.element.play();
+	      this.playing = true;
 	    }
 	
 	    /**
@@ -852,7 +860,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'updateBar',
 	    value: function updateBar(current_time) {
-	      if (current_time != undefined && current_time != NaN && current_time > 0) {
+	      if (current_time != undefined && current_time != NaN && current_time >= 0) {
 	        this.element.setAttribute("aria-valuenow", current_time);
 	        var song_duration = this.element.getAttribute('aria-valuemax');
 	        var p = current_time / parseFloat(song_duration) * 100;
