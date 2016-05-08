@@ -799,7 +799,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -807,33 +807,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var ihapSongInformation = function () {
-		function ihapSongInformation() {
-			_classCallCheck(this, ihapSongInformation);
+	  /**
+	   * the song information module
+	   * @constructor
+	   */
 	
-			this.markup = null;
-			this.element = null;
+	  function ihapSongInformation() {
+	    _classCallCheck(this, ihapSongInformation);
 	
-			this.createMarkup();
-		}
+	    this.markup = null;
+	    this.element = null;
 	
-		_createClass(ihapSongInformation, [{
-			key: 'createMarkup',
-			value: function createMarkup() {
-				var song_information_wrapper = document.createElement('div');
-				song_information_wrapper.setAttribute('id', 'ihap_song_information_wrapper');
-				song_information_wrapper.setAttribute('class', 'ihap_song_information_wrapper');
+	    this.createMarkup();
+	  }
 	
-				var song_information = document.createElement('div');
-				song_information.setAttribute('id', 'ihap_song_information_title');
-				song_information.setAttribute('class', 'ihap_song_information_title');
+	  /**
+	   * creates the html markup for the song information
+	   */
 	
-				song_information_wrapper.appendChild(song_information);
-				this.element = song_information;
-				this.markup = song_information_wrapper;
-			}
-		}]);
 	
-		return ihapSongInformation;
+	  _createClass(ihapSongInformation, [{
+	    key: 'createMarkup',
+	    value: function createMarkup() {
+	      // wrapper
+	      var song_information_wrapper = document.createElement('div');
+	      song_information_wrapper.setAttribute('id', 'ihap_song_information_wrapper');
+	      song_information_wrapper.setAttribute('class', 'ihap_song_information_wrapper');
+	
+	      // actual info div
+	      var song_information = document.createElement('div');
+	      song_information.setAttribute('id', 'ihap_song_information_title');
+	      song_information.setAttribute('class', 'ihap_song_information_title');
+	
+	      // concat
+	      song_information_wrapper.appendChild(song_information);
+	
+	      // set properties
+	      this.element = song_information;
+	      this.markup = song_information_wrapper;
+	    }
+	  }]);
+	
+	  return ihapSongInformation;
 	}();
 	
 	exports.default = ihapSongInformation;
