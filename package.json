@@ -5,7 +5,8 @@
   "main": "dist/js/ihap.js",
   "scripts": {
     "dev": "webpack --progress --colors --watch --mode=dev",
-    "build": "NODE_ENV=production webpack && cp src/css/ihap.css dist/css/"
+    "build": "NODE_ENV=production webpack && cp src/css/ihap.css dist/css/",
+    "doc": "jsdoc src/js/index.js src/js/modules/ihap_controls.js src/js/modules/ihap_audio.js src/js/modules/ihap_playlist.js src/js/modules/ihap_progress_bar.js src/js/modules/ihap_song_information.js"
   },
   "devDependencies": {
     "babel": "^6.3.13",

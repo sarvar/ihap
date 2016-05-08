@@ -174,7 +174,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * updates the progress_bar visually (adjusts the width)
-	     * @param {Float} current_time: the current time playing
+	     * @param {Float} current_time the current time playing
 	     */
 	
 	  }, {
@@ -199,7 +199,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * appends a song to the current playlist
-	     * @param  {Array} songs: an array of songs, also accepts a single song
+	     * @param  {Array} songs an array of songs, also accepts a single song
 	     */
 	
 	  }, {
@@ -210,7 +210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * prepends a song to the current playlist
-	     * @param  {Array} songs: an array of songs, also accepts a single song
+	     * @param  {Array} songs an array of songs, also accepts a single song
 	     */
 	
 	  }, {
@@ -446,7 +446,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * sets a new song to the audioplayer and loads it
-	     * @param {Song} song: the song that should be set
+	     * @param {Song} song the song that should be set
 	     */
 	
 	  }, {
@@ -612,7 +612,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * sets the songs and updates the playlist
-	     * @param {Array} songs: an array of songs. also accepts a single song
+	     * @param {Array} songs an array of songs. also accepts a single song
 	     */
 	
 	  }, {
@@ -628,7 +628,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * returns the next song in the playlist
-	     * @return {Object} the song
+	     * @return {Object} song the next song
 	     */
 	
 	  }, {
@@ -647,7 +647,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * return the previous song in the playlist
-	     * @return {object} the song
+	     * @return {object} song the previous song
 	     */
 	
 	  }, {
@@ -677,7 +677,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * appends the given songs to the current playlist
-	     * @param {Array} songs: an array of song objects. also accepts a single song
+	     * @param {Array} songs an array of song objects. also accepts a single song
 	     */
 	
 	  }, {
@@ -691,7 +691,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * prepends the given songs to the current playlist
-	     * @param {Array} songs: an array of song objects. also accepts a single song
+	     * @param {Array} songs an array of song objects. also accepts a single song
 	     */
 	
 	  }, {
@@ -708,7 +708,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    //= privates =//
 	    /**
 	     * checks if songs are currently set in the playlist
-	     * @return {Bool} true if songs are present
+	     * @return {Bool} result true if songs are present
 	     */
 	
 	  }, {
@@ -729,7 +729,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * update the playlist with a new set of songs
-	     * @param  {Array} songs: an array of songs. also accepts a single song
+	     * @param  {Array} songs an array of songs. also accepts a single song
 	     */
 	
 	  }, {
@@ -818,7 +818,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * resets max value and current value of the progress bar to match the new song
-	     * @param {Float} song_duration: the duration of the song currenty playing
+	     * @param {Float} song_duration the duration of the song currenty playing
 	     */
 	
 	  }, {
@@ -832,7 +832,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * updates the progressbar visually - sets its width
-	     * @param {Float} current_time: the current time of the song
+	     * @param {Float} current_time the current time of the song
 	     */
 	
 	  }, {
