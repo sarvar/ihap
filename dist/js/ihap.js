@@ -60,7 +60,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); //= module imports ==//
+	
 	
 	var _ihap_audio = __webpack_require__(1);
 	
@@ -87,6 +88,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var ihap = function () {
+	  /**
+	   * @constructor
+	   */
+	
 	  function ihap(data) {
 	    _classCallCheck(this, ihap);
 	
@@ -104,13 +109,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.initializeihap();
 	  }
 	
+	  /**
+	   * initialize the plugin. create required markup and add event listeners
+	   */
+	
+	
 	  _createClass(ihap, [{
 	    key: 'initializeihap',
 	    value: function initializeihap() {
-	      if (this.container == undefined || this.container == undefined) {
+	      if (this.container == undefined) {
 	        throw 'Cannot find container "' + this.settings.container + '". Please make sure self an element with this id is present.';
 	      } else {
 	        this.createComponents();
+	        this.addListeners();
+	
 	        if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
 	          this.setCurrentSong(this.playlist.songs[0]);
 	        }
@@ -118,7 +130,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    /**
-	     * creates the html markup
+	     * appends the html markup of each module
 	     */
 	
 	  }, {
@@ -129,9 +141,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.container.appendChild(this.progress_bar.markup);
 	      this.container.appendChild(this.song_information.markup);
 	      if (this.playlist_container != undefined) this.playlist_container.appendChild(this.playlist.markup);
-	
-	      this.addListeners();
 	    }
+	
+	    /**
+	     * sets a song from the playlist to be the current song
+	     * @param {Object} song
+	     */
+	
 	  }, {
 	    key: 'setCurrentSong',
 	    value: function setCurrentSong(song) {
@@ -140,14 +156,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.updateProgressBar(0);
 	      if (this.audio.playing) this.audio.play();
 	    }
+	
+	    /**
+	     * resets the progressbars values to 0
+	     */
+	
 	  }, {
 	    key: 'resetProgressBar',
 	    value: function resetProgressBar() {
 	      var song_duration = this.audio.element.duration;
 	      if (song_duration == undefined) {
-	        this.progress_bar.refresh(0);
+	        this.progress_bar.reset(0);
 	      } else {
-	        this.progress_bar.refresh(song_duration);
+	        this.progress_bar.reset(song_duration);
 	      }
 	    }
 	
@@ -163,6 +184,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    //= interactions with the playlist =//
+	    /**
+	     * removes all songs from the playlist and stops playback
+	     */
 	
 	  }, {
 	    key: 'emptyPlaylist',
@@ -172,28 +196,55 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.resetProgressBar();
 	      this.updateProgressBar(0);
 	    }
+	
+	    /**
+	     * appends a song to the current playlist
+	     * @param  {Array} songs: an array of songs, also accepts a single song
+	     */
+	
 	  }, {
 	    key: 'appendToPlaylist',
 	    value: function appendToPlaylist(songs) {
 	      this.playlist.appendSongs(songs);
 	    }
+	
+	    /**
+	     * prepends a song to the current playlist
+	     * @param  {Array} songs: an array of songs, also accepts a single song
+	     */
+	
 	  }, {
 	    key: 'prependToPlaylist',
 	    value: function prependToPlaylist(songs) {
 	      this.playlist.prependSongs(songs);
 	    }
+	
+	    /**
+	     * plays the next song in the playlist, or the first if the current song is the last
+	     */
+	
 	  }, {
 	    key: 'nextSong',
 	    value: function nextSong() {
 	      var next_song = this.playlist.getNextSong();
 	      this.setCurrentSong(next_song);
 	    }
+	
+	    /**
+	     * plays the previous song in the playlist, or the last if the current song is the first
+	     */
+	
 	  }, {
 	    key: 'previousSong',
 	    value: function previousSong() {
 	      var previous_song = this.playlist.getPreviousSong();
 	      this.setCurrentSong(previous_song);
 	    }
+	
+	    /**
+	     * adds event listeners
+	     */
+	
 	  }, {
 	    key: 'addListeners',
 	    value: function addListeners() {
@@ -248,6 +299,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        self.previousSong();
 	      });
 	    }
+	
+	    /**
+	     * adds listeners for the progress bar
+	     */
+	
 	  }, {
 	    key: 'addProgressListeners',
 	    value: function addProgressListeners() {
@@ -272,6 +328,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        self.moving_progress = false;
 	      });
 	    }
+	
+	    /**
+	     * updates the song title & artist in the frontend
+	     */
+	
 	  }, {
 	    key: 'updateSongInformation',
 	    value: function updateSongInformation() {
@@ -623,7 +684,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'appendSongs',
 	    value: function appendSongs(songs) {
 	      if (songs != undefined) {
-	        var new_songs = this.songs = this.songs.concat(songs);
+	        var new_songs = this.songs.concat(songs);
 	        this.setSongs(new_songs);
 	      } else {}
 	    }
@@ -639,7 +700,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (songs != undefined) {
 	        if (!(songs instanceof Array)) songs = [songs];
 	
-	        var new_songs = this.songs = songs.concat(this.songs);
+	        var new_songs = songs.concat(this.songs);
 	        this.setSongs(new_songs);
 	      }
 	    }
@@ -756,13 +817,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    /**
-	     * refreshes max value and current value of the progress bar to match the new song
+	     * resets max value and current value of the progress bar to match the new song
 	     * @param {Float} song_duration: the duration of the song currenty playing
 	     */
 	
 	  }, {
-	    key: 'refresh',
-	    value: function refresh(song_duration) {
+	    key: 'reset',
+	    value: function reset(song_duration) {
 	      if (song_duration != undefined && song_duration != NaN && song_duration > 0) {
 	        this.element.setAttribute("aria-valuemax", song_duration);
 	        this.element.setAttribute("aria-valuenow", "0");

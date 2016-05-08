@@ -1,3 +1,4 @@
+//= module imports ==//
 import ihapAudio from './modules/ihap_audio'
 import ihapControls from './modules/ihap_controls'
 import ihapPlaylist from './modules/ihap_playlist'
@@ -5,6 +6,9 @@ import ihapProgressBar from './modules/ihap_progress_bar'
 import ihapSongInformation from './modules/ihap_song_information'
 
 export default class ihap {
+  /**
+   * @constructor
+   */
   constructor(data) {
     this.settings = data.settings
     this.container = document.getElementById(data.settings.container)
@@ -20,11 +24,16 @@ export default class ihap {
     this.initializeihap()
   }
 
+  /**
+   * initialize the plugin. create required markup and add event listeners
+   */
   initializeihap() {
-    if (this.container == undefined || this.container == undefined) {
+    if (this.container == undefined) {
       throw ('Cannot find container "' + this.settings.container + '". Please make sure self an element with this id is present.')
     } else {
       this.createComponents()
+      this.addListeners()
+
       if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
         this.setCurrentSong(this.playlist.songs[0])
       }
@@ -32,7 +41,7 @@ export default class ihap {
   }
 
   /**
-   * creates the html markup
+   * appends the html markup of each module
    */
   createComponents() {
     this.container.appendChild(this.audio.markup)
@@ -41,10 +50,12 @@ export default class ihap {
     this.container.appendChild(this.song_information.markup)
     if (this.playlist_container != undefined)
       this.playlist_container.appendChild(this.playlist.markup)
-
-    this.addListeners()
   }
 
+  /**
+   * sets a song from the playlist to be the current song
+   * @param {Object} song
+   */
   setCurrentSong(song) {
     this.playlist.current_song_index = this.playlist.songs.indexOf(song)
     this.audio.setSong(song)
@@ -52,12 +63,15 @@ export default class ihap {
     if (this.audio.playing) this.audio.play()
   }
 
+  /**
+   * resets the progressbars values to 0
+   */
   resetProgressBar() {
     let song_duration = this.audio.element.duration
     if (song_duration == undefined) {
-      this.progress_bar.refresh(0)
+      this.progress_bar.reset(0)
     } else {
-      this.progress_bar.refresh(song_duration)
+      this.progress_bar.reset(song_duration)
     }
   }
 
@@ -70,7 +84,9 @@ export default class ihap {
   }
 
   //= interactions with the playlist =//
-
+  /**
+   * removes all songs from the playlist and stops playback
+   */
   emptyPlaylist() {
     this.playlist.empty()
     this.audio.empty()
@@ -78,24 +94,41 @@ export default class ihap {
     this.updateProgressBar(0)
   }
 
+  /**
+   * appends a song to the current playlist
+   * @param  {Array} songs: an array of songs, also accepts a single song
+   */
   appendToPlaylist(songs) {
     this.playlist.appendSongs(songs)
   }
 
+  /**
+   * prepends a song to the current playlist
+   * @param  {Array} songs: an array of songs, also accepts a single song
+   */
   prependToPlaylist(songs) {
     this.playlist.prependSongs(songs)
   }
 
+  /**
+   * plays the next song in the playlist, or the first if the current song is the last
+   */
   nextSong() {
     let next_song = this.playlist.getNextSong()
     this.setCurrentSong(next_song)
   }
 
+  /**
+   * plays the previous song in the playlist, or the last if the current song is the first
+   */
   previousSong() {
     let previous_song = this.playlist.getPreviousSong()
     this.setCurrentSong(previous_song)
   }
 
+  /**
+   * adds event listeners
+   */
   addListeners() {
     this.addAudioListeners()
     this.addControlsListeners()
@@ -143,6 +176,9 @@ export default class ihap {
     })
   }
 
+  /**
+   * adds listeners for the progress bar
+   */
   addProgressListeners() {
     let self = this
     this.progress_bar.markup.addEventListener('mousedown', function(e) {
@@ -166,6 +202,9 @@ export default class ihap {
     })
   }
 
+  /**
+   * updates the song title & artist in the frontend
+   */
   updateSongInformation() {
     let song = this.playlist.songs[this.playlist.current_song_index]
     let title = song.title

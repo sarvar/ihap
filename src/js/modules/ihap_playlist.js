@@ -93,7 +93,7 @@ export default class ihapPlaylist {
    */
   appendSongs(songs) {
     if (songs != undefined) {
-      let new_songs = this.songs = this.songs.concat(songs)
+      let new_songs = this.songs.concat(songs)
       this.setSongs(new_songs)
     } else {}
   }
@@ -107,7 +107,7 @@ export default class ihapPlaylist {
       if (!(songs instanceof Array))
         songs = [songs]
 
-      let new_songs = this.songs = songs.concat(this.songs)
+      let new_songs = songs.concat(this.songs)
       this.setSongs(new_songs)
     }
   }

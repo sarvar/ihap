@@ -41,10 +41,10 @@ export default class ihapProgressBar {
   }
 
   /**
-   * refreshes max value and current value of the progress bar to match the new song
+   * resets max value and current value of the progress bar to match the new song
    * @param {Float} song_duration: the duration of the song currenty playing
    */
-  refresh(song_duration) {
+  reset(song_duration) {
     if (song_duration != undefined && song_duration != NaN && song_duration > 0) {
       this.element.setAttribute("aria-valuemax", song_duration)
       this.element.setAttribute("aria-valuenow", "0")
