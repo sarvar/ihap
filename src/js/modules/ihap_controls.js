@@ -1,4 +1,8 @@
 export default class ihapControls {
+  /**
+   * the module for the player controls
+   * @constructor
+   */
   constructor() {
     this.markup = null
     this.buttons = {
@@ -12,9 +16,10 @@ export default class ihapControls {
   }
 
   /**
-   * create the basic html for the controls
+   * create the html for the controls
    */
   createMarkup() {
+    // wrapper
     let controls_wrapper = document.createElement('div')
     controls_wrapper.setAttribute('id', 'ihap_controls_wrapper')
     controls_wrapper.setAttribute('class', 'ihap_controls_wrapper')
@@ -39,16 +44,17 @@ export default class ihapControls {
     previous_button.setAttribute('class', 'material-icons ihap_controls_previous_button')
     previous_button.innerHTML = 'skip_previous'
 
+    // concat
     controls_wrapper.appendChild(play_button)
     controls_wrapper.appendChild(pause_button)
 		controls_wrapper.appendChild(previous_button)
     controls_wrapper.appendChild(next_button)
 
+    // set properties
     this.buttons.play = play_button
     this.buttons.pause = pause_button
     this.buttons.skip_next = next_button
     this.buttons.skip_previous = previous_button
-
     this.markup = controls_wrapper
   }
 }

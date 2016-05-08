@@ -12,7 +12,7 @@ export default class ihapAudio {
   }
 
   /**
-   * create the html markup for the audio element
+   * create the html for the audio element
    */
   createMarkup() {
     // wrapper
