@@ -57,6 +57,7 @@ export default class ihap {
   setCurrentSong(song) {
     this.playlist.current_song_index = this.playlist.songs.indexOf(song)
     this.audio.setSong(song)
+    this.resetProgressBar()
     this.updateProgressBar(0)
     if (this.audio.playing) this.audio.play()
   }
