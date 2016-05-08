@@ -36,8 +36,10 @@ export default class ihapAudio {
    * play the currently set song
    */
   play() {
-    this.element.play()
-    this.playing = true
+    if (this.element.readyState == 4) {
+      this.element.play()
+      this.playing = true
+    }
   }
 
   /**
@@ -55,6 +57,10 @@ export default class ihapAudio {
     this.element.currentTime = 0 // property of actual audio element
     this.element.setAttribute('src', '') // empty src
     this.element.setAttribute('aria-valuemax', '0') // set duration to 0
+  }
+
+  is_empty() {
+    return this.element.getAttribute('src') == ''
   }
 
   /**

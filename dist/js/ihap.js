@@ -123,9 +123,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.createComponents();
 	        this.addListeners();
 	
-	        if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
-	          this.setCurrentSong(this.playlist.songs[0]);
-	        }
+	        this.loadFirstSong();
 	      }
 	    }
 	
@@ -206,6 +204,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'appendToPlaylist',
 	    value: function appendToPlaylist(songs) {
 	      this.playlist.appendSongs(songs);
+	      this.loadFirstSong();
 	    }
 	
 	    /**
@@ -217,6 +216,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'prependToPlaylist',
 	    value: function prependToPlaylist(songs) {
 	      this.playlist.prependSongs(songs);
+	      this.loadFirstSong();
+	    }
+	  }, {
+	    key: 'loadFirstSong',
+	    value: function loadFirstSong() {
+	      if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
+	        if (this.audio.is_empty()) this.setCurrentSong(this.playlist.songs[0]);
+	      }
 	    }
 	
 	    /**
@@ -417,8 +424,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'play',
 	    value: function play() {
-	      this.element.play();
-	      this.playing = true;
+	      if (this.element.readyState == 4) {
+	        this.element.play();
+	        this.playing = true;
+	      }
 	    }
 	
 	    /**
@@ -442,6 +451,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.element.currentTime = 0; // property of actual audio element
 	      this.element.setAttribute('src', ''); // empty src
 	      this.element.setAttribute('aria-valuemax', '0'); // set duration to 0
+	    }
+	  }, {
+	    key: 'is_empty',
+	    value: function is_empty() {
+	      return this.element.getAttribute('src') == '';
 	    }
 	
 	    /**

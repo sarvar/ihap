@@ -34,9 +34,7 @@ export default class ihap {
       this.createComponents()
       this.addListeners()
 
-      if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
-        this.setCurrentSong(this.playlist.songs[0])
-      }
+      this.loadFirstSong()
     }
   }
 
@@ -100,6 +98,7 @@ export default class ihap {
    */
   appendToPlaylist(songs) {
     this.playlist.appendSongs(songs)
+    this.loadFirstSong()
   }
 
   /**
@@ -108,6 +107,14 @@ export default class ihap {
    */
   prependToPlaylist(songs) {
     this.playlist.prependSongs(songs)
+    this.loadFirstSong()
+  }
+
+  loadFirstSong() {
+    if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
+      if (this.audio.is_empty())
+        this.setCurrentSong(this.playlist.songs[0])
+    }
   }
 
   /**
