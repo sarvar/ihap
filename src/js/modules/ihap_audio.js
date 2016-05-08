@@ -1,4 +1,8 @@
 export default class ihapAudio {
+  /**
+   * the audio module
+   * @constructor
+   */
   constructor() {
     this.markup = null
     this.element = null
@@ -8,7 +12,7 @@ export default class ihapAudio {
   }
 
   /**
-   * create the basic html for the audio element
+   * create the html markup for the audio element
    */
   createMarkup() {
     // wrapper
@@ -29,7 +33,7 @@ export default class ihapAudio {
   }
 
   /**
-   * play the current song
+   * play the currently set song
    */
   play() {
     this.element.play()
@@ -37,17 +41,20 @@ export default class ihapAudio {
   }
 
   /**
-   * pause the current song
+   * pause the currently playing song
    */
   pause() {
     this.element.pause()
     this.playing = false
   }
 
+  /**
+   * reset the audio element to inital state without src or duration
+   */
   empty() {
-    this.element.currentTime = 0
-    this.element.setAttribute('src', '')
-    this.element.setAttribute('aria-valuemax', '0')
+    this.element.currentTime = 0 // property of actual audio element
+    this.element.setAttribute('src', '') // empty src
+    this.element.setAttribute('aria-valuemax', '0') // set duration to 0
   }
 
   /**
@@ -55,8 +62,10 @@ export default class ihapAudio {
    * @param {Song} song: the song that should be set
    */
   setSong(song) {
-    this.element.currentTime = 0
-    this.element.setAttribute('src', song.url)
-    this.element.load()
+    if (song != undefined && song.url != undefined) {
+      this.element.currentTime = 0
+      this.element.setAttribute('src', song.url)
+      this.element.load()
+    }
   }
 }

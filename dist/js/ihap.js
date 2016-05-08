@@ -309,6 +309,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var ihapAudio = function () {
+	  /**
+	   * the audio module
+	   * @constructor
+	   */
+	
 	  function ihapAudio() {
 	    _classCallCheck(this, ihapAudio);
 	
@@ -320,7 +325,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  /**
-	   * create the basic html for the audio element
+	   * create the html markup for the audio element
 	   */
 	
 	
@@ -345,7 +350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    /**
-	     * play the current song
+	     * play the currently set song
 	     */
 	
 	  }, {
@@ -356,7 +361,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    /**
-	     * pause the current song
+	     * pause the currently playing song
 	     */
 	
 	  }, {
@@ -365,12 +370,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.element.pause();
 	      this.playing = false;
 	    }
+	
+	    /**
+	     * reset the audio element to inital state without src or duration
+	     */
+	
 	  }, {
 	    key: 'empty',
 	    value: function empty() {
-	      this.element.currentTime = 0;
-	      this.element.setAttribute('src', '');
-	      this.element.setAttribute('aria-valuemax', '0');
+	      this.element.currentTime = 0; // property of actual audio element
+	      this.element.setAttribute('src', ''); // empty src
+	      this.element.setAttribute('aria-valuemax', '0'); // set duration to 0
 	    }
 	
 	    /**
@@ -381,9 +391,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'setSong',
 	    value: function setSong(song) {
-	      this.element.currentTime = 0;
-	      this.element.setAttribute('src', song.url);
-	      this.element.load();
+	      if (song != undefined && song.url != undefined) {
+	        this.element.currentTime = 0;
+	        this.element.setAttribute('src', song.url);
+	        this.element.load();
+	      }
 	    }
 	  }]);
 	
