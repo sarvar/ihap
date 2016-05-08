@@ -707,6 +707,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var ihapProgressBar = function () {
+	  /**
+	   * the progressbar module
+	   * @constructor
+	   */
+	
 	  function ihapProgressBar() {
 	    _classCallCheck(this, ihapProgressBar);
 	
@@ -717,7 +722,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  /**
-	   * create the basic html for the progress bar
+	   * create the html for the progress bar
 	   */
 	
 	
@@ -742,7 +747,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      progress_bar_background.setAttribute('class', 'ihap_progress_bar_background');
 	      progress_bar_background.appendChild(progress_bar);
 	
+	      // concat
 	      progress_bar_wrapper.appendChild(progress_bar_background);
+	
+	      // set properties
 	      this.markup = progress_bar_wrapper;
 	      this.element = progress_bar;
 	    }
@@ -750,26 +758,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * refreshes max value and current value of the progress bar to match the new song
 	     * @param {Float} song_duration: the duration of the song currenty playing
-	    */
+	     */
 	
 	  }, {
 	    key: 'refresh',
 	    value: function refresh(song_duration) {
-	      this.element.setAttribute("aria-valuemax", song_duration);
-	      this.element.setAttribute("aria-valuenow", "0");
+	      if (song_duration != undefined && song_duration != NaN && song_duration > 0) {
+	        this.element.setAttribute("aria-valuemax", song_duration);
+	        this.element.setAttribute("aria-valuenow", "0");
+	      }
 	    }
 	
 	    /**
-	      * @param {Float} current_time: the current time of the song
-	    */
+	     * updates the progressbar visually - sets its width
+	     * @param {Float} current_time: the current time of the song
+	     */
 	
 	  }, {
 	    key: 'updateBar',
 	    value: function updateBar(current_time) {
-	      this.element.setAttribute("aria-valuenow", current_time);
-	      var song_duration = this.element.getAttribute('aria-valuemax');
-	      var p = current_time / parseFloat(song_duration) * 100;
-	      this.element.style.width = p + '%';
+	      if (current_time != undefined && current_time != NaN && current_time > 0) {
+	        this.element.setAttribute("aria-valuenow", current_time);
+	        var song_duration = this.element.getAttribute('aria-valuemax');
+	        var p = current_time / parseFloat(song_duration) * 100;
+	        this.element.style.width = p + '%';
+	      }
 	    }
 	  }]);
 	
