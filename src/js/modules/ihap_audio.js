@@ -44,6 +44,12 @@ export default class ihapAudio {
     this.playing = false
   }
 
+  empty() {
+    this.element.currentTime = 0
+    this.element.setAttribute('src', '')
+    this.element.setAttribute('aria-valuemax', '0')
+  }
+
   /**
    * sets a new song to the audioplayer and loads it
    * @param {Song} song: the song that should be set

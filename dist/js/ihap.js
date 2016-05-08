@@ -92,6 +92,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    this.settings = data.settings;
 	    this.container = document.getElementById(data.settings.container);
+	    this.playlist_container = document.getElementById(data.settings.playlist_container);
 	
 	    this.audio = new _ihap_audio2.default();
 	    this.controls = new _ihap_controls2.default();
@@ -127,6 +128,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.container.appendChild(this.controls.markup);
 	      this.container.appendChild(this.progress_bar.markup);
 	      this.container.appendChild(this.song_information.markup);
+	      if (this.playlist_container != undefined) this.playlist_container.appendChild(this.playlist.markup);
 	
 	      this.addListeners();
 	    }
@@ -142,7 +144,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'resetProgressBar',
 	    value: function resetProgressBar() {
 	      var song_duration = this.audio.element.duration;
-	      this.progress_bar.refresh(song_duration);
+	      if (song_duration == undefined) {
+	        this.progress_bar.refresh(0);
+	      } else {
+	        this.progress_bar.refresh(song_duration);
+	      }
 	    }
 	
 	    /**
@@ -154,6 +160,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'updateProgressBar',
 	    value: function updateProgressBar(current_time) {
 	      this.progress_bar.updateBar(current_time);
+	    }
+	
+	    //= interactions with the playlist =//
+	
+	  }, {
+	    key: 'emptyPlaylist',
+	    value: function emptyPlaylist() {
+	      this.playlist.empty();
+	      this.audio.empty();
+	      this.resetProgressBar();
+	      this.updateProgressBar(0);
+	    }
+	  }, {
+	    key: 'appendToPlaylist',
+	    value: function appendToPlaylist(songs) {
+	      this.playlist.appendSongs(songs);
+	    }
+	  }, {
+	    key: 'prependToPlaylist',
+	    value: function prependToPlaylist(songs) {
+	      this.playlist.prependSongs(songs);
 	    }
 	  }, {
 	    key: 'nextSong',
@@ -338,6 +365,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.element.pause();
 	      this.playing = false;
 	    }
+	  }, {
+	    key: 'empty',
+	    value: function empty() {
+	      this.element.currentTime = 0;
+	      this.element.setAttribute('src', '');
+	      this.element.setAttribute('aria-valuemax', '0');
+	    }
 	
 	    /**
 	     * sets a new song to the audioplayer and loads it
@@ -444,7 +478,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -458,20 +492,43 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function ihapPlaylist(songs) {
 	    _classCallCheck(this, ihapPlaylist);
 	
-	    //this.markup = null
-	    this.songs = songs;
+	    this.markup = null;
+	    this.element = null;
+	    this.songs = null;
 	    this.current_song_index = 0;
 	
-	    //this.createMarkup()
+	    this.createMarkup();
+	    this.setSongs(songs);
 	  }
 	
-	  // playlist currently has no markup. not visible in fronent yet
-	  //createMarkup() {}
+	  /**
+	   * create the basic html for the playlist
+	   */
+	
 	
 	  _createClass(ihapPlaylist, [{
-	    key: "getNextSong",
+	    key: 'createMarkup',
+	    value: function createMarkup() {
+	      var playlist_wrapper = document.createElement('div');
+	      playlist_wrapper.setAttribute('id', 'ihap_playlist_wrapper');
+	
+	      var playlist = document.createElement('ul');
+	      playlist.setAttribute('id', 'ihap_playlist');
+	      this.element = playlist;
+	
+	      playlist_wrapper.appendChild(playlist);
+	      this.markup = playlist_wrapper;
+	    }
+	  }, {
+	    key: 'setSongs',
+	    value: function setSongs(songs) {
+	      this.songs = songs;
+	      this._updatePlaylist(this.songs);
+	    }
+	  }, {
+	    key: 'getNextSong',
 	    value: function getNextSong() {
-	      if (this.songs != undefined && this.songs != []) {
+	      if (this._songsPresent()) {
 	        var new_index = this.current_song_index + 1;
 	        if (this.songs.length > 1 && this.songs.length > new_index) {
 	          var id = new_index;
@@ -482,9 +539,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.songs[id];
 	    }
 	  }, {
-	    key: "getPreviousSong",
+	    key: 'getPreviousSong',
 	    value: function getPreviousSong() {
-	      if (this.songs != undefined && this.songs != []) {
+	      if (this._songsPresent()) {
 	        var new_index = this.current_song_index - 1;
 	        if (this.songs.length > 1 && new_index >= 0 && this.songs.length > new_index) {
 	          var id = new_index;
@@ -493,6 +550,67 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      }
 	      return this.songs[id];
+	    }
+	  }, {
+	    key: 'empty',
+	    value: function empty() {
+	      this.songs = [];
+	      this.current_song_index = -1;
+	    }
+	
+	    /**
+	     * appends the given songs to the current playlist
+	     * @param {Array} songs: an array of song objects. also accepts a single song
+	     */
+	
+	  }, {
+	    key: 'appendSongs',
+	    value: function appendSongs(songs) {
+	      if (songs != undefined) {
+	        var new_songs = this.songs = this.songs.concat(songs);
+	        this.setSongs(new_songs);
+	      } else {}
+	    }
+	
+	    /**
+	     * prepends the given songs to the current playlist
+	     * @param {Array} songs: an array of song objects. also accepts a single song
+	     */
+	
+	  }, {
+	    key: 'prependSongs',
+	    value: function prependSongs(songs) {
+	      if (songs != undefined) {
+	        if (!(songs instanceof Array)) {
+	          songs = [songs];
+	        }
+	        var new_songs = this.songs = songs.concat(this.songs);
+	        this.setSongs(new_songs);
+	      }
+	    }
+	
+	    //= privates =//
+	
+	  }, {
+	    key: '_songsPresent',
+	    value: function _songsPresent() {
+	      return this.songs != undefined && this.songs != [] && this.current_song_index >= 0;
+	    }
+	  }, {
+	    key: '_resetPlaylist',
+	    value: function _resetPlaylist() {
+	      this.element.innerHTML = '';
+	    }
+	  }, {
+	    key: '_updatePlaylist',
+	    value: function _updatePlaylist(songs) {
+	      this._resetPlaylist();
+	      for (var i = 0; i < songs.length; i++) {
+	        var new_point = document.createElement('li');
+	        var new_point_content = document.createTextNode(songs[i].title);
+	        new_point.appendChild(new_point_content);
+	        this.element.appendChild(new_point);
+	      }
 	    }
 	  }]);
 	
@@ -527,7 +645,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  /**
-	   * create the basic html for the progress bar. wrapper & input with type=range
+	   * create the basic html for the progress bar
 	   */
 	
 	

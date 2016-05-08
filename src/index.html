@@ -18,18 +18,35 @@
       .container {
         width: 1200px;
         margin: auto;
+      }
+
+      #audioplayer-container {
         background-color: #fff;
+      }
+
+      #playlist_container {
+        margin-top: 25px;
+        background-color: #fff;
+        min-height: 100px;
       }
     </style>
     <div class="container">
       <div id="audioplayer-container"></div>
+      <div id="playlist_container"></div>
+      <div id="debug_actions">
+        <button id="prependSongButton">PrependSong</button>
+        <button id="prependSongsButton">PrependSongs</button>
+        <button id="appendSongButton">AppendSong</button>
+        <button id="appendSongsButton">AppendSongs</button>
+      </div>
     </div>
     <script src="../dist/js/ihap.js"></script>
 
     <script>
       var player = new ihap({
         settings: {
-          container: "audioplayer-container"
+          container: "audioplayer-container",
+          playlist_container: "playlist_container"
         },
         songs: [
           {title: "To War",
@@ -46,6 +63,54 @@
             url: "http://www.html5tutorial.info/media/vincent.mp3"}
         ]
       });
+
+      document.getElementById('prependSongButton').addEventListener('click', function() {
+        player.prependToPlaylist(
+          {title: "Prepend",
+            id: "3",
+            artist: 'Starry Night Artist',
+            url: "http://www.html5tutorial.info/media/vincent.mp3"}
+        )
+      })
+
+      document.getElementById('prependSongsButton').addEventListener('click', function() {
+        player.prependToPlaylist(
+          [
+            {title: "Prepend 1",
+              id: "1",
+  						artist: "Abbath",
+              url: "./songs/01 - To War.mp3"},
+            {title: "Prepend 2",
+              id: "2",
+  						artist: 'Abbath',
+              url: "./songs/02 - Winter Bane.mp3"}
+          ]
+        )
+      })
+
+      document.getElementById('appendSongButton').addEventListener('click', function() {
+        player.appendToPlaylist(
+          {title: "Append",
+            id: "3",
+            artist: 'Starry Night Artist',
+            url: "http://www.html5tutorial.info/media/vincent.mp3"}
+        )
+      })
+
+      document.getElementById('appendSongsButton').addEventListener('click', function() {
+        player.appendToPlaylist(
+          [
+            {title: "Append 1",
+              id: "1",
+              artist: "Abbath",
+              url: "./songs/01 - To War.mp3"},
+            {title: "Append 2",
+              id: "2",
+              artist: 'Abbath',
+              url: "./songs/02 - Winter Bane.mp3"}
+          ]
+        )
+      })
     </script>
   </body>
 </html>

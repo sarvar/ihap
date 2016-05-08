@@ -7,7 +7,7 @@ export default class ihapProgressBar {
   }
 
   /**
-   * create the basic html for the progress bar. wrapper & input with type=range
+   * create the basic html for the progress bar
    */
   createMarkup() {
     // wrapper

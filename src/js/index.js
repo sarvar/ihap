@@ -8,6 +8,7 @@ export default class ihap {
   constructor(data) {
     this.settings = data.settings
     this.container = document.getElementById(data.settings.container)
+    this.playlist_container = document.getElementById(data.settings.playlist_container)
 
     this.audio = new ihapAudio()
     this.controls = new ihapControls()
@@ -38,6 +39,8 @@ export default class ihap {
     this.container.appendChild(this.controls.markup)
     this.container.appendChild(this.progress_bar.markup)
     this.container.appendChild(this.song_information.markup)
+    if (this.playlist_container != undefined)
+      this.playlist_container.appendChild(this.playlist.markup)
 
     this.addListeners()
   }
@@ -51,7 +54,11 @@ export default class ihap {
 
   resetProgressBar() {
     let song_duration = this.audio.element.duration
-    this.progress_bar.refresh(song_duration)
+    if (song_duration == undefined) {
+      this.progress_bar.refresh(0)
+    } else {
+      this.progress_bar.refresh(song_duration)
+    }
   }
 
   /**
@@ -60,6 +67,23 @@ export default class ihap {
    */
   updateProgressBar(current_time) {
     this.progress_bar.updateBar(current_time)
+  }
+
+  //= interactions with the playlist =//
+
+  emptyPlaylist() {
+    this.playlist.empty()
+    this.audio.empty()
+    this.resetProgressBar()
+    this.updateProgressBar(0)
+  }
+
+  appendToPlaylist(songs) {
+    this.playlist.appendSongs(songs)
+  }
+
+  prependToPlaylist(songs) {
+    this.playlist.prependSongs(songs)
   }
 
   nextSong() {
