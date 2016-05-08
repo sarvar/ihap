@@ -57,10 +57,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); //= module imports ==//
+	
 	
 	var _ihap_audio = __webpack_require__(1);
 	
@@ -87,174 +88,278 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var ihap = function () {
-		function ihap(data) {
-			_classCallCheck(this, ihap);
+	  /**
+	   * @constructor
+	   */
 	
-			this.settings = data.settings;
-			this.container = document.getElementById(data.settings.container);
+	  function ihap(data) {
+	    _classCallCheck(this, ihap);
 	
-			this.audio = new _ihap_audio2.default();
-			this.controls = new _ihap_controls2.default();
-			this.playlist = new _ihap_playlist2.default(data.songs);
-			this.progress_bar = new _ihap_progress_bar2.default();
-			this.song_information = new _ihap_song_information2.default();
-			this.current_song_index = 0;
-			this.moving_progress = false;
+	    this.settings = data.settings;
+	    this.container = document.getElementById(data.settings.container);
+	    this.playlist_container = document.getElementById(data.settings.playlist_container);
 	
-			this.initializeihap();
-		}
+	    this.audio = new _ihap_audio2.default();
+	    this.controls = new _ihap_controls2.default();
+	    this.playlist = new _ihap_playlist2.default(data.songs);
+	    this.progress_bar = new _ihap_progress_bar2.default();
+	    this.song_information = new _ihap_song_information2.default();
+	    this.moving_progress = false;
 	
-		_createClass(ihap, [{
-			key: 'initializeihap',
-			value: function initializeihap() {
-				this.createComponents();
-				if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
-					this.setCurrentSong(this.playlist.songs[0]);
-				}
-			}
+	    this.initializeihap();
+	  }
 	
-			/**
-	   * creates the html markup
-	  */
+	  /**
+	   * initialize the plugin. create required markup and add event listeners
+	   */
 	
-		}, {
-			key: 'createComponents',
-			value: function createComponents() {
-				this.container.appendChild(this.audio.markup);
-				this.container.appendChild(this.controls.markup);
-				this.container.appendChild(this.progress_bar.markup);
-				this.container.appendChild(this.song_information.markup);
 	
-				this.addListeners();
-			}
-		}, {
-			key: 'setCurrentSong',
-			value: function setCurrentSong(song) {
-				this.playlist.setCurrentSong(this, song);
-			}
-		}, {
-			key: 'resetProgressBar',
-			value: function resetProgressBar() {
-				var song_duration = this.audio.element.duration;
-				this.progress_bar.refresh(song_duration);
-			}
+	  _createClass(ihap, [{
+	    key: 'initializeihap',
+	    value: function initializeihap() {
+	      if (this.container == undefined) {
+	        throw 'Cannot find container "' + this.settings.container + '". Please make sure self an element with this id is present.';
+	      } else {
+	        this.createComponents();
+	        this.addListeners();
 	
-			/**
-	   * updates the progress_bar visually (adjusts the width)
-	   * @param {Float} current_time: the current time playing
-	  */
+	        this.loadFirstSong();
+	      }
+	    }
 	
-		}, {
-			key: 'updateProgressBar',
-			value: function updateProgressBar(current_time) {
-				this.progress_bar.updateBar(current_time);
-			}
-		}, {
-			key: 'nextSong',
-			value: function nextSong() {
-				this.audio.element.currentTime = 0;
-				this.updateProgressBar(0);
-				this.playlist.nextSong(this);
-			}
-		}, {
-			key: 'previousSong',
-			value: function previousSong() {
-				this.audio.element.currentTime = 0;
-				this.updateProgressBar(0);
-				this.playlist.previousSong(this);
-			}
-		}, {
-			key: 'addListeners',
-			value: function addListeners() {
-				this.addAudioListeners();
-				this.addControlsListeners();
-				this.addProgressListeners();
-			}
+	    /**
+	     * appends the html markup of each module
+	     */
 	
-			/**
-	   * adds listeners for the audio element
-	  */
+	  }, {
+	    key: 'createComponents',
+	    value: function createComponents() {
+	      this.container.appendChild(this.audio.markup);
+	      this.container.appendChild(this.controls.markup);
+	      this.container.appendChild(this.progress_bar.markup);
+	      this.container.appendChild(this.song_information.markup);
+	      if (this.playlist_container != undefined) this.playlist_container.appendChild(this.playlist.markup);
+	    }
 	
-		}, {
-			key: 'addAudioListeners',
-			value: function addAudioListeners() {
-				var that = this;
-				// update the progress_bar to match the current timestamp
-				this.audio.element.addEventListener("timeupdate", function () {
-					if (that.moving_progress == false) {
-						that.updateProgressBar(this.currentTime);
-					}
-				});
-				// reload the progress_bar after the song changed
-				this.audio.element.addEventListener('canplay', function () {
-					that.resetProgressBar();
-					that.updateSongInformation();
-				});
-				// autoplay next song on finishing one
-				this.audio.element.addEventListener('ended', function () {
-					that.nextSong(true);
-				});
-			}
+	    /**
+	     * sets a song from the playlist to be the current song
+	     * @param {Object} song
+	     */
 	
-			/**
-	   *	adds listeners for the controls (button)
-	  */
+	  }, {
+	    key: 'setCurrentSong',
+	    value: function setCurrentSong(song) {
+	      this.playlist.current_song_index = this.playlist.songs.indexOf(song);
+	      this.audio.setSong(song);
+	      this.updateProgressBar(0);
+	      if (this.audio.playing) this.audio.play();
+	    }
 	
-		}, {
-			key: 'addControlsListeners',
-			value: function addControlsListeners() {
-				var that = this;
-				this.controls.buttons.play.addEventListener('click', function () {
-					that.audio.element.play();
-				});
-				this.controls.buttons.pause.addEventListener('click', function () {
-					that.audio.element.pause();
-				});
-				this.controls.buttons.skip_next.addEventListener('click', function () {
-					that.nextSong();
-				});
-				this.controls.buttons.skip_previous.addEventListener('click', function () {
-					that.previousSong();
-				});
-			}
-		}, {
-			key: 'addProgressListeners',
-			value: function addProgressListeners() {
-				var that = this;
-				this.progress_bar.markup.addEventListener('mousedown', function (e) {
-					if (e.preventDefault) e.preventDefault();
-					that.moving_progress = true;
-				});
+	    /**
+	     * resets the progressbars values to 0
+	     */
 	
-				this.progress_bar.markup.addEventListener('mousemove', function (e) {
-					if (that.moving_progress) {
-						var p = (e.layerX - this.offsetLeft) / this.offsetWidth;
-						var duration = that.progress_bar.element.getAttribute('aria-valuemax');
-						that.updateProgressBar(duration * p);
-					}
-				});
+	  }, {
+	    key: 'resetProgressBar',
+	    value: function resetProgressBar() {
+	      var song_duration = this.audio.element.duration;
+	      if (song_duration == undefined) {
+	        this.progress_bar.reset(0);
+	      } else {
+	        this.progress_bar.reset(song_duration);
+	      }
+	    }
 	
-				this.progress_bar.markup.addEventListener('mouseup', function (e) {
-					var p = (e.layerX - this.offsetLeft) / this.offsetWidth;
-					var duration = that.progress_bar.element.getAttribute('aria-valuemax');
-					that.moving_progress = false;
-					that.audio.element.currentTime = duration * p;
-				});
-			}
-		}, {
-			key: 'updateSongInformation',
-			value: function updateSongInformation() {
-				var song = this.playlist.songs[this.current_song_index];
-				var title = song.title;
-				var artist = song.artist;
-				this.song_information.element.innerHTML = artist + ' - ' + title;
-			}
-		}]);
+	    /**
+	     * updates the progress_bar visually (adjusts the width)
+	     * @param {Float} current_time the current time playing
+	     */
 	
-		return ihap;
+	  }, {
+	    key: 'updateProgressBar',
+	    value: function updateProgressBar(current_time) {
+	      this.progress_bar.updateBar(current_time);
+	    }
+	
+	    //= interactions with the playlist =//
+	    /**
+	     * removes all songs from the playlist and stops playback
+	     */
+	
+	  }, {
+	    key: 'emptyPlaylist',
+	    value: function emptyPlaylist() {
+	      this.playlist.empty();
+	      this.audio.empty();
+	      this.resetProgressBar();
+	      this.updateProgressBar(0);
+	    }
+	
+	    /**
+	     * appends a song to the current playlist
+	     * @param  {Array} songs an array of songs, also accepts a single song
+	     */
+	
+	  }, {
+	    key: 'appendToPlaylist',
+	    value: function appendToPlaylist(songs) {
+	      this.playlist.appendSongs(songs);
+	      this.loadFirstSong();
+	    }
+	
+	    /**
+	     * prepends a song to the current playlist
+	     * @param  {Array} songs an array of songs, also accepts a single song
+	     */
+	
+	  }, {
+	    key: 'prependToPlaylist',
+	    value: function prependToPlaylist(songs) {
+	      this.playlist.prependSongs(songs);
+	      this.loadFirstSong();
+	    }
+	  }, {
+	    key: 'loadFirstSong',
+	    value: function loadFirstSong() {
+	      if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
+	        if (this.audio.is_empty()) this.setCurrentSong(this.playlist.songs[0]);
+	      }
+	    }
+	
+	    /**
+	     * plays the next song in the playlist, or the first if the current song is the last
+	     */
+	
+	  }, {
+	    key: 'nextSong',
+	    value: function nextSong() {
+	      var next_song = this.playlist.getNextSong();
+	      this.setCurrentSong(next_song);
+	    }
+	
+	    /**
+	     * plays the previous song in the playlist, or the last if the current song is the first
+	     */
+	
+	  }, {
+	    key: 'previousSong',
+	    value: function previousSong() {
+	      var previous_song = this.playlist.getPreviousSong();
+	      this.setCurrentSong(previous_song);
+	    }
+	
+	    /**
+	     * adds event listeners
+	     */
+	
+	  }, {
+	    key: 'addListeners',
+	    value: function addListeners() {
+	      this.addAudioListeners();
+	      this.addControlsListeners();
+	      this.addProgressListeners();
+	    }
+	
+	    /**
+	     * adds listeners for the audio element
+	     */
+	
+	  }, {
+	    key: 'addAudioListeners',
+	    value: function addAudioListeners() {
+	      var self = this;
+	      // update the progress_bar to match the current timestamp
+	      this.audio.element.addEventListener("timeupdate", function () {
+	        if (self.moving_progress == false) {
+	          self.updateProgressBar(this.currentTime);
+	        }
+	      });
+	      // reload the progress_bar after the song changed
+	      this.audio.element.addEventListener('canplay', function () {
+	        self.resetProgressBar();
+	        self.updateSongInformation();
+	      });
+	      // autoplay next song on finishing one
+	      this.audio.element.addEventListener('ended', function () {
+	        self.nextSong();
+	      });
+	    }
+	
+	    /**
+	     *	adds listeners for the controls (button)
+	     */
+	
+	  }, {
+	    key: 'addControlsListeners',
+	    value: function addControlsListeners() {
+	      var self = this;
+	      this.controls.buttons.play.addEventListener('click', function () {
+	        self.audio.play();
+	      });
+	      this.controls.buttons.pause.addEventListener('click', function () {
+	        self.audio.pause();
+	      });
+	      this.controls.buttons.skip_next.addEventListener('click', function () {
+	        self.nextSong();
+	      });
+	      this.controls.buttons.skip_previous.addEventListener('click', function () {
+	        self.previousSong();
+	      });
+	    }
+	
+	    /**
+	     * adds listeners for the progress bar
+	     */
+	
+	  }, {
+	    key: 'addProgressListeners',
+	    value: function addProgressListeners() {
+	      var self = this;
+	      this.progress_bar.markup.addEventListener('mousedown', function (e) {
+	        if (e.preventDefault) e.preventDefault();
+	        self.moving_progress = true;
+	      });
+	
+	      this.progress_bar.markup.addEventListener('mousemove', function (e) {
+	        if (self.moving_progress) {
+	          var duration = self.progress_bar.element.getAttribute('aria-valuemax');
+	          var progress = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration);
+	          self.updateProgressBar(progress);
+	        }
+	      });
+	
+	      this.progress_bar.markup.addEventListener('mouseup', function (e) {
+	        var duration = self.progress_bar.element.getAttribute('aria-valuemax');
+	        var progress = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration);
+	        self.audio.element.currentTime = progress;
+	        self.moving_progress = false;
+	      });
+	    }
+	
+	    /**
+	     * updates the song title & artist in the frontend
+	     */
+	
+	  }, {
+	    key: 'updateSongInformation',
+	    value: function updateSongInformation() {
+	      var song = this.playlist.songs[this.playlist.current_song_index];
+	      var title = song.title;
+	      var artist = song.artist;
+	      this.song_information.element.innerHTML = artist + ' - ' + title;
+	    }
+	  }]);
+	
+	  return ihap;
 	}();
 	
 	exports.default = ihap;
+	
+	
+	function calculate_progress(layerX, offsetLeft, offsetWidth, duration) {
+	  var p = (layerX - offsetLeft) / offsetWidth;
+	  return duration * p;
+	}
 	module.exports = exports['default'];
 
 /***/ },
@@ -272,17 +377,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var ihapAudio = function () {
+	  /**
+	   * the audio module
+	   * @constructor
+	   */
+	
 	  function ihapAudio() {
 	    _classCallCheck(this, ihapAudio);
 	
 	    this.markup = null;
 	    this.element = null;
+	    this.playing = false;
 	
 	    this.createMarkup();
 	  }
 	
 	  /**
-	   * create the basic html for the audio element
+	   * create the html for the audio element
 	   */
 	
 	
@@ -291,17 +402,75 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function createMarkup() {
 	      // wrapper
 	      var player_wrapper = document.createElement('div');
-	      player_wrapper.setAttribute('id', 'player_wrapper');
+	      player_wrapper.setAttribute('id', 'ihap_player_wrapper');
 	
 	      // actual audio element
 	      var audio_player = document.createElement('audio');
 	      audio_player.setAttribute('id', 'player');
 	      audio_player.setAttribute('src', '');
 	
+	      // combine wrapper & audio element
 	      player_wrapper.appendChild(audio_player);
 	
+	      // set object properties
 	      this.markup = player_wrapper;
 	      this.element = audio_player;
+	    }
+	
+	    /**
+	     * play the currently set song
+	     */
+	
+	  }, {
+	    key: 'play',
+	    value: function play() {
+	      if (this.element.readyState == 4) {
+	        this.element.play();
+	        this.playing = true;
+	      }
+	    }
+	
+	    /**
+	     * pause the currently playing song
+	     */
+	
+	  }, {
+	    key: 'pause',
+	    value: function pause() {
+	      this.element.pause();
+	      this.playing = false;
+	    }
+	
+	    /**
+	     * reset the audio element to inital state without src or duration
+	     */
+	
+	  }, {
+	    key: 'empty',
+	    value: function empty() {
+	      this.element.currentTime = 0; // property of actual audio element
+	      this.element.setAttribute('src', ''); // empty src
+	      this.element.setAttribute('aria-valuemax', '0'); // set duration to 0
+	    }
+	  }, {
+	    key: 'is_empty',
+	    value: function is_empty() {
+	      return this.element.getAttribute('src') == '';
+	    }
+	
+	    /**
+	     * sets a new song to the audioplayer and loads it
+	     * @param {Song} song the song that should be set
+	     */
+	
+	  }, {
+	    key: 'setSong',
+	    value: function setSong(song) {
+	      if (song != undefined && song.url != undefined) {
+	        this.element.currentTime = 0;
+	        this.element.setAttribute('src', song.url);
+	        this.element.load();
+	      }
 	    }
 	  }]);
 	
@@ -326,6 +495,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var ihapControls = function () {
+	  /**
+	   * the module for the player controls
+	   * @constructor
+	   */
+	
 	  function ihapControls() {
 	    _classCallCheck(this, ihapControls);
 	
@@ -341,46 +515,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  /**
-	   * create the basic html for the controls
+	   * create the html for the controls
 	   */
 	
 	
 	  _createClass(ihapControls, [{
 	    key: 'createMarkup',
 	    value: function createMarkup() {
+	      // wrapper
 	      var controls_wrapper = document.createElement('div');
-	      controls_wrapper.setAttribute('id', 'controls_wrapper');
+	      controls_wrapper.setAttribute('id', 'ihap_controls_wrapper');
+	      controls_wrapper.setAttribute('class', 'ihap_controls_wrapper');
 	      // play button
 	      var play_button = document.createElement('i');
-	      play_button.setAttribute('id', 'play_button');
-	      play_button.setAttribute('class', 'material-icons');
+	      play_button.setAttribute('id', 'ihap_controls_play_button');
+	      play_button.setAttribute('class', 'material-icons ihap_controls_play_button');
 	      play_button.innerHTML = 'play_arrow';
 	      // pause button
 	      var pause_button = document.createElement('i');
-	      pause_button.setAttribute('id', 'pause_button');
-	      pause_button.setAttribute('class', 'material-icons');
+	      pause_button.setAttribute('id', 'ihap_controls_pause_button');
+	      pause_button.setAttribute('class', 'material-icons ihap_controls_pause_button');
 	      pause_button.innerHTML = 'pause';
 	      // next button
 	      var next_button = document.createElement('i');
-	      next_button.setAttribute('id', 'next_button');
-	      next_button.setAttribute('class', 'material-icons');
+	      next_button.setAttribute('id', 'ihap_controls_next_button');
+	      next_button.setAttribute('class', 'material-icons ihap_controls_next_button');
 	      next_button.innerHTML = 'skip_next';
 	      // previous button
 	      var previous_button = document.createElement('i');
-	      previous_button.setAttribute('id', 'previous_button');
-	      previous_button.setAttribute('class', 'material-icons');
+	      previous_button.setAttribute('id', 'ihap_controls_previous_button');
+	      previous_button.setAttribute('class', 'material-icons ihap_controls_previous_button');
 	      previous_button.innerHTML = 'skip_previous';
 	
+	      // concat
 	      controls_wrapper.appendChild(play_button);
 	      controls_wrapper.appendChild(pause_button);
 	      controls_wrapper.appendChild(previous_button);
 	      controls_wrapper.appendChild(next_button);
 	
+	      // set properties
 	      this.buttons.play = play_button;
 	      this.buttons.pause = pause_button;
 	      this.buttons.skip_next = next_button;
 	      this.buttons.skip_previous = previous_button;
-	
 	      this.markup = controls_wrapper;
 	    }
 	  }]);
@@ -406,58 +583,181 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var ihapPlaylist = function () {
+	  /**
+	   * the playlist module
+	   * @constructor
+	   */
+	
 	  function ihapPlaylist(songs) {
 	    _classCallCheck(this, ihapPlaylist);
 	
-	    //this.markup = null
-	    this.songs = songs;
-	    this.current_song_index = null;
+	    this.markup = null;
+	    this.element = null;
+	    this.songs = null;
+	    this.current_song_index = 0;
 	
-	    //this.createMarkup()
+	    this.createMarkup();
+	    this.setSongs(songs);
 	  }
 	
-	  // playlist currently has no markup. not visible in fronent yet
-	  //createMarkup() {}
+	  /**
+	   * create the html for the playlist
+	   */
+	
 	
 	  _createClass(ihapPlaylist, [{
-	    key: 'nextSong',
-	    value: function nextSong(that) {
-	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = that.audio.element.paused !== true || playing;
-	        var new_index = that.current_song_index + 1;
-	        if (this.songs.length > new_index) {
-	          that.current_song_index = new_index;
-	        } else {
-	          that.current_song_index = 0;
-	        }
-	        this.setCurrentSong(that, this.songs[that.current_song_index]);
-	        if (playing === true) {
-	          that.audio.element.play();
-	        }
+	    key: 'createMarkup',
+	    value: function createMarkup() {
+	      // wrapper
+	      var playlist_wrapper = document.createElement('div');
+	      playlist_wrapper.setAttribute('id', 'ihap_playlist_wrapper');
+	
+	      // actual playlist
+	      var playlist = document.createElement('ul');
+	      playlist.setAttribute('id', 'ihap_playlist');
+	
+	      // concat
+	      playlist_wrapper.appendChild(playlist);
+	
+	      // set properties
+	      this.markup = playlist_wrapper;
+	      this.element = playlist;
+	    }
+	
+	    /**
+	     * sets the songs and updates the playlist
+	     * @param {Array} songs an array of songs. also accepts a single song
+	     */
+	
+	  }, {
+	    key: 'setSongs',
+	    value: function setSongs(songs) {
+	      if (songs != undefined) {
+	        if (!(songs instanceof Array)) songs = [songs];
+	
+	        this.songs = songs;
+	        this._updatePlaylist(this.songs);
 	      }
 	    }
+	
+	    /**
+	     * returns the next song in the playlist
+	     * @return {Object} song the next song
+	     */
+	
 	  }, {
-	    key: 'previousSong',
-	    value: function previousSong(that) {
-	      if (this.songs != undefined && this.songs.length > 1) {
-	        var playing = that.audio.element.paused !== true;
-	        var new_index = that.current_song_index - 1;
-	        if (new_index >= 0) {
-	          that.current_song_index = new_index;
+	    key: 'getNextSong',
+	    value: function getNextSong() {
+	      if (this._songsPresent()) {
+	        var new_index = this.current_song_index + 1;
+	        if (this.songs.length > 1 && this.songs.length > new_index) {
+	          var id = new_index;
 	        } else {
-	          that.current_song_index = this.songs.length - 1;
-	        }
-	        this.setCurrentSong(that, this.songs[that.current_song_index]);
-	        if (playing === true) {
-	          that.audio.element.play();
+	          var id = 0;
 	        }
 	      }
+	      return this.songs[id];
 	    }
+	
+	    /**
+	     * return the previous song in the playlist
+	     * @return {object} song the previous song
+	     */
+	
 	  }, {
-	    key: 'setCurrentSong',
-	    value: function setCurrentSong(that, song) {
-	      that.audio.element.setAttribute('src', song.url);
-	      that.audio.element.load();
+	    key: 'getPreviousSong',
+	    value: function getPreviousSong() {
+	      if (this._songsPresent()) {
+	        var new_index = this.current_song_index - 1;
+	        if (this.songs.length > 1 && new_index >= 0 && this.songs.length > new_index) {
+	          var id = new_index;
+	        } else {
+	          var id = this.songs.length - 1;
+	        }
+	      }
+	      return this.songs[id];
+	    }
+	
+	    /**
+	     * resets the playlist
+	     */
+	
+	  }, {
+	    key: 'empty',
+	    value: function empty() {
+	      this.setSongs([]);
+	      this.current_song_index = -1;
+	    }
+	
+	    /**
+	     * appends the given songs to the current playlist
+	     * @param {Array} songs an array of song objects. also accepts a single song
+	     */
+	
+	  }, {
+	    key: 'appendSongs',
+	    value: function appendSongs(songs) {
+	      if (songs != undefined) {
+	        var new_songs = this.songs.concat(songs);
+	        this.setSongs(new_songs);
+	      } else {}
+	    }
+	
+	    /**
+	     * prepends the given songs to the current playlist
+	     * @param {Array} songs an array of song objects. also accepts a single song
+	     */
+	
+	  }, {
+	    key: 'prependSongs',
+	    value: function prependSongs(songs) {
+	      if (songs != undefined) {
+	        if (!(songs instanceof Array)) songs = [songs];
+	
+	        var new_songs = songs.concat(this.songs);
+	        this.setSongs(new_songs);
+	      }
+	    }
+	
+	    //= privates =//
+	    /**
+	     * checks if songs are currently set in the playlist
+	     * @return {Bool} result true if songs are present
+	     */
+	
+	  }, {
+	    key: '_songsPresent',
+	    value: function _songsPresent() {
+	      return this.songs != undefined && this.songs != [] && this.current_song_index >= 0;
+	    }
+	
+	    /**
+	     * empties the html of the actual playlist
+	     */
+	
+	  }, {
+	    key: '_resetPlaylist',
+	    value: function _resetPlaylist() {
+	      this.element.innerHTML = '';
+	    }
+	
+	    /**
+	     * update the playlist with a new set of songs
+	     * @param  {Array} songs an array of songs. also accepts a single song
+	     */
+	
+	  }, {
+	    key: '_updatePlaylist',
+	    value: function _updatePlaylist(songs) {
+	      this._resetPlaylist();
+	      if (!(songs instanceof Array)) songs = [songs];
+	
+	      for (var i = 0; i < songs.length; i++) {
+	        var new_point = document.createElement('li');
+	        var new_point_content = document.createTextNode(songs[i].title);
+	        new_point.appendChild(new_point_content);
+	        this.element.appendChild(new_point);
+	      }
 	    }
 	  }]);
 	
@@ -482,6 +782,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var ihapProgressBar = function () {
+	  /**
+	   * the progressbar module
+	   * @constructor
+	   */
+	
 	  function ihapProgressBar() {
 	    _classCallCheck(this, ihapProgressBar);
 	
@@ -492,7 +797,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  /**
-	   * create the basic html for the progress bar. wrapper & input with type=range
+	   * create the html for the progress bar
 	   */
 	
 	
@@ -501,47 +806,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function createMarkup() {
 	      // wrapper
 	      var progress_bar_wrapper = document.createElement('div');
-	      progress_bar_wrapper.setAttribute('id', 'progress_bar_wrapper');
+	      progress_bar_wrapper.setAttribute('id', 'ihap_progress_bar_wrapper');
+	      progress_bar_wrapper.setAttribute('class', 'ihap_progress_bar_wrapper');
 	
 	      // actual bar
 	      var progress_bar = document.createElement('div');
-	      progress_bar.setAttribute('id', 'progress_bar');
+	      progress_bar.setAttribute('id', 'ihap_progress_bar');
+	      progress_bar.setAttribute('class', 'ihap_progress_bar');
 	      progress_bar.setAttribute('aria-valuenow', '0');
 	      progress_bar.setAttribute('aria-valuemin', '0');
 	
 	      // grey background
 	      var progress_bar_background = document.createElement('div');
-	      progress_bar_background.setAttribute('id', 'progress_bar_background');
+	      progress_bar_background.setAttribute('id', 'ihap_progress_bar_background');
+	      progress_bar_background.setAttribute('class', 'ihap_progress_bar_background');
 	      progress_bar_background.appendChild(progress_bar);
 	
+	      // concat
 	      progress_bar_wrapper.appendChild(progress_bar_background);
+	
+	      // set properties
 	      this.markup = progress_bar_wrapper;
 	      this.element = progress_bar;
 	    }
 	
 	    /**
-	     * refreshes max value and current value of the progress bar to match the new song
-	     * @param {Float} song_duration: the duration of the song currenty playing
-	    */
+	     * resets max value and current value of the progress bar to match the new song
+	     * @param {Float} song_duration the duration of the song currenty playing
+	     */
 	
 	  }, {
-	    key: 'refresh',
-	    value: function refresh(song_duration) {
-	      this.element.setAttribute("aria-valuemax", song_duration);
-	      this.element.setAttribute("aria-valuenow", "0");
+	    key: 'reset',
+	    value: function reset(song_duration) {
+	      if (song_duration != undefined && song_duration != NaN && song_duration > 0) {
+	        this.element.setAttribute("aria-valuemax", song_duration);
+	        this.element.setAttribute("aria-valuenow", "0");
+	      }
 	    }
 	
 	    /**
-	      * @param {Float} current_time: the current time of the song
-	    */
+	     * updates the progressbar visually - sets its width
+	     * @param {Float} current_time the current time of the song
+	     */
 	
 	  }, {
 	    key: 'updateBar',
 	    value: function updateBar(current_time) {
-	      this.element.setAttribute("aria-valuenow", current_time);
-	      var song_duration = this.element.getAttribute('aria-valuemax');
-	      var p = current_time / parseFloat(song_duration) * 100;
-	      this.element.style.width = p + '%';
+	      if (current_time != undefined && current_time != NaN && current_time > 0) {
+	        this.element.setAttribute("aria-valuenow", current_time);
+	        var song_duration = this.element.getAttribute('aria-valuemax');
+	        var p = current_time / parseFloat(song_duration) * 100;
+	        this.element.style.width = p + '%';
+	      }
 	    }
 	  }]);
 	
@@ -558,7 +874,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -566,31 +882,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var ihapSongInformation = function () {
-		function ihapSongInformation() {
-			_classCallCheck(this, ihapSongInformation);
+	  /**
+	   * the song information module
+	   * @constructor
+	   */
 	
-			this.markup = null;
-			this.element = null;
+	  function ihapSongInformation() {
+	    _classCallCheck(this, ihapSongInformation);
 	
-			this.createMarkup();
-		}
+	    this.markup = null;
+	    this.element = null;
 	
-		_createClass(ihapSongInformation, [{
-			key: 'createMarkup',
-			value: function createMarkup() {
-				var song_information_wrapper = document.createElement('div');
-				song_information_wrapper.setAttribute('id', 'song_information_wrapper');
+	    this.createMarkup();
+	  }
 	
-				var song_information = document.createElement('div');
-				song_information.setAttribute('id', 'song_information_title');
+	  /**
+	   * creates the html markup for the song information
+	   */
 	
-				song_information_wrapper.appendChild(song_information);
-				this.element = song_information;
-				this.markup = song_information_wrapper;
-			}
-		}]);
 	
-		return ihapSongInformation;
+	  _createClass(ihapSongInformation, [{
+	    key: 'createMarkup',
+	    value: function createMarkup() {
+	      // wrapper
+	      var song_information_wrapper = document.createElement('div');
+	      song_information_wrapper.setAttribute('id', 'ihap_song_information_wrapper');
+	      song_information_wrapper.setAttribute('class', 'ihap_song_information_wrapper');
+	
+	      // actual info div
+	      var song_information = document.createElement('div');
+	      song_information.setAttribute('id', 'ihap_song_information_title');
+	      song_information.setAttribute('class', 'ihap_song_information_title');
+	
+	      // concat
+	      song_information_wrapper.appendChild(song_information);
+	
+	      // set properties
+	      this.element = song_information;
+	      this.markup = song_information_wrapper;
+	    }
+	  }]);
+	
+	  return ihapSongInformation;
 	}();
 	
 	exports.default = ihapSongInformation;
