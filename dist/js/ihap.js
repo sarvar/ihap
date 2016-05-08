@@ -508,6 +508,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var ihapPlaylist = function () {
+	  /**
+	   * the playlist module
+	   * @constructor
+	   */
+	
 	  function ihapPlaylist(songs) {
 	    _classCallCheck(this, ihapPlaylist);
 	
@@ -521,29 +526,50 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  /**
-	   * create the basic html for the playlist
+	   * create the html for the playlist
 	   */
 	
 	
 	  _createClass(ihapPlaylist, [{
 	    key: 'createMarkup',
 	    value: function createMarkup() {
+	      // wrapper
 	      var playlist_wrapper = document.createElement('div');
 	      playlist_wrapper.setAttribute('id', 'ihap_playlist_wrapper');
 	
+	      // actual playlist
 	      var playlist = document.createElement('ul');
 	      playlist.setAttribute('id', 'ihap_playlist');
-	      this.element = playlist;
 	
+	      // concat
 	      playlist_wrapper.appendChild(playlist);
+	
+	      // set properties
 	      this.markup = playlist_wrapper;
+	      this.element = playlist;
 	    }
+	
+	    /**
+	     * sets the songs and updates the playlist
+	     * @param {Array} songs: an array of songs. also accepts a single song
+	     */
+	
 	  }, {
 	    key: 'setSongs',
 	    value: function setSongs(songs) {
-	      this.songs = songs;
-	      this._updatePlaylist(this.songs);
+	      if (songs != undefined) {
+	        if (!(songs instanceof Array)) songs = [songs];
+	
+	        this.songs = songs;
+	        this._updatePlaylist(this.songs);
+	      }
 	    }
+	
+	    /**
+	     * returns the next song in the playlist
+	     * @return {Object} the song
+	     */
+	
 	  }, {
 	    key: 'getNextSong',
 	    value: function getNextSong() {
@@ -557,6 +583,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      return this.songs[id];
 	    }
+	
+	    /**
+	     * return the previous song in the playlist
+	     * @return {object} the song
+	     */
+	
 	  }, {
 	    key: 'getPreviousSong',
 	    value: function getPreviousSong() {
@@ -570,6 +602,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      return this.songs[id];
 	    }
+	
+	    /**
+	     * resets the playlist
+	     */
+	
 	  }, {
 	    key: 'empty',
 	    value: function empty() {
@@ -600,30 +637,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'prependSongs',
 	    value: function prependSongs(songs) {
 	      if (songs != undefined) {
-	        if (!(songs instanceof Array)) {
-	          songs = [songs];
-	        }
+	        if (!(songs instanceof Array)) songs = [songs];
+	
 	        var new_songs = this.songs = songs.concat(this.songs);
 	        this.setSongs(new_songs);
 	      }
 	    }
 	
 	    //= privates =//
+	    /**
+	     * checks if songs are currently set in the playlist
+	     * @return {Bool} true if songs are present
+	     */
 	
 	  }, {
 	    key: '_songsPresent',
 	    value: function _songsPresent() {
 	      return this.songs != undefined && this.songs != [] && this.current_song_index >= 0;
 	    }
+	
+	    /**
+	     * empties the html of the actual playlist
+	     */
+	
 	  }, {
 	    key: '_resetPlaylist',
 	    value: function _resetPlaylist() {
 	      this.element.innerHTML = '';
 	    }
+	
+	    /**
+	     * update the playlist with a new set of songs
+	     * @param  {Array} songs: an array of songs. also accepts a single song
+	     */
+	
 	  }, {
 	    key: '_updatePlaylist',
 	    value: function _updatePlaylist(songs) {
 	      this._resetPlaylist();
+	      if (!(songs instanceof Array)) songs = [songs];
+	
 	      for (var i = 0; i < songs.length; i++) {
 	        var new_point = document.createElement('li');
 	        var new_point_content = document.createTextNode(songs[i].title);
