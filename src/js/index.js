@@ -21,7 +21,7 @@ export default class ihap {
 
   initializeihap() {
     if (this.container == undefined || this.container == undefined) {
-      throw ('Cannot find container "' + this.settings.container + '". Please make sure that an element with this id is present.')
+      throw ('Cannot find container "' + this.settings.container + '". Please make sure self an element with this id is present.')
     } else {
       this.createComponents()
       if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
@@ -82,21 +82,21 @@ export default class ihap {
    * adds listeners for the audio element
    */
   addAudioListeners() {
-    let that = this
+    let self = this
       // update the progress_bar to match the current timestamp
     this.audio.element.addEventListener("timeupdate", function() {
-        if (that.moving_progress == false) {
-          that.updateProgressBar(this.currentTime)
+        if (self.moving_progress == false) {
+          self.updateProgressBar(this.currentTime)
         }
       })
       // reload the progress_bar after the song changed
     this.audio.element.addEventListener('canplay', function() {
-        that.resetProgressBar()
-        that.updateSongInformation()
+        self.resetProgressBar()
+        self.updateSongInformation()
       })
       // autoplay next song on finishing one
     this.audio.element.addEventListener('ended', function() {
-      that.nextSong()
+      self.nextSong()
     })
   }
 
@@ -104,41 +104,41 @@ export default class ihap {
    *	adds listeners for the controls (button)
    */
   addControlsListeners() {
-    let that = this
+    let self = this
     this.controls.buttons.play.addEventListener('click', function() {
-      that.audio.play()
+      self.audio.play()
     })
     this.controls.buttons.pause.addEventListener('click', function() {
-      that.audio.pause()
+      self.audio.pause()
     })
     this.controls.buttons.skip_next.addEventListener('click', function() {
-      that.nextSong()
+      self.nextSong()
     })
     this.controls.buttons.skip_previous.addEventListener('click', function() {
-      that.previousSong()
+      self.previousSong()
     })
   }
 
   addProgressListeners() {
-    let that = this
+    let self = this
     this.progress_bar.markup.addEventListener('mousedown', function(e) {
       if (e.preventDefault) e.preventDefault()
-      that.moving_progress = true
+      self.moving_progress = true
     })
 
     this.progress_bar.markup.addEventListener('mousemove', function(e) {
-      if (that.moving_progress) {
-        let duration = that.progress_bar.element.getAttribute('aria-valuemax')
+      if (self.moving_progress) {
+        let duration = self.progress_bar.element.getAttribute('aria-valuemax')
         let progress = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration)
-        that.updateProgressBar(progress)
+        self.updateProgressBar(progress)
       }
     })
 
     this.progress_bar.markup.addEventListener('mouseup', function(e) {
-      let duration = that.progress_bar.element.getAttribute('aria-valuemax')
+      let duration = self.progress_bar.element.getAttribute('aria-valuemax')
       let progress = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration)
-      that.audio.element.currentTime = progress
-      that.moving_progress = false
+      self.audio.element.currentTime = progress
+      self.moving_progress = false
     })
   }
 
