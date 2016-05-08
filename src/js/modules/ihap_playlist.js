@@ -54,7 +54,7 @@ export default class ihapPlaylist {
   }
 
   empty() {
-    this.songs = []
+    this.setSongs([])
     this.current_song_index = -1
   }
 

@@ -554,7 +554,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'empty',
 	    value: function empty() {
-	      this.songs = [];
+	      this.setSongs([]);
 	      this.current_song_index = -1;
 	    }
 	

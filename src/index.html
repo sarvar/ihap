@@ -34,10 +34,11 @@
       <div id="audioplayer-container"></div>
       <div id="playlist_container"></div>
       <div id="debug_actions">
-        <button id="prependSongButton">PrependSong</button>
-        <button id="prependSongsButton">PrependSongs</button>
-        <button id="appendSongButton">AppendSong</button>
-        <button id="appendSongsButton">AppendSongs</button>
+        <button id="prependSongButton">Prepend Song</button>
+        <button id="prependSongsButton">Prepend Songs</button>
+        <button id="appendSongButton">Append Song</button>
+        <button id="appendSongsButton">Append Songs</button>
+        <button id="emptyButton">Empty Playlist</button>
       </div>
     </div>
     <script src="../dist/js/ihap.js"></script>
@@ -110,6 +111,10 @@
               url: "./songs/02 - Winter Bane.mp3"}
           ]
         )
+      })
+
+      document.getElementById('emptyButton').addEventListener('click', function() {
+        player.emptyPlaylist();
       })
     </script>
   </body>
