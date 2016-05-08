@@ -31,7 +31,6 @@ module.exports = {
 	plugins: dev ? [] : [
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
-    //new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
     new ClosureCompilerPlugin({
       compiler: {
         language_in: 'ECMASCRIPT6',
