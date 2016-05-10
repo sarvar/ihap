@@ -407,7 +407,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      // actual audio element
 	      var audio_player = document.createElement('audio');
-	      audio_player.setAttribute('id', 'player');
+	      audio_player.setAttribute('id', 'ihap_player');
 	      audio_player.setAttribute('src', '');
 	
 	      // combine wrapper & audio element
@@ -478,6 +478,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.element.currentTime = 0;
 	        this.element.setAttribute('src', song.url);
 	        this.element.load();
+	      } else {
+	        throw new Error('Invalid song');
 	      }
 	    }
 	  }]);
