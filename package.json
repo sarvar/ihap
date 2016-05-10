@@ -4,15 +4,19 @@
   "description": "independent html5 audio player",
   "main": "dist/js/ihap.js",
   "scripts": {
-    "dev": "webpack --progress --colors --watch --mode=dev",
-    "build": "NODE_ENV=production webpack && cp src/css/ihap.css dist/css/",
-    "doc": "jsdoc src/js/index.js src/js/modules/ihap_controls.js src/js/modules/ihap_audio.js src/js/modules/ihap_playlist.js src/js/modules/ihap_progress_bar.js src/js/modules/ihap_song_information.js"
+    "dev": "node_modules/webpack/bin/webpack.js --progress --colors --watch --mode=dev",
+    "build": "NODE_ENV=production node_modules/webpack/bin/webpack.js && cp src/css/ihap.css dist/css/",
+    "doc": "jsdoc -d doc src/js/index.js src/js/modules/ihap_controls.js src/js/modules/ihap_audio.js src/js/modules/ihap_playlist.js src/js/modules/ihap_progress_bar.js src/js/modules/ihap_song_information.js",
+    "test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --"
   },
   "devDependencies": {
     "babel": "^6.3.13",
     "babel-core": "^6.1.18",
     "babel-loader": "^6.1.0",
     "babel-preset-es2015": "^6.3.13",
+    "chai": "^3.5.0",
+    "istanbul": "^1.0.0-alpha",
+    "mocha": "^2.4.5",
     "webpack": "^1.12.9",
     "webpack-closure-compiler": "^2.0.2"
   },
@@ -22,5 +26,4 @@
     "type": "git",
     "url": "https://github.com/cars10/ihap"
   }
-
 }
