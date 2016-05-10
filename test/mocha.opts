@@ -1,0 +1,4 @@
+--reporter progress
+--recursive
+--check-leaks
+--compilers js:babel-core/register
