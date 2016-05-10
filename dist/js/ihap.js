@@ -361,6 +361,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var p = (layerX - offsetLeft) / offsetWidth;
 	  return duration * p;
 	}
+	module.exports = exports['default'];
 
 /***/ },
 /* 1 */
@@ -406,7 +407,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      // actual audio element
 	      var audio_player = document.createElement('audio');
-	      audio_player.setAttribute('id', 'player');
+	      audio_player.setAttribute('id', 'ihap_player');
 	      audio_player.setAttribute('src', '');
 	
 	      // combine wrapper & audio element
@@ -477,6 +478,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.element.currentTime = 0;
 	        this.element.setAttribute('src', song.url);
 	        this.element.load();
+	      } else {
+	        throw new Error('Invalid song');
 	      }
 	    }
 	  }]);
@@ -485,6 +488,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = ihapAudio;
+	module.exports = exports['default'];
 
 /***/ },
 /* 2 */
@@ -572,6 +576,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = ihapControls;
+	module.exports = exports['default'];
 
 /***/ },
 /* 3 */
@@ -770,6 +775,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = ihapPlaylist;
+	module.exports = exports['default'];
 
 /***/ },
 /* 4 */
@@ -869,6 +875,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = ihapProgressBar;
+	module.exports = exports['default'];
 
 /***/ },
 /* 5 */
@@ -930,6 +937,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = ihapSongInformation;
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ])

@@ -17,6 +17,7 @@
     "chai": "^3.5.0",
     "istanbul": "^1.0.0-alpha",
     "mocha": "^2.4.5",
+    "mocha-jsdom": "^1.1.0",
     "webpack": "^1.12.9",
     "webpack-closure-compiler": "^2.0.2"
   },
