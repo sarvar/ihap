@@ -2,7 +2,9 @@ language: node_js
 node_js:
   - "5"
   - "4"
-script: npm run build
+script:
+  - npm run build
+  - npm test
 branches:
   only:
     - master
