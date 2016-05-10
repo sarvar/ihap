@@ -63,21 +63,6 @@ describe('ihap audio module', function() {
       expect(duration).not.to.equal('0')
     })
 
-    it('can play songs immediatly with the correct readyState', function() {
-      let ihap_audio = new ihapAudio();
-      let song = {
-        url: 'http://www.html5tutorial.info/media/vincent.mp3'
-      }
-      ihap_audio.element.readyState = 4
-      ihap_audio.setSong(song)
-
-      let duration = ihap_audio.element.getAttribute('aria-valuemax')
-      ihap_audio.play()
-
-      expect(ihap_audio.playing).to.be.true
-      expect(duration).not.to.equal('0')
-    })
-
     it('can pause songs', function() {
       let ihap_audio = new ihapAudio();
       let song = {
@@ -99,11 +84,12 @@ describe('ihap audio module', function() {
       }
       ihap_audio.setSong(song)
       ihap_audio.play()
+      var src = ihap_audio.element.getAttribute('src')
       expect(src).not.to.equal('')
 
       ihap_audio.empty()
 
-      let src = ihap_audio.element.getAttribute('src')
+      src = ihap_audio.element.getAttribute('src')
       let duration = ihap_audio.element.getAttribute('aria-valuemax')
       expect(src).to.equal('')
       expect(duration).to.equal('0')
