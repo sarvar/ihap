@@ -20,10 +20,12 @@ export default class ihapPlaylist {
     // wrapper
     let playlist_wrapper = document.createElement('div')
     playlist_wrapper.setAttribute('id', 'ihap_playlist_wrapper')
+    playlist_wrapper.setAttribute('class', 'ihap_playlist_wrapper')
 
     // actual playlist
     let playlist = document.createElement('ul')
     playlist.setAttribute('id', 'ihap_playlist')
+    playlist.setAttribute('class', 'ihap_playlist')
 
     // concat
     playlist_wrapper.appendChild(playlist)

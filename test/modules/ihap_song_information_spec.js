@@ -7,16 +7,11 @@ describe('ihap song_information module', function() {
   jsdom()
 
   context('constructor', function() {
-    it('has no empty properties', function() {
+    it('has correct initial properties', function() {
       let song_information = new ihapSongInformation();
 
       expect(song_information.markup).not.to.be.null
       expect(song_information.element).not.to.be.null
-    })
-
-    it('has correct properties', function() {
-      let song_information = new ihapSongInformation();
-
       expect(song_information.markup.outerHTML).to.match(/<div\s*id="\w*"\s*class="\w*">.*<\/div>/g)
       expect(song_information.element.outerHTML).to.match(/<div\s*id="\w*"\s*class="\w*">.*<\/div>/g)
     })

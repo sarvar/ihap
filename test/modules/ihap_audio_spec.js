@@ -7,16 +7,12 @@ describe('ihap audio module', function() {
   jsdom()
 
   context('constructor', function() {
-    it('has no empty properties', function() {
+    it('has has correct initial properties', function() {
       let ihap_audio = new ihapAudio();
 
       expect(ihap_audio.markup).not.to.be.null
       expect(ihap_audio.element).not.to.be.null
       expect(ihap_audio.playing).not.to.be.null
-    })
-
-    it('has correct properties', function() {
-      let ihap_audio = new ihapAudio();
 
       expect(ihap_audio.element.outerHTML).to.match(/<audio\s*id="ihap_player"\s*src=".*?">.*?<\/audio>/g)
       expect(ihap_audio.markup.outerHTML).to.match(/<div\s*?id="ihap_player_wrapper">.*?<\/div>/g)

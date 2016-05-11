@@ -7,7 +7,7 @@ describe('ihap controls module', function() {
   jsdom()
 
   context('constructor', function() {
-    it('has no empty properties', function() {
+    it('has has correct initial properties', function() {
       let ihap_controls = new ihapControls();
 
       expect(ihap_controls.markup).not.to.be.null
@@ -16,10 +16,6 @@ describe('ihap controls module', function() {
       expect(ihap_controls.buttons.pause).not.to.be.null
       expect(ihap_controls.buttons.skip_next).not.to.be.null
       expect(ihap_controls.buttons.skip_previous).not.to.be.null
-    })
-
-    it('has correct properties', function() {
-      let ihap_controls = new ihapControls();
 
       expect(ihap_controls.markup.outerHTML).to.match(/<div\s*id="\w*"\s*class="\w*">.*<\/div>/g)
       expect(ihap_controls.buttons.play.outerHTML).to.match(/<i\s*id="\w*|\s*"\s*class="\w*">.*<\/i>/g)
