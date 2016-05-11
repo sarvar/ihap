@@ -3,7 +3,7 @@ var jsdom = require('mocha-jsdom')
 var ihapAudio = require('../../src/js/modules/ihap_audio.js')
 
 describe('ihap audio module', function() {
-  // create
+  // create dom
   jsdom()
 
   context('constructor', function() {

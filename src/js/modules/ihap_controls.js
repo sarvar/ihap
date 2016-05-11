@@ -1,4 +1,4 @@
-export default class ihapControls {
+class ihapControls {
   /**
    * the module for the player controls
    * @constructor
@@ -58,3 +58,5 @@ export default class ihapControls {
     this.markup = controls_wrapper
   }
 }
+
+export { ihapControls as default }
