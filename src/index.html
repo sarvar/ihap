@@ -39,6 +39,7 @@
         <button id="appendSongButton">Append Song</button>
         <button id="appendSongsButton">Append Songs</button>
         <button id="emptyButton">Empty Playlist</button>
+        <button id="setNewSongs">Set new Songs</button>
       </div>
     </div>
     <script src="../dist/js/ihap.js"></script>
@@ -48,21 +49,7 @@
         settings: {
           container: "audioplayer-container",
           playlist_container: "playlist_container"
-        },
-        songs: [
-          {title: "To War",
-            id: "1",
-						artist: "Abbath",
-            url: "./songs/01 - To War.mp3"},
-          {title: "Winter Bane",
-            id: "2",
-						artist: 'Abbath',
-            url: "./songs/02 - Winter Bane.mp3"},
-          {title: "Starry night",
-            id: "3",
-						artist: 'Starry Night Artist',
-            url: "http://www.html5tutorial.info/media/vincent.mp3"}
-        ]
+        }
       });
 
       document.getElementById('prependSongButton').addEventListener('click', function() {
@@ -115,6 +102,21 @@
 
       document.getElementById('emptyButton').addEventListener('click', function() {
         player.emptyPlaylist();
+      })
+
+      document.getElementById('setNewSongs').addEventListener('click', function() {
+        player.setSongs(
+          [
+            {title: "New Song 1",
+              id: "1",
+              artist: "Abbath",
+              url: "./songs/01 - To War.mp3"},
+            {title: "New Song 2",
+              id: "2",
+              artist: 'Abbath',
+              url: "./songs/02 - Winter Bane.mp3"}
+          ]
+        )
       })
     </script>
   </body>

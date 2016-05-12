@@ -44,8 +44,10 @@ class ihapAudio {
   }
 
   onCanPlay() {
-    this.element.play()
-    this.playing = true
+    if (!this.is_empty()) {
+      this.element.play()
+      this.playing = true
+    }
   }
 
   /**
@@ -83,4 +85,7 @@ class ihapAudio {
     }
   }
 }
-export { ihapAudio as default }
+export {
+  ihapAudio as
+  default
+}

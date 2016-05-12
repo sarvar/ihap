@@ -54,12 +54,21 @@ export default class ihap {
    * sets a song from the playlist to be the current song
    * @param {Object} song
    */
-  setCurrentSong(song) {
+  setPlaylistSong(song) {
     this.playlist.current_song_index = this.playlist.songs.indexOf(song)
     this.audio.setSong(song)
     this.resetProgressBar()
     this.updateProgressBar(0)
     if (this.audio.playing) this.audio.play()
+  }
+
+  /**
+   * reset the playlist and set new songs
+   * @param {[Object]} songs
+   */
+  setSongs(songs) {
+    this.emptyPlaylist()
+    this.appendToPlaylist(songs)
   }
 
   /**
@@ -114,7 +123,7 @@ export default class ihap {
   loadFirstSong() {
     if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
       if (this.audio.is_empty())
-        this.setCurrentSong(this.playlist.songs[0])
+        this.setPlaylistSong(this.playlist.songs[0])
     }
   }
 
@@ -123,7 +132,7 @@ export default class ihap {
    */
   nextSong() {
     let next_song = this.playlist.getNextSong()
-    this.setCurrentSong(next_song)
+    this.setPlaylistSong(next_song)
   }
 
   /**
@@ -131,7 +140,7 @@ export default class ihap {
    */
   previousSong() {
     let previous_song = this.playlist.getPreviousSong()
-    this.setCurrentSong(previous_song)
+    this.setPlaylistSong(previous_song)
   }
 
   /**

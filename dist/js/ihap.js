@@ -147,13 +147,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	
 	  }, {
-	    key: 'setCurrentSong',
-	    value: function setCurrentSong(song) {
+	    key: 'setPlaylistSong',
+	    value: function setPlaylistSong(song) {
 	      this.playlist.current_song_index = this.playlist.songs.indexOf(song);
 	      this.audio.setSong(song);
 	      this.resetProgressBar();
 	      this.updateProgressBar(0);
 	      if (this.audio.playing) this.audio.play();
+	    }
+	
+	    /**
+	     * reset the playlist and set new songs
+	     * @param {[Object]} songs
+	     */
+	
+	  }, {
+	    key: 'setSongs',
+	    value: function setSongs(songs) {
+	      this.emptyPlaylist();
+	      this.appendToPlaylist(songs);
 	    }
 	
 	    /**
@@ -223,7 +235,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'loadFirstSong',
 	    value: function loadFirstSong() {
 	      if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
-	        if (this.audio.is_empty()) this.setCurrentSong(this.playlist.songs[0]);
+	        if (this.audio.is_empty()) this.setPlaylistSong(this.playlist.songs[0]);
 	      }
 	    }
 	
@@ -235,7 +247,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'nextSong',
 	    value: function nextSong() {
 	      var next_song = this.playlist.getNextSong();
-	      this.setCurrentSong(next_song);
+	      this.setPlaylistSong(next_song);
 	    }
 	
 	    /**
@@ -246,7 +258,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'previousSong',
 	    value: function previousSong() {
 	      var previous_song = this.playlist.getPreviousSong();
-	      this.setCurrentSong(previous_song);
+	      this.setPlaylistSong(previous_song);
 	    }
 	
 	    /**
@@ -434,8 +446,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'onCanPlay',
 	    value: function onCanPlay() {
-	      this.element.play();
-	      this.playing = true;
+	      if (!this.is_empty()) {
+	        this.element.play();
+	        this.playing = true;
+	      }
 	    }
 	
 	    /**
@@ -603,7 +617,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    this.markup = null;
 	    this.element = null;
-	    this.songs = null;
+	    this.songs = [];
 	    this.current_song_index = 0;
 	
 	    this.createMarkup();
@@ -621,10 +635,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // wrapper
 	      var playlist_wrapper = document.createElement('div');
 	      playlist_wrapper.setAttribute('id', 'ihap_playlist_wrapper');
+	      playlist_wrapper.setAttribute('class', 'ihap_playlist_wrapper');
 	
 	      // actual playlist
 	      var playlist = document.createElement('ul');
 	      playlist.setAttribute('id', 'ihap_playlist');
+	      playlist.setAttribute('class', 'ihap_playlist');
 	
 	      // concat
 	      playlist_wrapper.appendChild(playlist);
@@ -710,7 +726,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (songs != undefined) {
 	        var new_songs = this.songs.concat(songs);
 	        this.setSongs(new_songs);
-	      } else {}
+	      }
 	    }
 	
 	    /**

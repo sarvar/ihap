@@ -6,7 +6,7 @@ export default class ihapPlaylist {
   constructor(songs) {
     this.markup = null
     this.element = null
-    this.songs = null
+    this.songs = []
     this.current_song_index = 0
 
     this.createMarkup()
@@ -97,7 +97,7 @@ export default class ihapPlaylist {
     if (songs != undefined) {
       let new_songs = this.songs.concat(songs)
       this.setSongs(new_songs)
-    } else {}
+    } 
   }
 
   /**
