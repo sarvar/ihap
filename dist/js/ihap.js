@@ -171,8 +171,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	
 	    /**
-	    * removes all songs from the playlist (visually and in the background) and stops playback
-	    */
+	     * removes all songs from the playlist (visually and in the background) and stops playback
+	     */
 	
 	  }, {
 	    key: 'emptyPlaylist',
@@ -191,11 +191,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'changeSong',
 	    value: function changeSong(song) {
-	      this.playlist.current_song_index = this.playlist.songs.indexOf(song);
-	      this.audio.setSong(song);
-	      this._resetProgressBar();
-	      this._updateProgressBar(0);
-	      if (this.audio.playing) this.audio.play();
+	      if (this.playlist.songs.indexOf(song) != undefined) {
+	        this.playlist.current_song_index = this.playlist.songs.indexOf(song);
+	        this.audio.setSong(song);
+	        this._resetProgressBar();
+	        this._updateProgressBar(0);
+	        if (this.audio.playing) this.audio.play();
+	      }
 	    }
 	
 	    /**

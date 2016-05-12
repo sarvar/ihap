@@ -72,26 +72,28 @@ export default class ihap {
    * *********************
    */
 
-   /**
+  /**
    * removes all songs from the playlist (visually and in the background) and stops playback
    */
-   emptyPlaylist() {
-     this.playlist.empty()
-     this.audio.empty()
-     this._resetProgressBar()
-     this._updateProgressBar(0)
-   }
+  emptyPlaylist() {
+    this.playlist.empty()
+    this.audio.empty()
+    this._resetProgressBar()
+    this._updateProgressBar(0)
+  }
 
   /**
    * sets a song from the playlist to be the current song
    * @param {Object} song
    */
   changeSong(song) {
-    this.playlist.current_song_index = this.playlist.songs.indexOf(song)
-    this.audio.setSong(song)
-    this._resetProgressBar()
-    this._updateProgressBar(0)
-    if (this.audio.playing) this.audio.play()
+    if (this.playlist.songs.indexOf(song) != undefined) {
+      this.playlist.current_song_index = this.playlist.songs.indexOf(song)
+      this.audio.setSong(song)
+      this._resetProgressBar()
+      this._updateProgressBar(0)
+      if (this.audio.playing) this.audio.play()
+    }
   }
 
   /**
