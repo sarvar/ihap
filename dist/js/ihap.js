@@ -229,7 +229,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * reset the playlist and set new songs
-	     * @param {Array} songs
+	     * @param {Array} songs the songs to set
+	     * @return {Array} songs the new playlist
 	     */
 	
 	  }, {
@@ -237,6 +238,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function setPlaylist(songs) {
 	      this.emptyPlaylist();
 	      this.appendToPlaylist(songs);
+	      return this.getPlaylist();
 	    }
 	
 	    /**
@@ -253,6 +255,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * appends a song to the current playlist
 	     * @param  {Array} songs an array of songs, also accepts a single song
+	     * @return {Array} the new playlist
 	     */
 	
 	  }, {
@@ -260,11 +263,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function appendToPlaylist(songs) {
 	      this.playlist.appendSongs(songs);
 	      this._loadFirstSong();
+	      return this.getPlaylist();
 	    }
 	
 	    /**
 	     * prepends a song to the current playlist
 	     * @param  {Array} songs an array of songs, also accepts a single song
+	     * @return {Array} the new playlist
 	     */
 	
 	  }, {
@@ -272,6 +277,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function prependToPlaylist(songs) {
 	      this.playlist.prependSongs(songs);
 	      this._loadFirstSong();
+	      return this.getPlaylist();
 	    }
 	
 	    /**

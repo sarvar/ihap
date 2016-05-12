@@ -119,11 +119,13 @@ export default class ihap {
 
   /**
    * reset the playlist and set new songs
-   * @param {Array} songs
+   * @param {Array} songs the songs to set
+   * @return {Array} songs the new playlist
    */
   setPlaylist(songs) {
     this.emptyPlaylist()
     this.appendToPlaylist(songs)
+    return this.getPlaylist()
   }
 
   /**
@@ -137,19 +139,23 @@ export default class ihap {
   /**
    * appends a song to the current playlist
    * @param  {Array} songs an array of songs, also accepts a single song
+   * @return {Array} the new playlist
    */
   appendToPlaylist(songs) {
     this.playlist.appendSongs(songs)
     this._loadFirstSong()
+    return this.getPlaylist()
   }
 
   /**
    * prepends a song to the current playlist
    * @param  {Array} songs an array of songs, also accepts a single song
+   * @return {Array} the new playlist
    */
   prependToPlaylist(songs) {
     this.playlist.prependSongs(songs)
     this._loadFirstSong()
+    return this.getPlaylist()
   }
 
   /**
