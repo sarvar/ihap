@@ -20,13 +20,13 @@ dist/css/ihap.css    # styles
 
 ### Setup
 Use your favourite module loader
-```
+```javascript
 import ihap from 'ihap';
 // or whatever
 ```
 
 or include js & css directly into your HTML
-```
+```html
 <!-- include the ihap javascript -->
 <script src="ihap.js"></script>
 
@@ -36,16 +36,16 @@ or include js & css directly into your HTML
 
 ### Add required markup
 * Make sure you have at least a container div for the player in your markup
-```
+```html
 <div id="audioplayer_container"></div>
 ```
 * If you want to use the visual playlist then create a container for that, too
-```
+```html
 <div id="playlist_container"></div>
 ```
 
 ### Initialize the plugin
-```
+```html
 <script>
   var player = new Ihap({
         settings: {
