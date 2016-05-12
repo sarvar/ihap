@@ -35,11 +35,11 @@ or include js & css directly into your HTML
 ```
 
 ### Add required markup
-* Make sure you have at least a container div for the player in your markup
+Make sure you have at least a container div for the player in your markup
 ```html
 <div id="audioplayer_container"></div>
 ```
-* If you want to use the visual playlist then create a container for that, too
+If you want to use the visual playlist then create a container for that, too
 ```html
 <div id="playlist_container"></div>
 ```
@@ -49,7 +49,7 @@ or include js & css directly into your HTML
 <script>
   var player = new Ihap({
         settings: {
-          container: 'audioplayer_container'  # use your id
+          container: 'audioplayer_container'  // use your id
         },
         songs: [
           {
