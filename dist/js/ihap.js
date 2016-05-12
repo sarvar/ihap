@@ -200,7 +200,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * reset the playlist and set new songs
-	     * @param {[Object]} songs
+	     * @param {Array} songs
 	     */
 	
 	  }, {
@@ -212,7 +212,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * appends a song to the current playlist
-	     * @param  {[Object]} songs an array of songs, also accepts a single song
+	     * @param  {Array} songs an array of songs, also accepts a single song
 	     */
 	
 	  }, {
@@ -224,7 +224,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * prepends a song to the current playlist
-	     * @param  {[Object]} songs an array of songs, also accepts a single song
+	     * @param  {Array} songs an array of songs, also accepts a single song
 	     */
 	
 	  }, {
@@ -232,6 +232,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function prependToPlaylist(songs) {
 	      this.playlist.prependSongs(songs);
 	      this._loadFirstSong();
+	    }
+	
+	    /**
+	     * returns the currently playing song
+	     * @return {Object} the currently playing song
+	     */
+	
+	  }, {
+	    key: 'getCurrentSong',
+	    value: function getCurrentSong() {
+	      return this.playlist.songs[this.playlist.current_song_index];
+	    }
+	
+	    /**
+	     * returns the current song index
+	     * @return {Integer} index of the currently playing song in the playlist
+	     */
+	
+	  }, {
+	    key: 'getCurrentSongIndex',
+	    value: function getCurrentSongIndex() {
+	      return this.playlist.current_song_index;
 	    }
 	
 	    /**
