@@ -22,6 +22,8 @@ dist/css/ihap.css    # styles
 Use your favourite module loader
 ```javascript
 import ihap from 'ihap';
+// or
+var ihap = require('ihap');
 // or whatever
 ```
 
