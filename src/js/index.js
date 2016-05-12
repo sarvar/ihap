@@ -148,6 +148,15 @@ export default class ihap {
   }
 
   /**
+   * removes the given song(s) from the playlist
+   * @param  {Array} songs the song(s) to removes
+   * @return {Array}       the new playlist
+   */
+  removeFromPlaylist(songs) {
+    this.playlist.removeSongs(songs)
+    return this.playlist.songs
+  }
+  /**
    * ***************
    * private methods
    * ***************

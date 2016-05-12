@@ -49,6 +49,10 @@ export default class ihapPlaylist {
     }
   }
 
+  removeSongs(songs){
+      //TODO implement
+  }
+
   /**
    * returns the next song in the playlist
    * @return {Object} song the next song
@@ -97,7 +101,7 @@ export default class ihapPlaylist {
     if (songs != undefined) {
       let new_songs = this.songs.concat(songs)
       this.setSongs(new_songs)
-    } 
+    }
   }
 
   /**

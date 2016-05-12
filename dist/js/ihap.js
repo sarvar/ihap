@@ -270,6 +270,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    /**
+	     * removes the given song(s) from the playlist
+	     * @param  {Array} songs the song(s) to removes
+	     * @return {Array}       the new playlist
+	     */
+	
+	  }, {
+	    key: 'removeFromPlaylist',
+	    value: function removeFromPlaylist(songs) {
+	      this.playlist.removeSongs(songs);
+	      return this.playlist.songs;
+	    }
+	    /**
 	     * ***************
 	     * private methods
 	     * ***************
@@ -743,6 +755,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this._updatePlaylist(this.songs);
 	      }
 	    }
+	  }, {
+	    key: 'removeSongs',
+	    value: function removeSongs(songs) {}
+	    //TODO implement
+	
 	
 	    /**
 	     * returns the next song in the playlist
