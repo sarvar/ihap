@@ -49,8 +49,9 @@ export default class ihapPlaylist {
     }
   }
 
-  removeSongs(songs){
-      //TODO implement
+  removeSongs(songs) {
+    //TODO implement
+    console.error('removeSongs is not implemented yet')
   }
 
   /**

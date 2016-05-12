@@ -791,9 +791,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: 'removeSongs',
-	    value: function removeSongs(songs) {}
-	    //TODO implement
-	
+	    value: function removeSongs(songs) {
+	      //TODO implement
+	      console.error('removeSongs is not implemented yet');
+	    }
 	
 	    /**
 	     * returns the next song in the playlist
