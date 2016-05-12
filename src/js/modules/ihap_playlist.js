@@ -6,7 +6,7 @@ export default class ihapPlaylist {
   constructor(songs) {
     this.markup = null
     this.element = null
-    this.songs = null
+    this.songs = []
     this.current_song_index = 0
 
     this.createMarkup()
@@ -20,10 +20,12 @@ export default class ihapPlaylist {
     // wrapper
     let playlist_wrapper = document.createElement('div')
     playlist_wrapper.setAttribute('id', 'ihap_playlist_wrapper')
+    playlist_wrapper.setAttribute('class', 'ihap_playlist_wrapper')
 
     // actual playlist
     let playlist = document.createElement('ul')
     playlist.setAttribute('id', 'ihap_playlist')
+    playlist.setAttribute('class', 'ihap_playlist')
 
     // concat
     playlist_wrapper.appendChild(playlist)
@@ -95,7 +97,7 @@ export default class ihapPlaylist {
     if (songs != undefined) {
       let new_songs = this.songs.concat(songs)
       this.setSongs(new_songs)
-    } else {}
+    } 
   }
 
   /**
