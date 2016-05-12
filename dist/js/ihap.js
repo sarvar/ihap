@@ -134,34 +134,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * pause the current song
+	     * @return {Bool} returns true on successfull pause
 	     */
 	
 	  }, {
 	    key: 'pause',
 	    value: function pause() {
-	      this.audio.pause();
+	      return this.audio.pause();
 	    }
 	
 	    /**
 	     * plays the next song in the playlist, or the first if the current song is the last
+	     * @return {Object} the next song thats now set
 	     */
 	
 	  }, {
-	    key: 'next',
-	    value: function next() {
+	    key: 'skip_next',
+	    value: function skip_next() {
 	      var next_song = this.playlist.getNextSong();
 	      this.changeSong(next_song);
+	      return next_song;
 	    }
 	
 	    /**
 	     * plays the previous song in the playlist, or the last if the current song is the first
+	     * @return {Object} the previous song that is now set
 	     */
 	
 	  }, {
-	    key: 'prev',
-	    value: function prev() {
+	    key: 'skip_prev',
+	    value: function skip_prev() {
 	      var previous_song = this.playlist.getPreviousSong();
 	      this.changeSong(previous_song);
+	      return previous_song;
 	    }
 	
 	    /**
@@ -171,8 +176,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 	
 	    /**
-	    * removes all songs from the playlist (visually and in the background) and stops playback
-	    */
+	     * gets the next song
+	     * @return {Object} the next song in the playlist
+	     */
+	
+	  }, {
+	    key: 'getNextSong',
+	    value: function getNextSong() {
+	      return this.playlist.getNextSong();
+	    }
+	
+	    /**
+	     * gets the previous song
+	     * @return {Object} the previous song in the playlist
+	     */
+	
+	  }, {
+	    key: 'getPreviousSong',
+	    value: function getPreviousSong() {
+	      return this.playlist.getPreviousSong();
+	    }
+	
+	    /**
+	     * removes all songs from the playlist (visually and in the background) and stops playback
+	     */
 	
 	  }, {
 	    key: 'emptyPlaylist',
@@ -191,16 +218,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'changeSong',
 	    value: function changeSong(song) {
-	      this.playlist.current_song_index = this.playlist.songs.indexOf(song);
-	      this.audio.setSong(song);
-	      this._resetProgressBar();
-	      this._updateProgressBar(0);
-	      if (this.audio.playing) this.audio.play();
+	      if (this.playlist.songs.indexOf(song) != undefined) {
+	        this.playlist.current_song_index = this.playlist.songs.indexOf(song);
+	        this.audio.setSong(song);
+	        this._resetProgressBar();
+	        this._updateProgressBar(0);
+	        if (this.audio.playing) this.audio.play();
+	      }
 	    }
 	
 	    /**
 	     * reset the playlist and set new songs
-	     * @param {Array} songs
+	     * @param {Array} songs the songs to set
+	     * @return {Array} songs the new playlist
 	     */
 	
 	  }, {
@@ -208,6 +238,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function setPlaylist(songs) {
 	      this.emptyPlaylist();
 	      this.appendToPlaylist(songs);
+	      return this.getPlaylist();
 	    }
 	
 	    /**
@@ -224,6 +255,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * appends a song to the current playlist
 	     * @param  {Array} songs an array of songs, also accepts a single song
+	     * @return {Array} the new playlist
 	     */
 	
 	  }, {
@@ -231,11 +263,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function appendToPlaylist(songs) {
 	      this.playlist.appendSongs(songs);
 	      this._loadFirstSong();
+	      return this.getPlaylist();
 	    }
 	
 	    /**
 	     * prepends a song to the current playlist
 	     * @param  {Array} songs an array of songs, also accepts a single song
+	     * @return {Array} the new playlist
 	     */
 	
 	  }, {
@@ -243,6 +277,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function prependToPlaylist(songs) {
 	      this.playlist.prependSongs(songs);
 	      this._loadFirstSong();
+	      return this.getPlaylist();
 	    }
 	
 	    /**
@@ -267,6 +302,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return this.playlist.current_song_index;
 	    }
 	
+	    /**
+	     * removes the given song(s) from the playlist
+	     * @param  {Array} songs the song(s) to removes
+	     * @return {Array}       the new playlist
+	     */
+	
+	  }, {
+	    key: 'removeFromPlaylist',
+	    value: function removeFromPlaylist(songs) {
+	      this.playlist.removeSongs(songs);
+	      return this.playlist.songs;
+	    }
 	    /**
 	     * ***************
 	     * private methods
@@ -370,7 +417,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	      // autoplay next song on finishing one
 	      this.audio.element.addEventListener('ended', function () {
-	        self.next();
+	        self.skip_next();
 	      });
 	    }
 	
@@ -389,10 +436,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        self.audio.pause();
 	      });
 	      this.controls.buttons.skip_next.addEventListener('click', function () {
-	        self.next();
+	        self.skip_next();
 	      });
 	      this.controls.buttons.skip_previous.addEventListener('click', function () {
-	        self.prev();
+	        self.skip_prev();
 	      });
 	    }
 	
@@ -536,7 +583,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'pause',
 	    value: function pause() {
 	      this.element.pause();
-	      this.playing = false;
+	      this.playing = !this.element.paused;
+	      return this.element.paused;
 	    }
 	
 	    /**
@@ -740,6 +788,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.songs = songs;
 	        this._updatePlaylist(this.songs);
 	      }
+	    }
+	  }, {
+	    key: 'removeSongs',
+	    value: function removeSongs(songs) {
+	      //TODO implement
+	      console.error('removeSongs is not implemented yet');
 	    }
 	
 	    /**

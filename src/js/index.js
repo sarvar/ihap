@@ -45,25 +45,30 @@ export default class ihap {
 
   /**
    * pause the current song
+   * @return {Bool} returns true on successfull pause
    */
   pause() {
-    this.audio.pause()
+    return this.audio.pause()
   }
 
   /**
    * plays the next song in the playlist, or the first if the current song is the last
+   * @return {Object} the next song thats now set
    */
-  next() {
+  skip_next() {
     let next_song = this.playlist.getNextSong()
     this.changeSong(next_song)
+    return next_song
   }
 
   /**
    * plays the previous song in the playlist, or the last if the current song is the first
+   * @return {Object} the previous song that is now set
    */
-  prev() {
+  skip_prev() {
     let previous_song = this.playlist.getPreviousSong()
     this.changeSong(previous_song)
+    return previous_song
   }
 
   /**
@@ -73,34 +78,54 @@ export default class ihap {
    */
 
    /**
+    * gets the next song
+    * @return {Object} the next song in the playlist
+    */
+  getNextSong() {
+    return this.playlist.getNextSong()
+  }
+
+  /**
+   * gets the previous song
+   * @return {Object} the previous song in the playlist
+   */
+  getPreviousSong() {
+    return this.playlist.getPreviousSong()
+  }
+
+  /**
    * removes all songs from the playlist (visually and in the background) and stops playback
    */
-   emptyPlaylist() {
-     this.playlist.empty()
-     this.audio.empty()
-     this._resetProgressBar()
-     this._updateProgressBar(0)
-   }
+  emptyPlaylist() {
+    this.playlist.empty()
+    this.audio.empty()
+    this._resetProgressBar()
+    this._updateProgressBar(0)
+  }
 
   /**
    * sets a song from the playlist to be the current song
    * @param {Object} song
    */
   changeSong(song) {
-    this.playlist.current_song_index = this.playlist.songs.indexOf(song)
-    this.audio.setSong(song)
-    this._resetProgressBar()
-    this._updateProgressBar(0)
-    if (this.audio.playing) this.audio.play()
+    if (this.playlist.songs.indexOf(song) != undefined) {
+      this.playlist.current_song_index = this.playlist.songs.indexOf(song)
+      this.audio.setSong(song)
+      this._resetProgressBar()
+      this._updateProgressBar(0)
+      if (this.audio.playing) this.audio.play()
+    }
   }
 
   /**
    * reset the playlist and set new songs
-   * @param {Array} songs
+   * @param {Array} songs the songs to set
+   * @return {Array} songs the new playlist
    */
   setPlaylist(songs) {
     this.emptyPlaylist()
     this.appendToPlaylist(songs)
+    return this.getPlaylist()
   }
 
   /**
@@ -114,19 +139,23 @@ export default class ihap {
   /**
    * appends a song to the current playlist
    * @param  {Array} songs an array of songs, also accepts a single song
+   * @return {Array} the new playlist
    */
   appendToPlaylist(songs) {
     this.playlist.appendSongs(songs)
     this._loadFirstSong()
+    return this.getPlaylist()
   }
 
   /**
    * prepends a song to the current playlist
    * @param  {Array} songs an array of songs, also accepts a single song
+   * @return {Array} the new playlist
    */
   prependToPlaylist(songs) {
     this.playlist.prependSongs(songs)
     this._loadFirstSong()
+    return this.getPlaylist()
   }
 
   /**
@@ -146,10 +175,19 @@ export default class ihap {
   }
 
   /**
-   * ***************
-   * private methods
-   * ***************
+   * removes the given song(s) from the playlist
+   * @param  {Array} songs the song(s) to removes
+   * @return {Array}       the new playlist
    */
+  removeFromPlaylist(songs) {
+      this.playlist.removeSongs(songs)
+      return this.playlist.songs
+    }
+    /**
+     * ***************
+     * private methods
+     * ***************
+     */
 
   /**
    * initialize the plugin. create required markup and add event listeners
@@ -231,7 +269,7 @@ export default class ihap {
       })
       // autoplay next song on finishing one
     this.audio.element.addEventListener('ended', function() {
-      self.next()
+      self.skip_next()
     })
   }
 
@@ -247,10 +285,10 @@ export default class ihap {
       self.audio.pause()
     })
     this.controls.buttons.skip_next.addEventListener('click', function() {
-      self.next()
+      self.skip_next()
     })
     this.controls.buttons.skip_previous.addEventListener('click', function() {
-      self.prev()
+      self.skip_prev()
     })
   }
 

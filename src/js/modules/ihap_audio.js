@@ -55,7 +55,8 @@ class ihapAudio {
    */
   pause() {
     this.element.pause()
-    this.playing = false
+    this.playing = !this.element.paused
+    return this.element.paused
   }
 
   /**
