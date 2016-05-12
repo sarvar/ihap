@@ -134,34 +134,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    /**
 	     * pause the current song
+	     * @return {Bool} returns true on successfull pause
 	     */
 	
 	  }, {
 	    key: 'pause',
 	    value: function pause() {
-	      this.audio.pause();
+	      return this.audio.pause();
 	    }
 	
 	    /**
 	     * plays the next song in the playlist, or the first if the current song is the last
+	     * @return {Object} the next song thats now set
 	     */
 	
 	  }, {
-	    key: 'next',
-	    value: function next() {
+	    key: 'skip_next',
+	    value: function skip_next() {
 	      var next_song = this.playlist.getNextSong();
 	      this.changeSong(next_song);
+	      return next_song;
 	    }
 	
 	    /**
 	     * plays the previous song in the playlist, or the last if the current song is the first
+	     * @return {Object} the previous song that is now set
 	     */
 	
 	  }, {
-	    key: 'prev',
-	    value: function prev() {
+	    key: 'skip_prev',
+	    value: function skip_prev() {
 	      var previous_song = this.playlist.getPreviousSong();
 	      this.changeSong(previous_song);
+	      return previous_song;
 	    }
 	
 	    /**
@@ -169,6 +174,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * playlist interactions
 	     * *********************
 	     */
+	
+	    /**
+	     * gets the next song
+	     * @return {Object} the next song in the playlist
+	     */
+	
+	  }, {
+	    key: 'getNextSong',
+	    value: function getNextSong() {
+	      return this.playlist.getNextSong();
+	    }
+	
+	    /**
+	     * gets the previous song
+	     * @return {Object} the previous song in the playlist
+	     */
+	
+	  }, {
+	    key: 'getPreviousSong',
+	    value: function getPreviousSong() {
+	      return this.playlist.getPreviousSong();
+	    }
 	
 	    /**
 	     * removes all songs from the playlist (visually and in the background) and stops playback
@@ -384,7 +411,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	      // autoplay next song on finishing one
 	      this.audio.element.addEventListener('ended', function () {
-	        self.next();
+	        self.skip_next();
 	      });
 	    }
 	
@@ -403,10 +430,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        self.audio.pause();
 	      });
 	      this.controls.buttons.skip_next.addEventListener('click', function () {
-	        self.next();
+	        self.skip_next();
 	      });
 	      this.controls.buttons.skip_previous.addEventListener('click', function () {
-	        self.prev();
+	        self.skip_prev();
 	      });
 	    }
 	
@@ -550,7 +577,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'pause',
 	    value: function pause() {
 	      this.element.pause();
-	      this.playing = false;
+	      this.playing = !this.element.paused;
+	      return this.element.paused;
 	    }
 	
 	    /**

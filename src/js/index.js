@@ -45,25 +45,30 @@ export default class ihap {
 
   /**
    * pause the current song
+   * @return {Bool} returns true on successfull pause
    */
   pause() {
-    this.audio.pause()
+    return this.audio.pause()
   }
 
   /**
    * plays the next song in the playlist, or the first if the current song is the last
+   * @return {Object} the next song thats now set
    */
-  next() {
+  skip_next() {
     let next_song = this.playlist.getNextSong()
     this.changeSong(next_song)
+    return next_song
   }
 
   /**
    * plays the previous song in the playlist, or the last if the current song is the first
+   * @return {Object} the previous song that is now set
    */
-  prev() {
+  skip_prev() {
     let previous_song = this.playlist.getPreviousSong()
     this.changeSong(previous_song)
+    return previous_song
   }
 
   /**
@@ -71,6 +76,22 @@ export default class ihap {
    * playlist interactions
    * *********************
    */
+
+   /**
+    * gets the next song
+    * @return {Object} the next song in the playlist
+    */
+  getNextSong() {
+    return this.playlist.getNextSong()
+  }
+
+  /**
+   * gets the previous song
+   * @return {Object} the previous song in the playlist
+   */
+  getPreviousSong() {
+    return this.playlist.getPreviousSong()
+  }
 
   /**
    * removes all songs from the playlist (visually and in the background) and stops playback
@@ -153,14 +174,14 @@ export default class ihap {
    * @return {Array}       the new playlist
    */
   removeFromPlaylist(songs) {
-    this.playlist.removeSongs(songs)
-    return this.playlist.songs
-  }
-  /**
-   * ***************
-   * private methods
-   * ***************
-   */
+      this.playlist.removeSongs(songs)
+      return this.playlist.songs
+    }
+    /**
+     * ***************
+     * private methods
+     * ***************
+     */
 
   /**
    * initialize the plugin. create required markup and add event listeners
@@ -242,7 +263,7 @@ export default class ihap {
       })
       // autoplay next song on finishing one
     this.audio.element.addEventListener('ended', function() {
-      self.next()
+      self.skip_next()
     })
   }
 
@@ -258,10 +279,10 @@ export default class ihap {
       self.audio.pause()
     })
     this.controls.buttons.skip_next.addEventListener('click', function() {
-      self.next()
+      self.skip_next()
     })
     this.controls.buttons.skip_previous.addEventListener('click', function() {
-      self.prev()
+      self.skip_prev()
     })
   }
 
