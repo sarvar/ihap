@@ -49,27 +49,146 @@ export default class ihap {
     this.song_information = new ihapSongInformation()
     this.moving_progress = false
 
-    this.initializeihap()
+    this._initializeihap()
   }
+
+  /**
+   * ******************
+   * public api methods
+   * ******************
+   */
+
+  /**
+   * ********************
+   * basic audio controls
+   * ********************
+   */
+
+  /**
+   * plays the current song
+   */
+  play() {
+    this.audio.play()
+  }
+
+  /**
+   * pause the current song
+   */
+  pause() {
+    this.audio.pause()
+  }
+
+  /**
+   * plays the next song in the playlist, or the first if the current song is the last
+   */
+  next() {
+    let next_song = this.playlist.getNextSong()
+    this.changeSong(next_song)
+  }
+
+  /**
+   * plays the previous song in the playlist, or the last if the current song is the first
+   */
+  prev() {
+    let previous_song = this.playlist.getPreviousSong()
+    this.changeSong(previous_song)
+  }
+
+  /**
+   * *********************
+   * playlist interactions
+   * *********************
+   */
+
+   /**
+   * removes all songs from the playlist (visually and in the background) and stops playback
+   */
+   emptyPlaylist() {
+     this.playlist.empty()
+     this.audio.empty()
+     this._resetProgressBar()
+     this._updateProgressBar(0)
+   }
+
+  /**
+   * sets a song from the playlist to be the current song
+   * @param {Object} song
+   */
+  changeSong(song) {
+    this.playlist.current_song_index = this.playlist.songs.indexOf(song)
+    this.audio.setSong(song)
+    this._resetProgressBar()
+    this._updateProgressBar(0)
+    if (this.audio.playing) this.audio.play()
+  }
+
+  /**
+   * reset the playlist and set new songs
+   * @param {Array} songs
+   */
+  setPlaylist(songs) {
+    this.emptyPlaylist()
+    this.appendToPlaylist(songs)
+  }
+
+  /**
+   * appends a song to the current playlist
+   * @param  {Array} songs an array of songs, also accepts a single song
+   */
+  appendToPlaylist(songs) {
+    this.playlist.appendSongs(songs)
+    this._loadFirstSong()
+  }
+
+  /**
+   * prepends a song to the current playlist
+   * @param  {Array} songs an array of songs, also accepts a single song
+   */
+  prependToPlaylist(songs) {
+    this.playlist.prependSongs(songs)
+    this._loadFirstSong()
+  }
+
+  /**
+   * returns the currently playing song
+   * @return {Object} the currently playing song
+   */
+  getCurrentSong() {
+    return this.playlist.songs[this.playlist.current_song_index]
+  }
+
+  /**
+   * returns the current song index
+   * @return {Integer} index of the currently playing song in the playlist
+   */
+  getCurrentSongIndex() {
+    return this.playlist.current_song_index
+  }
+
+  /**
+   * ***************
+   * private methods
+   * ***************
+   */
 
   /**
    * initialize the plugin. create required markup and add event listeners
    */
-  initializeihap() {
+  _initializeihap() {
     if (this.container == undefined) {
       throw ('Cannot find container "' + this.settings.container + '". Please make sure self an element with this id is present.')
     } else {
-      this.createComponents()
-      this.addListeners()
+      this._createComponents()
+      this._addListeners()
 
-      this.loadFirstSong()
+      this._loadFirstSong()
     }
   }
 
   /**
    * appends the html markup of each module
    */
-  createComponents() {
+  _createComponents() {
     this.container.appendChild(this.audio.markup)
     this.container.appendChild(this.controls.markup)
     this.container.appendChild(this.progress_bar.markup)
@@ -79,21 +198,9 @@ export default class ihap {
   }
 
   /**
-   * sets a song from the playlist to be the current song
-   * @param {Object} song
-   */
-  setCurrentSong(song) {
-    this.playlist.current_song_index = this.playlist.songs.indexOf(song)
-    this.audio.setSong(song)
-    this.resetProgressBar()
-    this.updateProgressBar(0)
-    if (this.audio.playing) this.audio.play()
-  }
-
-  /**
    * resets the progressbars values to 0
    */
-  resetProgressBar() {
+  _resetProgressBar() {
     let song_duration = this.audio.element.duration
     if (song_duration == undefined) {
       this.progress_bar.reset(0)
@@ -106,97 +213,52 @@ export default class ihap {
    * updates the progress_bar visually (adjusts the width)
    * @param {Float} current_time the current time playing
    */
-  updateProgressBar(current_time) {
+  _updateProgressBar(current_time) {
     this.progress_bar.updateBar(current_time)
   }
 
-  //= interactions with the playlist =//
-  /**
-   * removes all songs from the playlist and stops playback
-   */
-  emptyPlaylist() {
-    this.playlist.empty()
-    this.audio.empty()
-    this.resetProgressBar()
-    this.updateProgressBar(0)
-  }
-
-  /**
-   * appends a song to the current playlist
-   * @param  {Array} songs an array of songs, also accepts a single song
-   */
-  appendToPlaylist(songs) {
-    this.playlist.appendSongs(songs)
-    this.loadFirstSong()
-  }
-
-  /**
-   * prepends a song to the current playlist
-   * @param  {Array} songs an array of songs, also accepts a single song
-   */
-  prependToPlaylist(songs) {
-    this.playlist.prependSongs(songs)
-    this.loadFirstSong()
-  }
-
-  loadFirstSong() {
+  _loadFirstSong() {
     if (this.playlist.songs != undefined &amp;&amp; this.playlist.songs.length != 0) {
       if (this.audio.is_empty())
-        this.setCurrentSong(this.playlist.songs[0])
+        this.changeSong(this.playlist.songs[0])
     }
-  }
-
-  /**
-   * plays the next song in the playlist, or the first if the current song is the last
-   */
-  nextSong() {
-    let next_song = this.playlist.getNextSong()
-    this.setCurrentSong(next_song)
-  }
-
-  /**
-   * plays the previous song in the playlist, or the last if the current song is the first
-   */
-  previousSong() {
-    let previous_song = this.playlist.getPreviousSong()
-    this.setCurrentSong(previous_song)
   }
 
   /**
    * adds event listeners
    */
-  addListeners() {
-    this.addAudioListeners()
-    this.addControlsListeners()
-    this.addProgressListeners()
+  _addListeners() {
+    this._addAudioListeners()
+    this._addControlsListeners()
+    this._addProgressListeners()
   }
 
   /**
    * adds listeners for the audio element
    */
-  addAudioListeners() {
+  _addAudioListeners() {
     let self = this
       // update the progress_bar to match the current timestamp
     this.audio.element.addEventListener("timeupdate", function() {
         if (self.moving_progress == false) {
-          self.updateProgressBar(this.currentTime)
+          self._updateProgressBar(this.currentTime)
         }
       })
       // reload the progress_bar after the song changed
     this.audio.element.addEventListener('canplay', function() {
-        self.resetProgressBar()
-        self.updateSongInformation()
+        self._resetProgressBar()
+        self._updateSongInformation()
       })
       // autoplay next song on finishing one
     this.audio.element.addEventListener('ended', function() {
-      self.nextSong()
+      self.next()
     })
   }
 
   /**
    *	adds listeners for the controls (button)
    */
-  addControlsListeners() {
+  _addControlsListeners() {
     let self = this
     this.controls.buttons.play.addEventListener('click', function() {
       self.audio.play()
@@ -205,17 +267,17 @@ export default class ihap {
       self.audio.pause()
     })
     this.controls.buttons.skip_next.addEventListener('click', function() {
-      self.nextSong()
+      self.next()
     })
     this.controls.buttons.skip_previous.addEventListener('click', function() {
-      self.previousSong()
+      self.prev()
     })
   }
 
   /**
    * adds listeners for the progress bar
    */
-  addProgressListeners() {
+  _addProgressListeners() {
     let self = this
     this.progress_bar.markup.addEventListener('mousedown', function(e) {
       if (e.preventDefault) e.preventDefault()
@@ -226,7 +288,7 @@ export default class ihap {
       if (self.moving_progress) {
         let duration = self.progress_bar.element.getAttribute('aria-valuemax')
         let progress = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration)
-        self.updateProgressBar(progress)
+        self._updateProgressBar(progress)
       }
     })
 
@@ -241,7 +303,7 @@ export default class ihap {
   /**
    * updates the song title &amp; artist in the frontend
    */
-  updateSongInformation() {
+  _updateSongInformation() {
     let song = this.playlist.songs[this.playlist.current_song_index]
     let title = song.title
     let artist = song.artist
@@ -270,7 +332,7 @@ function calculate_progress(layerX, offsetLeft, offsetWidth, duration) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Tue May 10 2016 14:22:44 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu May 12 2016 16:24:09 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
