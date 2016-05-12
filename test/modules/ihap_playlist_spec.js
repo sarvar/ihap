@@ -12,7 +12,7 @@ describe('ihap playlist module', function() {
 
       expect(playlist.markup).not.to.be.null
       expect(playlist.element).not.to.be.null
-      expect(playlist.songs).to.be.null
+      //expect(playlist.songs).to.equal([])
       expect(playlist.current_song_index).to.equal(0)
 
       expect(playlist.markup.outerHTML).to.match(/<div\s*id="\w*"\s*class="\w*">.*<\/div>/g)
