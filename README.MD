@@ -65,7 +65,7 @@ If you want to use the visual playlist then create a container for that, too
 </script>
 ```
 
-See the wiki for a complete list of options and the API.
+See the [wiki](https://github.com/cars10/ihap/wiki) for a complete list of [options](https://github.com/cars10/ihap/wiki/Options) and the [API](https://github.com/cars10/ihap/wiki/API).
 
 
 ## Contributing and development
