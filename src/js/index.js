@@ -104,6 +104,14 @@ export default class ihap {
   }
 
   /**
+   * gets the playlist
+   * @return {Array} the current songs in the playlist
+   */
+  getPlaylist() {
+    return this.playlist.songs
+  }
+
+  /**
    * appends a song to the current playlist
    * @param  {Array} songs an array of songs, also accepts a single song
    */

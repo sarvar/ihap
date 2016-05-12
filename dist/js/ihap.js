@@ -211,6 +211,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    /**
+	     * gets the playlist
+	     * @return {Array} the current songs in the playlist
+	     */
+	
+	  }, {
+	    key: 'getPlaylist',
+	    value: function getPlaylist() {
+	      return this.playlist.songs;
+	    }
+	
+	    /**
 	     * appends a song to the current playlist
 	     * @param  {Array} songs an array of songs, also accepts a single song
 	     */
