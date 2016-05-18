@@ -718,7 +718,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
@@ -727,6 +727,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _ihap_song = __webpack_require__(6);
+	
+	var _ihap_song2 = _interopRequireDefault(_ihap_song);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -782,10 +788,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'setSongs',
 	    value: function setSongs(songs) {
+	      this.songs = [];
 	      if (songs != undefined) {
 	        if (!(songs instanceof Array)) songs = [songs];
 	
-	        this.songs = songs;
+	        for (var i = 0; i < songs.length; i++) {
+	          this.songs.push(new _ihap_song2.default(songs[i]));
+	        }
 	        this._updatePlaylist(this.songs);
 	      }
 	    }
@@ -841,7 +850,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'empty',
 	    value: function empty() {
-	      this.setSongs([]);
+	      this.setSongs();
 	      this.current_song_index = -1;
 	    }
 	
@@ -1083,6 +1092,56 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = ihapSongInformation;
+	module.exports = exports['default'];
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var ihapSong = function () {
+	  /**
+	   * the song module
+	   * @constructor
+	   */
+	
+	  function ihapSong(song) {
+	    _classCallCheck(this, ihapSong);
+	
+	    this.title = song.title;
+	    this.artist = song.artist;
+	    this.id = song.id;
+	    this.url = song.url;
+	
+	    this.type = null;
+	
+	    this._setType();
+	  }
+	
+	  _createClass(ihapSong, [{
+	    key: '_setType',
+	    value: function _setType() {
+	      if (this.url.match(/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/g)) {
+	        this.type = 'youtube_video';
+	      } else {
+	        this.type = 'song';
+	      }
+	    }
+	  }]);
+	
+	  return ihapSong;
+	}();
+	
+	exports.default = ihapSong;
 	module.exports = exports['default'];
 
 /***/ }
