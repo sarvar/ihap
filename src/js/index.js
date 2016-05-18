@@ -3,6 +3,7 @@ import ihapAudio from './modules/ihap_audio'
 import ihapControls from './modules/ihap_controls'
 import ihapPlaylist from './modules/ihap_playlist'
 import ihapProgressBar from './modules/ihap_progress_bar'
+import ihapSettings from './modules/ihap_settings'
 import ihapSongInformation from './modules/ihap_song_information'
 
 export default class ihap {
@@ -10,10 +11,7 @@ export default class ihap {
    * @constructor
    */
   constructor(data) {
-    this.settings = data.settings
-    this.container = document.getElementById(data.settings.container)
-    this.playlist_container = document.getElementById(data.settings.playlist_container)
-
+    this.settings = new ihapSettings(data.settings)
     this.audio = new ihapAudio()
     this.controls = new ihapControls()
     this.playlist = new ihapPlaylist(data.songs)
@@ -193,7 +191,7 @@ export default class ihap {
    * initialize the plugin. create required markup and add event listeners
    */
   _initializeihap() {
-    if (this.container == undefined) {
+    if (this.settings.container == undefined) {
       throw ('Cannot find container "' + this.settings.container + '". Please make sure self an element with this id is present.')
     } else {
       this._createComponents()
@@ -207,12 +205,12 @@ export default class ihap {
    * appends the html markup of each module
    */
   _createComponents() {
-    this.container.appendChild(this.audio.markup)
-    this.container.appendChild(this.controls.markup)
-    this.container.appendChild(this.progress_bar.markup)
-    this.container.appendChild(this.song_information.markup)
-    if (this.playlist_container != undefined)
-      this.playlist_container.appendChild(this.playlist.markup)
+    this.settings.container.appendChild(this.audio.markup)
+    this.settings.container.appendChild(this.controls.markup)
+    this.settings.container.appendChild(this.progress_bar.markup)
+    this.settings.container.appendChild(this.song_information.markup)
+    if (this.settings.playlist.container != undefined)
+      this.settings.playlist.container.appendChild(this.playlist.markup)
   }
 
   /**

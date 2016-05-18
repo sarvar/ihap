@@ -62,10 +62,10 @@
 
       // 3. This function creates an <iframe> (and YouTube player)
       //    after the API code downloads.
-      var player;
+      var youtube_player;
 
       function onYouTubeIframeAPIReady() {
-        player = new YT.Player('youtube_player', {
+        youtube_player = new YT.Player('youtube_player', {
           height: '390',
           width: '640',
           videoId: '7rgB94jWvgY',
@@ -94,7 +94,7 @@
       }
 
       function stopVideo() {
-        player.stopVideo();
+        youtube_player.stopVideo();
       }
     </script>
 
@@ -104,8 +104,17 @@
   <script>
     var player = new ihap({
       settings: {
-        container: "audioplayer-container",
-        playlist_container: "playlist_container"
+        container: "#audioplayer-container",
+        playlist: {
+          enabled: true,
+          embedded: false,
+          container: "#playlist_container"
+        },
+        youtube: {
+          enabled: true,
+          embedded: false,
+          container: "#youtube_player"
+        }
       }
     });
 
