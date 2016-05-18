@@ -1,6 +1,7 @@
 var expect = require('chai').expect
 var jsdom = require('mocha-jsdom')
 var ihapPlaylist = require('../../src/js/modules/ihap_playlist.js')
+var ihapSong = require('../../src/js/modules/ihap_song.js')
 
 describe('ihap playlist module', function() {
   // create dom
@@ -12,7 +13,7 @@ describe('ihap playlist module', function() {
 
       expect(playlist.markup).not.to.be.null
       expect(playlist.element).not.to.be.null
-      //expect(playlist.songs).to.equal([])
+      expect(playlist.songs).to.eql([])
       expect(playlist.current_song_index).to.equal(0)
 
       expect(playlist.markup.outerHTML).to.match(/<div\s*id="\w*"\s*class="\w*">.*<\/div>/g)
@@ -20,27 +21,29 @@ describe('ihap playlist module', function() {
     })
 
     it('has correct properties when initialized with an array of songs', function() {
-      let songs = [{
+      let songs = [new ihapSong({
         title: "Song 1",
         id: "1",
         artist: 'Artist 1',
-        url: "http://www.html5tutorial.info/media/vincent.mp3"
-      }, {
+        url: "http://www.html5tutorial.info/media/vincent.mp3",
+        type: "song"
+      }), new ihapSong({
         title: "Song 2",
         id: "2",
         artist: 'Artist 2',
-        url: "http://www.html5tutorial.info/media/vincent.mp3"
-      }]
+        url: "http://www.html5tutorial.info/media/vincent.mp3",
+        type: "song"
+      })]
+
       let playlist = new ihapPlaylist(songs);
 
       expect(playlist.markup).not.to.be.null
       expect(playlist.element).not.to.be.null
-      expect(playlist.songs).to.equal(songs)
+      expect(playlist.songs).to.eql(songs)
       expect(playlist.current_song_index).to.equal(0)
 
       expect(playlist.element.innerHTML).to.match(/<li>.*<\/li>/g)
     })
-
 
   })
 })

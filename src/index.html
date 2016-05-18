@@ -1,123 +1,141 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>ihap</title>
-    <!-- custom styles -->
-    <link rel="stylesheet" href="css/ihap.css">
-    <!-- google material icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  </head>
-  <body>
-    <style>
-      body {
-        background-color: #efefef;
-        margin: 0;
-      }
 
-      .container {
-        width: 1200px;
-        margin: auto;
-      }
+<head>
+  <meta charset="utf-8">
+  <title>ihap</title>
+  <!-- custom styles -->
+  <link rel="stylesheet" href="css/ihap.css">
+  <!-- google material icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
 
-      #audioplayer-container {
-        background-color: #fff;
-      }
+<body>
+  <style>
+    body {
+      background-color: #efefef;
+      margin: 0;
+    }
 
-      #playlist_container {
-        margin-top: 25px;
-        background-color: #fff;
-        min-height: 100px;
-      }
-    </style>
-    <div class="container">
-      <div id="audioplayer-container"></div>
-      <div id="playlist_container"></div>
-      <div id="debug_actions">
-        <button id="prependSongButton">Prepend Song</button>
-        <button id="prependSongsButton">Prepend Songs</button>
-        <button id="appendSongButton">Append Song</button>
-        <button id="appendSongsButton">Append Songs</button>
-        <button id="emptyButton">Empty Playlist</button>
-        <button id="setNewSongs">Set new Songs</button>
-      </div>
+    .container {
+      width: 1200px;
+      margin: auto;
+    }
+
+    #audioplayer-container {
+      background-color: #fff;
+    }
+
+    #playlist_container {
+      margin-top: 25px;
+      background-color: #fff;
+      min-height: 100px;
+    }
+  </style>
+  <div class="container">
+    <div id="audioplayer-container"></div>
+    <div id="playlist_container"></div>
+    <div id="debug_actions">
+      <button id="prependSongButton">Prepend Song</button>
+      <button id="prependSongsButton">Prepend Songs</button>
+      <button id="appendSongButton">Append Song</button>
+      <button id="appendSongsButton">Append Songs</button>
+      <button id="emptyButton">Empty Playlist</button>
+      <button id="setNewSongs">Set new Songs</button>
+      <button id="addYoutubeVideo">Add youtube video</button>
     </div>
-    <script src="../dist/js/ihap.js"></script>
+  </div>
+  <script src="../dist/js/ihap.js"></script>
 
-    <script>
-      var player = new ihap({
-        settings: {
-          container: "audioplayer-container",
-          playlist_container: "playlist_container"
-        }
-      });
+  <script>
+    var player = new ihap({
+      settings: {
+        container: "audioplayer-container",
+        playlist_container: "playlist_container"
+      }
+    });
 
-      document.getElementById('prependSongButton').addEventListener('click', function() {
-        player.prependToPlaylist(
-          {title: "Prepend",
-            id: "3",
-            artist: 'Starry Night Artist',
-            url: "http://www.html5tutorial.info/media/vincent.mp3"}
-        )
+    document.getElementById('prependSongButton').addEventListener('click', function() {
+      player.prependToPlaylist({
+        title: "Prepend",
+        id: "3",
+        artist: 'Starry Night Artist',
+        url: "http://www.html5tutorial.info/media/vincent.mp3"
       })
+    })
 
-      document.getElementById('prependSongsButton').addEventListener('click', function() {
-        player.prependToPlaylist(
-          [
-            {title: "Prepend 1",
-              id: "1",
-  						artist: "Abbath",
-              url: "./songs/01 - To War.mp3"},
-            {title: "Prepend 2",
-              id: "2",
-  						artist: 'Abbath',
-              url: "./songs/02 - Winter Bane.mp3"}
-          ]
-        )
-      })
+    document.getElementById('prependSongsButton').addEventListener('click', function() {
+      player.prependToPlaylist(
+        [{
+          title: "Prepend 1",
+          id: "1",
+          artist: "Abbath",
+          url: "./songs/01 - To War.mp3"
+        }, {
+          title: "Prepend 2",
+          id: "2",
+          artist: 'Abbath',
+          url: "./songs/02 - Winter Bane.mp3"
+        }]
+      )
+    })
 
-      document.getElementById('appendSongButton').addEventListener('click', function() {
-        player.appendToPlaylist(
-          {title: "Append",
-            id: "3",
-            artist: 'Starry Night Artist',
-            url: "http://www.html5tutorial.info/media/vincent.mp3"}
-        )
+    document.getElementById('appendSongButton').addEventListener('click', function() {
+      player.appendToPlaylist({
+        title: "Append",
+        id: "3",
+        artist: 'Starry Night Artist',
+        url: "http://www.html5tutorial.info/media/vincent.mp3"
       })
+    })
 
-      document.getElementById('appendSongsButton').addEventListener('click', function() {
-        player.appendToPlaylist(
-          [
-            {title: "Append 1",
-              id: "1",
-              artist: "Abbath",
-              url: "./songs/01 - To War.mp3"},
-            {title: "Append 2",
-              id: "2",
-              artist: 'Abbath',
-              url: "./songs/02 - Winter Bane.mp3"}
-          ]
-        )
-      })
+    document.getElementById('appendSongsButton').addEventListener('click', function() {
+      player.appendToPlaylist(
+        [{
+          title: "Append 1",
+          id: "1",
+          artist: "Abbath",
+          url: "./songs/01 - To War.mp3"
+        }, {
+          title: "Append 2",
+          id: "2",
+          artist: 'Abbath',
+          url: "./songs/02 - Winter Bane.mp3"
+        }]
+      )
+    })
 
-      document.getElementById('emptyButton').addEventListener('click', function() {
-        player.emptyPlaylist();
-      })
+    document.getElementById('emptyButton').addEventListener('click', function() {
+      player.emptyPlaylist();
+    })
 
-      document.getElementById('setNewSongs').addEventListener('click', function() {
-        player.setSongs(
-          [
-            {title: "New Song 1",
-              id: "1",
-              artist: "Abbath",
-              url: "./songs/01 - To War.mp3"},
-            {title: "New Song 2",
-              id: "2",
-              artist: 'Abbath',
-              url: "./songs/02 - Winter Bane.mp3"}
-          ]
-        )
-      })
-    </script>
-  </body>
+    document.getElementById('setNewSongs').addEventListener('click', function() {
+      player.setPlaylist(
+        [{
+          title: "New Song 1",
+          id: "1",
+          artist: "Abbath",
+          url: "./songs/01 - To War.mp3"
+        }, {
+          title: "New Song 2",
+          id: "2",
+          artist: 'Abbath',
+          url: "./songs/02 - Winter Bane.mp3"
+        }]
+      )
+    })
+
+    document.getElementById('addYoutubeVideo').addEventListener('click', function() {
+      player.setPlaylist(
+        [{
+          title: 'Youtube Song 1',
+          artist: 'Youtube Artist 1',
+          id: "12345",
+          url: "https://www.youtube.com/watch?v=w_prtHy_a_o"
+        }]
+      )
+    })
+  </script>
+</body>
+
 </html>
