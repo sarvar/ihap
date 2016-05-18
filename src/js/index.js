@@ -11,12 +11,15 @@ export default class ihap {
    * @constructor
    */
   constructor(data) {
+    // modules
     this.settings = new ihapSettings(data.settings)
     this.audio = new ihapAudio()
     this.controls = new ihapControls()
     this.playlist = new ihapPlaylist(data.songs)
     this.progress_bar = new ihapProgressBar()
     this.song_information = new ihapSongInformation()
+
+    // props
     this.moving_progress = false
 
     this._initializeihap()
