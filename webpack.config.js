@@ -4,6 +4,7 @@ var path = require('path');
 
 // plugins
 var ClosureCompilerPlugin = require('webpack-closure-compiler');
+var CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = {
   entry: __dirname + '/src/js/index.js',
@@ -16,19 +17,17 @@ module.exports = {
     umdNamedDefine: true
   },
   module: {
-    loaders: [
-      {
-        test: /(\.jsx|\.js)$/,
-        loader: 'babel',
-        exclude: /(node_modules|bower_components)/
-      }
-    ]
+    loaders: [{
+      test: /(\.jsx|\.js)$/,
+      loader: 'babel',
+      exclude: /(node_modules|bower_components)/
+    }]
   },
   resolve: {
     root: path.resolve('./src'),
     extensions: ['', '.js']
-	},
-	plugins: dev ? [] : [
+  },
+  plugins: dev ? [] : [
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new ClosureCompilerPlugin({
@@ -38,6 +37,13 @@ module.exports = {
         compilation_level: 'ADVANCED'
       },
       concurrency: 1,
+    }),
+    new CompressionPlugin({
+      asset: '[path].gz[query]',
+      algorithm: 'gzip',
+      test: /\.js$/,
+      threshold: 10240,
+      minRatio: 0.8,
     })
   ]
 };
