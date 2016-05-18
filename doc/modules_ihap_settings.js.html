@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: modules/ihap_song_information.js</title>
+    <title>JSDoc: Source: modules/ihap_settings.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: modules/ihap_song_information.js</h1>
+    <h1 class="page-title">Source: modules/ihap_settings.js</h1>
 
     
 
@@ -26,39 +26,34 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>export default class ihapSongInformation {
+            <pre class="prettyprint source linenums"><code>class ihapSettings {
   /**
-   * the song information module
+   * the settings
    * @constructor
    */
-  constructor() {
-    this.markup = null
-    this.element = null
+  constructor(settings) {
+    // base
+    this.container = document.querySelector(settings.container)
 
-    this.createMarkup()
+    // playlist
+    this.playlist = {
+      enabled: settings.playlist.enabled,
+      embedded: settings.playlist.embedded,
+      container: document.querySelector(settings.playlist.container)
+    }
+
+    // youtube
+    this.youtube = {
+      enabled: settings.youtube.enabled,
+      embedded: settings.youtube.embedded,
+      container: document.querySelector(settings.youtube.container)
+    }
   }
+}
 
-  /**
-   * creates the html markup for the song information
-   */
-	createMarkup() {
-    // wrapper
-		let song_information_wrapper = document.createElement('div')
-		song_information_wrapper.setAttribute('id', 'ihap_song_information_wrapper')
-		song_information_wrapper.setAttribute('class', 'ihap_song_information_wrapper')
-
-    // actual info div
-		let song_information = document.createElement('div')
-		song_information.setAttribute('id', 'ihap_song_information_title')
-		song_information.setAttribute('class', 'ihap_song_information_title')
-
-    // concat
-		song_information_wrapper.appendChild(song_information)
-
-    // set properties
-		this.element = song_information
-		this.markup = song_information_wrapper
-	}
+export {
+  ihapSettings as
+  default
 }
 </code></pre>
         </article>
