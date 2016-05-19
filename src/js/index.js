@@ -184,11 +184,12 @@ export default class ihap {
       this.playlist.removeSongs(songs)
       return this.playlist.songs
     }
-    /**
-     * ***************
-     * private methods
-     * ***************
-     */
+
+  /**
+   * ***************
+   * private methods
+   * ***************
+   */
 
   /**
    * initialize the plugin. create required markup and add event listeners
@@ -280,10 +281,10 @@ export default class ihap {
   _addControlsListeners() {
     let self = this
     this.controls.buttons.play.addEventListener('click', function() {
-      self.audio.play()
+      self.play()
     })
     this.controls.buttons.pause.addEventListener('click', function() {
-      self.audio.pause()
+      self.pause()
     })
     this.controls.buttons.skip_next.addEventListener('click', function() {
       self.skip_next()
