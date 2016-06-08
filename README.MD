@@ -18,8 +18,8 @@ dist/js/ihap.min.js  # js
 dist/css/ihap.css    # styles
 ```
 
-### Setup
-Use your favourite module loader
+### Load the plugin
+Use your favorite module loader
 ```javascript
 import ihap from 'ihap';
 // or
@@ -51,7 +51,7 @@ If you want to use the visual playlist then create a container for that, too
 <script>
   var player = new Ihap({
         settings: {
-          container: 'audioplayer_container'  // use your id
+          container: 'audioplayer_container'  // use your selector
         },
         songs: [
           {

@@ -1,3 +1,5 @@
+import ihapSong from './ihap_song'
+
 export default class ihapPlaylist {
   /**
    * the playlist module
@@ -40,11 +42,14 @@ export default class ihapPlaylist {
    * @param {Array} songs an array of songs. also accepts a single song
    */
   setSongs(songs) {
+    this.songs = []
     if (songs != undefined) {
       if (!(songs instanceof Array))
         songs = [songs]
 
-      this.songs = songs
+      for (var i = 0; i < songs.length; i++) {
+        this.songs.push(new ihapSong(songs[i]))
+      }
       this._updatePlaylist(this.songs)
     }
   }
@@ -90,7 +95,7 @@ export default class ihapPlaylist {
    * resets the playlist
    */
   empty() {
-    this.setSongs([])
+    this.setSongs()
     this.current_song_index = -1
   }
 
