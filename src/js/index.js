@@ -324,10 +324,11 @@ export default class ihap {
    * updates the song title & artist in the frontend
    */
   _updateSongInformation() {
-    let song = this.playlist.songs[this.playlist.current_song_index]
+    let song = this.getCurrentSong()
     let title = song.title
     let artist = song.artist
-    this.song_information.element.innerHTML = artist + ' - ' + title
+
+    this.song_information.updateMeta(title, artist)
   }
 
 }

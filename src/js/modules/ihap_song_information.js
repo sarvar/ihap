@@ -31,4 +31,12 @@ export default class ihapSongInformation {
 		this.element = song_information
 		this.markup = song_information_wrapper
 	}
+
+  updateMeta(title, author) {
+    this.markup.innerHTML = title + ' ' + author
+  }
+
+  updateTime() {
+    //TODO implement
+  }
 }
