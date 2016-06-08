@@ -31,6 +31,7 @@ import ihapAudio from './modules/ihap_audio'
 import ihapControls from './modules/ihap_controls'
 import ihapPlaylist from './modules/ihap_playlist'
 import ihapProgressBar from './modules/ihap_progress_bar'
+import ihapSettings from './modules/ihap_settings'
 import ihapSongInformation from './modules/ihap_song_information'
 
 export default class ihap {
@@ -38,10 +39,7 @@ export default class ihap {
    * @constructor
    */
   constructor(data) {
-    this.settings = data.settings
-    this.container = document.getElementById(data.settings.container)
-    this.playlist_container = document.getElementById(data.settings.playlist_container)
-
+    this.settings = new ihapSettings(data.settings)
     this.audio = new ihapAudio()
     this.controls = new ihapControls()
     this.playlist = new ihapPlaylist(data.songs)
@@ -73,25 +71,30 @@ export default class ihap {
 
   /**
    * pause the current song
+   * @return {Bool} returns true on successfull pause
    */
   pause() {
-    this.audio.pause()
+    return this.audio.pause()
   }
 
   /**
    * plays the next song in the playlist, or the first if the current song is the last
+   * @return {Object} the next song thats now set
    */
-  next() {
+  skip_next() {
     let next_song = this.playlist.getNextSong()
     this.changeSong(next_song)
+    return next_song
   }
 
   /**
    * plays the previous song in the playlist, or the last if the current song is the first
+   * @return {Object} the previous song that is now set
    */
-  prev() {
+  skip_prev() {
     let previous_song = this.playlist.getPreviousSong()
     this.changeSong(previous_song)
+    return previous_song
   }
 
   /**
@@ -101,52 +104,84 @@ export default class ihap {
    */
 
    /**
+    * gets the next song
+    * @return {Object} the next song in the playlist
+    */
+  getNextSong() {
+    return this.playlist.getNextSong()
+  }
+
+  /**
+   * gets the previous song
+   * @return {Object} the previous song in the playlist
+   */
+  getPreviousSong() {
+    return this.playlist.getPreviousSong()
+  }
+
+  /**
    * removes all songs from the playlist (visually and in the background) and stops playback
    */
-   emptyPlaylist() {
-     this.playlist.empty()
-     this.audio.empty()
-     this._resetProgressBar()
-     this._updateProgressBar(0)
-   }
+  emptyPlaylist() {
+    this.playlist.empty()
+    this.audio.empty()
+    this._resetProgressBar()
+    this._updateProgressBar(0)
+  }
 
   /**
    * sets a song from the playlist to be the current song
    * @param {Object} song
    */
   changeSong(song) {
-    this.playlist.current_song_index = this.playlist.songs.indexOf(song)
-    this.audio.setSong(song)
-    this._resetProgressBar()
-    this._updateProgressBar(0)
-    if (this.audio.playing) this.audio.play()
+    if (this.playlist.songs.indexOf(song) != undefined) {
+      this.playlist.current_song_index = this.playlist.songs.indexOf(song)
+      this.audio.setSong(song)
+      this._resetProgressBar()
+      this._updateProgressBar(0)
+      if (this.audio.playing) this.audio.play()
+    }
   }
 
   /**
    * reset the playlist and set new songs
-   * @param {Array} songs
+   * @param {Array} songs the songs to set
+   * @return {Array} songs the new playlist
    */
   setPlaylist(songs) {
     this.emptyPlaylist()
     this.appendToPlaylist(songs)
+    return this.getPlaylist()
+  }
+
+  /**
+   * gets the playlist
+   * @return {Array} the current songs in the playlist
+   */
+  getPlaylist() {
+    return this.playlist.songs
   }
 
   /**
    * appends a song to the current playlist
    * @param  {Array} songs an array of songs, also accepts a single song
+   * @return {Array} the new playlist
    */
   appendToPlaylist(songs) {
     this.playlist.appendSongs(songs)
     this._loadFirstSong()
+    return this.getPlaylist()
   }
 
   /**
    * prepends a song to the current playlist
    * @param  {Array} songs an array of songs, also accepts a single song
+   * @return {Array} the new playlist
    */
   prependToPlaylist(songs) {
     this.playlist.prependSongs(songs)
     this._loadFirstSong()
+    return this.getPlaylist()
   }
 
   /**
@@ -166,16 +201,25 @@ export default class ihap {
   }
 
   /**
-   * ***************
-   * private methods
-   * ***************
+   * removes the given song(s) from the playlist
+   * @param  {Array} songs the song(s) to removes
+   * @return {Array}       the new playlist
    */
+  removeFromPlaylist(songs) {
+      this.playlist.removeSongs(songs)
+      return this.playlist.songs
+    }
+    /**
+     * ***************
+     * private methods
+     * ***************
+     */
 
   /**
    * initialize the plugin. create required markup and add event listeners
    */
   _initializeihap() {
-    if (this.container == undefined) {
+    if (this.settings.container == undefined) {
       throw ('Cannot find container "' + this.settings.container + '". Please make sure self an element with this id is present.')
     } else {
       this._createComponents()
@@ -189,12 +233,12 @@ export default class ihap {
    * appends the html markup of each module
    */
   _createComponents() {
-    this.container.appendChild(this.audio.markup)
-    this.container.appendChild(this.controls.markup)
-    this.container.appendChild(this.progress_bar.markup)
-    this.container.appendChild(this.song_information.markup)
-    if (this.playlist_container != undefined)
-      this.playlist_container.appendChild(this.playlist.markup)
+    this.settings.container.appendChild(this.audio.markup)
+    this.settings.container.appendChild(this.controls.markup)
+    this.settings.container.appendChild(this.progress_bar.markup)
+    this.settings.container.appendChild(this.song_information.markup)
+    if (this.settings.playlist.container != undefined)
+      this.settings.playlist.container.appendChild(this.playlist.markup)
   }
 
   /**
@@ -251,7 +295,7 @@ export default class ihap {
       })
       // autoplay next song on finishing one
     this.audio.element.addEventListener('ended', function() {
-      self.next()
+      self.skip_next()
     })
   }
 
@@ -267,10 +311,10 @@ export default class ihap {
       self.audio.pause()
     })
     this.controls.buttons.skip_next.addEventListener('click', function() {
-      self.next()
+      self.skip_next()
     })
     this.controls.buttons.skip_previous.addEventListener('click', function() {
-      self.prev()
+      self.skip_prev()
     })
   }
 
@@ -326,13 +370,13 @@ function calculate_progress(layerX, offsetLeft, offsetWidth, duration) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ihap.html">ihap</a></li><li><a href="ihapAudio.html">ihapAudio</a></li><li><a href="ihapControls.html">ihapControls</a></li><li><a href="ihapPlaylist.html">ihapPlaylist</a></li><li><a href="ihapProgressBar.html">ihapProgressBar</a></li><li><a href="ihapSongInformation.html">ihapSongInformation</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ihap.html">ihap</a></li><li><a href="ihapAudio.html">ihapAudio</a></li><li><a href="ihapControls.html">ihapControls</a></li><li><a href="ihapPlaylist.html">ihapPlaylist</a></li><li><a href="ihapProgressBar.html">ihapProgressBar</a></li><li><a href="ihapSettings.html">ihapSettings</a></li><li><a href="ihapSong.html">ihapSong</a></li><li><a href="ihapSongInformation.html">ihapSongInformation</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu May 12 2016 16:24:09 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed May 18 2016 20:28:38 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

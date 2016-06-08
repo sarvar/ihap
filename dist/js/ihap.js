@@ -75,11 +75,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _ihap_playlist2 = _interopRequireDefault(_ihap_playlist);
 	
-	var _ihap_progress_bar = __webpack_require__(4);
+	var _ihap_progress_bar = __webpack_require__(5);
 	
 	var _ihap_progress_bar2 = _interopRequireDefault(_ihap_progress_bar);
 	
-	var _ihap_song_information = __webpack_require__(5);
+	var _ihap_settings = __webpack_require__(6);
+	
+	var _ihap_settings2 = _interopRequireDefault(_ihap_settings);
+	
+	var _ihap_song_information = __webpack_require__(7);
 	
 	var _ihap_song_information2 = _interopRequireDefault(_ihap_song_information);
 	
@@ -95,10 +99,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function ihap(data) {
 	    _classCallCheck(this, ihap);
 	
-	    this.settings = data.settings;
-	    this.container = document.getElementById(data.settings.container);
-	    this.playlist_container = document.getElementById(data.settings.playlist_container);
-	
+	    this.settings = new _ihap_settings2.default(data.settings);
 	    this.audio = new _ihap_audio2.default();
 	    this.controls = new _ihap_controls2.default();
 	    this.playlist = new _ihap_playlist2.default(data.songs);
@@ -327,7 +328,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_initializeihap',
 	    value: function _initializeihap() {
-	      if (this.container == undefined) {
+	      if (this.settings.container == undefined) {
 	        throw 'Cannot find container "' + this.settings.container + '". Please make sure self an element with this id is present.';
 	      } else {
 	        this._createComponents();
@@ -344,11 +345,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: '_createComponents',
 	    value: function _createComponents() {
-	      this.container.appendChild(this.audio.markup);
-	      this.container.appendChild(this.controls.markup);
-	      this.container.appendChild(this.progress_bar.markup);
-	      this.container.appendChild(this.song_information.markup);
-	      if (this.playlist_container != undefined) this.playlist_container.appendChild(this.playlist.markup);
+	      this.settings.container.appendChild(this.audio.markup);
+	      this.settings.container.appendChild(this.controls.markup);
+	      this.settings.container.appendChild(this.progress_bar.markup);
+	      this.settings.container.appendChild(this.song_information.markup);
+	      if (this.settings.playlist.container != undefined) this.settings.playlist.container.appendChild(this.playlist.markup);
 	    }
 	
 	    /**
@@ -728,7 +729,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _ihap_song = __webpack_require__(6);
+	var _ihap_song = __webpack_require__(4);
 	
 	var _ihap_song2 = _interopRequireDefault(_ihap_song);
 	
@@ -946,6 +947,56 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
+	var ihapSong = function () {
+	  /**
+	   * the song module
+	   * @constructor
+	   */
+	
+	  function ihapSong(song) {
+	    _classCallCheck(this, ihapSong);
+	
+	    this.title = song.title;
+	    this.artist = song.artist;
+	    this.id = song.id;
+	    this.url = song.url;
+	
+	    this.type = null;
+	
+	    this._setType();
+	  }
+	
+	  _createClass(ihapSong, [{
+	    key: '_setType',
+	    value: function _setType() {
+	      if (this.url.match(/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/g)) {
+	        this.type = 'youtube_video';
+	      } else {
+	        this.type = 'song';
+	      }
+	    }
+	  }]);
+	
+	  return ihapSong;
+	}();
+	
+	exports.default = ihapSong;
+	module.exports = exports['default'];
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
 	var ihapProgressBar = function () {
 	  /**
 	   * the progressbar module
@@ -1033,7 +1084,48 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 5 */
+/* 6 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var ihapSettings =
+	/**
+	 * the settings
+	 * @constructor
+	 */
+	function ihapSettings(settings) {
+	  _classCallCheck(this, ihapSettings);
+	
+	  // base
+	  this.container = document.querySelector(settings.container);
+	
+	  // playlist
+	  this.playlist = {
+	    enabled: settings.playlist.enabled,
+	    embedded: settings.playlist.embedded,
+	    container: document.querySelector(settings.playlist.container)
+	  };
+	
+	  // youtube
+	  this.youtube = {
+	    enabled: settings.youtube.enabled,
+	    embedded: settings.youtube.embedded,
+	    container: document.querySelector(settings.youtube.container)
+	  };
+	};
+	
+	exports.default = ihapSettings;
+	module.exports = exports['default'];
+
+/***/ },
+/* 7 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1092,56 +1184,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 	
 	exports.default = ihapSongInformation;
-	module.exports = exports['default'];
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var ihapSong = function () {
-	  /**
-	   * the song module
-	   * @constructor
-	   */
-	
-	  function ihapSong(song) {
-	    _classCallCheck(this, ihapSong);
-	
-	    this.title = song.title;
-	    this.artist = song.artist;
-	    this.id = song.id;
-	    this.url = song.url;
-	
-	    this.type = null;
-	
-	    this._setType();
-	  }
-	
-	  _createClass(ihapSong, [{
-	    key: '_setType',
-	    value: function _setType() {
-	      if (this.url.match(/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/g)) {
-	        this.type = 'youtube_video';
-	      } else {
-	        this.type = 'song';
-	      }
-	    }
-	  }]);
-	
-	  return ihapSong;
-	}();
-	
-	exports.default = ihapSong;
 	module.exports = exports['default'];
 
 /***/ }

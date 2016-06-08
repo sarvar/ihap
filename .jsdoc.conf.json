@@ -1,0 +1,8 @@
+{
+  "source": {
+    "include": [
+      "src/js/index.js",
+      "src/js/modules/"
+    ]
+  }
+}
