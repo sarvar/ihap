@@ -9,9 +9,7 @@ class ihapSong {
     this.id = song.id
     this.url = song.url
 
-    this.type = null
-
-    this._setType()
+    this.type = this._setType()
   }
 
   _setType() {

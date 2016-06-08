@@ -7,6 +7,7 @@
     "dev": "node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.config.dev --inline --hot --content-base src",
     "build": "node_modules/webpack/bin/webpack.js --config webpack.config.prod && cp src/css/ihap.css dist/css/",
     "doc": "jsdoc -c .jsdoc.conf.json -d doc -R README.MD -r",
+    "release:minor": "npm version minor && npm publish && git push --follow-tags",
     "test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --"
   },
   "devDependencies": {
