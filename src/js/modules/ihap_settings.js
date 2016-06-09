@@ -2,6 +2,7 @@ class ihapSettings {
   /**
    * the settings
    * @constructor
+   * @private
    */
   constructor(settings) {
     // base

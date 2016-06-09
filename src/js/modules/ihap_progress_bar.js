@@ -2,6 +2,7 @@ export default class ihapProgressBar {
   /**
    * the progressbar module
    * @constructor
+   * @private
    */
   constructor() {
     this.markup = null
@@ -42,10 +43,10 @@ export default class ihapProgressBar {
 
   /**
    * resets max value and current value of the progress bar to match the new song
-   * @param {Float} song_duration the duration of the song currenty playing
+   * @param {Number} song_duration the duration of the song currenty playing
    */
   reset(song_duration) {
-    if (song_duration != undefined && song_duration != NaN && song_duration > 0) {
+    if (song_duration != undefined && song_duration > 0) {
       this.element.setAttribute("aria-valuemax", song_duration)
       this.element.setAttribute("aria-valuenow", "0")
     }
@@ -53,10 +54,10 @@ export default class ihapProgressBar {
 
   /**
    * updates the progressbar visually - sets its width
-   * @param {Float} current_time the current time of the song
+   * @param {Number} current_time the current time of the song
    */
   updateBar(current_time) {
-    if (current_time != undefined && current_time != NaN && current_time >= 0) {
+    if (current_time != undefined && current_time >= 0) {
       this.element.setAttribute("aria-valuenow", current_time)
       let song_duration = this.element.getAttribute('aria-valuemax')
       let p = (current_time / parseFloat(song_duration)) * 100

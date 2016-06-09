@@ -2,6 +2,7 @@ export default class ihapSongInformation {
   /**
    * the song information module
    * @constructor
+   * @private
    */
   constructor() {
     this.markup = null

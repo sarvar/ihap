@@ -2,6 +2,7 @@ class ihapSong {
   /**
    * the song module
    * @constructor
+   * @private
    */
   constructor(song) {
     this.title = song.title
@@ -9,16 +10,38 @@ class ihapSong {
     this.id = song.id
     this.url = song.url
 
-    this.type = this._setType()
+    this.type = this._getType()
   }
 
-  _setType() {
+  /**
+   * get the type of the song based on its url
+   * @returns {String} type
+   * @private
+   */
+  _getType() {
     if (this.url.match(/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/g)) {
-      this.type = 'youtube_video'
+      return 'youtube_video'
     } else {
-      this.type = 'song'
+      return 'song'
+    }
+  }
+
+  /**
+   * extracts the youtube video id from the url
+   * @returns {String} the id
+   * @returns {Boolean} false if song is no youtube video
+   */
+  getYoutubeId() {
+    if (this.type == 'youtube_video') {
+      var id_regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
+      return this.url.match(id_regex)[1]
+    } else {
+      return false
     }
   }
 }
 
-export { ihapSong as default }
+export {
+  ihapSong as
+    default
+}

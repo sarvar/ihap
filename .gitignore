@@ -3,3 +3,4 @@ src/songs/
 npm-debug.log
 .sass-cache
 coverage/
+.idea

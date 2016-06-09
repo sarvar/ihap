@@ -1,7 +1,11 @@
+/**
+ * ihap audio module
+ */
 class ihapAudio {
   /**
    * the audio module
    * @constructor
+   * @private
    */
   constructor() {
     this.markup = null
@@ -74,7 +78,7 @@ class ihapAudio {
 
   /**
    * sets a new song to the audioplayer and loads it
-   * @param {Song} song the song that should be set
+   * @param {Object} song the song that should be set
    */
   setSong(song) {
     if (song != undefined && song.url != undefined) {

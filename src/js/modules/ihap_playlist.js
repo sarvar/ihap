@@ -4,6 +4,7 @@ export default class ihapPlaylist {
   /**
    * the playlist module
    * @constructor
+   * @private
    */
   constructor(songs) {
     this.markup = null

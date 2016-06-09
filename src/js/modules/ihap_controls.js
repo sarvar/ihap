@@ -2,6 +2,7 @@ class ihapControls {
   /**
    * the module for the player controls
    * @constructor
+   * @private
    */
   constructor() {
     this.markup = null
