@@ -1,6 +1,6 @@
 var expect = require('chai').expect
 var jsdom = require('mocha-jsdom')
-var ihapAudio = require('../../src/js/modules/ihap_audio.js')
+var ihapAudio = require('../../src/js/modules/ihap_source_player/ihap_audio.js')
 
 describe('ihap audio module', function() {
   // create dom
@@ -99,9 +99,9 @@ describe('ihap audio module', function() {
       ihap_audio.setSong(song)
       ihap_audio.play()
 
-      expect(ihap_audio.is_empty()).to.be.false
+      expect(ihap_audio.isEmpty()).to.be.false
       ihap_audio.empty()
-      expect(ihap_audio.is_empty()).to.be.true
+      expect(ihap_audio.isEmpty()).to.be.true
     })
   })
 })

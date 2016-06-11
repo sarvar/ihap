@@ -1,7 +1,8 @@
+'use strict';
 /**
  * module imports
  */
-import ihapAudio from './modules/ihap_audio'
+import ihapAudio from './modules/ihap_source_player/ihap_audio'
 import ihapControls from './modules/ihap_controls'
 import ihapPlaylist from './modules/ihap_playlist'
 import ihapProgressBar from './modules/ihap_progress_bar'
@@ -14,6 +15,7 @@ import ihapSongInformation from './modules/ihap_song_information'
 class ihap {
   /**
    * @constructor
+   * @param {Object} data settings / songs
    */
   constructor(data) {
     // modules
@@ -50,12 +52,7 @@ class ihap {
    * plays the current song
    */
   play() {
-    let type = this.getCurrentSong().type
-    if (type == 'song') {
-      this.audio.play()
-    } else if (type == 'youtube_video') {
-      this.youtube.player.playVideo()
-    }
+    this.playSong(this.getCurrentSong())
   }
 
   /**
@@ -63,17 +60,7 @@ class ihap {
    * @return {Boolean} returns true on successfull pause
    */
   pause() {
-    console.log('this.pause')
-    let type = this.getCurrentSong().type
-    if (type == 'song') {
-      this.audio.pause()
-    } else if (type == 'youtube_video') {
-      console.log('yt video')
-      if (this.youtube.player) {
-        console.log('player exists')
-        this.youtube.player.pauseVideo()
-      }
-    }
+    this.pauseSong(this.getCurrentSong())
   }
 
   /**
@@ -124,42 +111,70 @@ class ihap {
   emptyPlaylist() {
     this.playlist.empty()
     this.audio.empty()
-    this._resetProgressBar()
+    this._resetProgressBar(0)
     this._updateProgressBar(0)
   }
 
   /**
    * sets a song from the playlist to be the current song
    * @param {Object} song
+   * @param {Boolean} pause
    */
-  changeSong(song) {
-    if (this.playlist.songs.indexOf(song) != undefined) {
-      // pause current element
-      if (this.audio.playing || (this.youtube.player && (this.youtube.player.getPlayerState() == 1)))
-        this.pause()
-      // set current song
-      this.playlist.current_song_index = this.playlist.songs.indexOf(song)
-      // empty song info
-      this.song_information.emptyMeta()
-      // set new element: set audio or load yt
-      //
+  changeSong(song, pause = true) {
+    // pause current playback
+    if (pause && this.audio.playing)
+      this.pause()
 
-      if (song.type == 'song') {
-        this.audio.setSong(song)
-      } else {
-        if (!this.youtubeIframeApiLoaded()) {
-          this.loadYoutubeIframeApi()
+    // reset the progress bar
+    this._resetProgressBar(0)
+    this._updateProgressBar(0)
+
+    // empty song info
+    this.song_information.emptyMeta()
+
+    switch (song.type) {
+      case 'youtube':
+        if (this.youtubeIframeApiLoaded()) {
+          this.youtube.player.loadVideoByUrl(song.url)
         } else {
-          this.youtube.player.loadVideoById(song.getYoutubeId())
+          this.loadYoutubeIframeApi()
         }
-      }
-
-      this.audio.pause()
-      this._resetProgressBar()
-      this._updateProgressBar(0)
-      if (this.audio.playing)
-        this.audio.play()
+        break;
+      default:
+        this.audio.setSong(song)
     }
+
+    // set current song
+    this.playlist.current_song_index = this.playlist.songs.indexOf(song)
+
+
+    // if (this.playlist.songs.indexOf(song) != undefined) {
+    //   // pause current element
+    //   if (this.audio.playing || (this.youtube.player && (this.youtube.player.getPlayerState() == 1)))
+    //     this.pause()
+    //   // set current song
+    //   this.playlist.current_song_index = this.playlist.songs.indexOf(song)
+    //   // empty song info
+    //   this.song_information.emptyMeta()
+    //   // set new element: set audio or load yt
+    //   //
+    //
+    //   if (song.type == 'song') {
+    //     this.audio.setSong(song)
+    //   } else {
+    //     if (!this.youtubeIframeApiLoaded()) {
+    //       this.loadYoutubeIframeApi()
+    //     } else {
+    //       this.youtube.player.loadVideoById(song.getYoutubeId())
+    //     }
+    //   }
+    //
+    //   this.audio.pause()
+    //   this._resetProgressBar()
+    //   this._updateProgressBar(0)
+    //   if (this.audio.playing)
+    //     this.audio.play()
+    // }
   }
 
   /**
@@ -266,10 +281,10 @@ class ihap {
 
   /**
    * resets the progressbars values to 0
+   * @param {number} song_duration
    * @private
    */
-  _resetProgressBar() {
-    let song_duration = this.audio.element.duration
+  _resetProgressBar(song_duration) {
     if (song_duration == undefined) {
       this.progress_bar.reset(0.0)
     } else {
@@ -281,6 +296,25 @@ class ihap {
    * ==================== yt
    */
 
+  playSong(song) {
+    switch (song.type) {
+      case 'youtube':
+        this.youtube.player.playVideo()
+        break
+      default:
+        this.audio.play()
+    }
+  }
+
+  pauseSong(song) {
+    switch (song.type) {
+      case 'youtube':
+        this.youtube.player.pauseVideo()
+        break
+      default:
+        this.audio.pause()
+    }
+  }
 
   /**
    * check if the youtube iframe api is loaded
@@ -323,13 +357,12 @@ class ihap {
       events: {
         'onReady': function (event) {
           event.target.playVideo();
+          that._resetProgressBar(that.youtube.player.getDuration())
         },
         'onStateChange': function (data) {
           console.log('State: ' + data.data)
           if (data.data == 1) {
             that.song_information.updateMeta(that.youtube.player.getVideoData().title, '')
-            let duration = that.youtube.player.getDuration()
-            that.progress_bar.element.setAttribute('aria-valuemax', duration)
             // update progressbar every 500ms
             setInterval(function () {
               that._updateProgressBar(that.youtube.player.getCurrentTime())
@@ -365,7 +398,7 @@ class ihap {
    */
   _loadFirstSong() {
     if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
-      if (this.audio.is_empty())
+      if (this.audio.isEmpty())
         this.changeSong(this.playlist.songs[0])
     }
   }
@@ -394,7 +427,8 @@ class ihap {
     })
     // reload the progress_bar after the song changed
     this.audio.element.addEventListener('canplay', function () {
-      self._resetProgressBar()
+      let duration = self.audio.element.duration
+      self._resetProgressBar(duration)
       self._updateSongInformation()
     })
     // autoplay next song on finishing one

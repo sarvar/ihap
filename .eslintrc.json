@@ -1,16 +1,29 @@
 {
+  "env": {
+    "browser": true
+  },
+  "extends": [
+    "defaults/configurations/eslint"
+  ],
   "parserOptions": {
     "ecmaVersion": 6,
     "sourceType": "module"
   },
   "rules": {
-    "max-len": [1, 120, 2],
-    "require-jsdoc": ["warn", {
-      "require": {
-        "FunctionDeclaration": true,
-        "MethodDefinition": true,
-        "ClassDeclaration": true
+    "max-len": [
+      1,
+      120,
+      2
+    ],
+    "require-jsdoc": [
+      "warn",
+      {
+        "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": true,
+          "ClassDeclaration": true
+        }
       }
-    }]
+    ]
   }
 }

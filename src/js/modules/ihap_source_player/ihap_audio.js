@@ -1,16 +1,20 @@
 /**
+ * module imports
+ */
+import ihapSourcePlayer from '../ihap_source_player'
+
+/**
  * ihap audio module
  * @private
  */
-class ihapAudio {
+class ihapAudio extends ihapSourcePlayer {
   /**
    * the audio module
    * @constructor
    * @private
    */
   constructor() {
-    this.markup = null
-    this.element = null
+    super()
     this.playing = false
 
     this.createMarkup()
@@ -31,7 +35,6 @@ class ihapAudio {
 
     // combine wrapper & audio element
     player_wrapper.appendChild(audio_player)
-
     // set object properties
     this.markup = player_wrapper
     this.element = audio_player
@@ -49,7 +52,7 @@ class ihapAudio {
   }
 
   onCanPlay() {
-    if (!this.is_empty()) {
+    if (!this.isEmpty()) {
       this.element.play()
       this.playing = true
     }
@@ -73,7 +76,7 @@ class ihapAudio {
     this.element.setAttribute('aria-valuemax', '0') // set duration to 0
   }
 
-  is_empty() {
+  isEmpty() {
     return this.element.getAttribute('src') == ''
   }
 
@@ -91,7 +94,4 @@ class ihapAudio {
     }
   }
 }
-export {
-  ihapAudio as
-  default
-}
+export {ihapAudio as default}

@@ -128,7 +128,7 @@ export default class ihapPlaylist {
   //= privates =//
   /**
    * checks if songs are currently set in the playlist
-   * @return {Bool} result true if songs are present
+   * @return {Boolean} result true if songs are present
    */
   _songsPresent() {
     return this.songs != undefined && this.songs != [] && this.current_song_index >= 0

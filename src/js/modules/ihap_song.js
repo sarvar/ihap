@@ -23,9 +23,9 @@ class ihapSong {
    * @private
    */
   _getType() {
-    let regex = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/g
+    let regex = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/g
     if (this.url.match(regex)) {
-      return 'youtube_video'
+      return 'youtube'
     } else {
       return 'song'
     }
@@ -37,7 +37,7 @@ class ihapSong {
    * @returns {Boolean} false if song is no youtube video
    */
   getYoutubeId() {
-    if (this.type == 'youtube_video') {
+    if (this.type == 'youtube') {
       var id_regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/i;
       return this.url.match(id_regex)[1]
     } else {
