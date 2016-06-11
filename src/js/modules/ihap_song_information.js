@@ -33,6 +33,18 @@ export default class ihapSongInformation {
 		this.markup = song_information_wrapper
 	}
 
+  /**
+   * empty self
+   */
+  emptyMeta() {
+    this.element.innerHTML = ''
+  }
+
+  /**
+   * set title and author
+   * @param title
+   * @param author
+   */
   updateMeta(title, author) {
     this.markup.innerHTML = title + ' ' + author
   }

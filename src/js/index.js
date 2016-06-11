@@ -1,4 +1,6 @@
-//= module imports ==//
+/**
+ * module imports
+ */
 import ihapAudio from './modules/ihap_audio'
 import ihapControls from './modules/ihap_controls'
 import ihapPlaylist from './modules/ihap_playlist'
@@ -9,7 +11,7 @@ import ihapSongInformation from './modules/ihap_song_information'
 /**
  * ihap main class
  */
-export default class ihap {
+class ihap {
   /**
    * @constructor
    */
@@ -48,7 +50,12 @@ export default class ihap {
    * plays the current song
    */
   play() {
-    this.audio.play()
+    let type = this.getCurrentSong().type
+    if (type == 'song') {
+      this.audio.play()
+    } else if (type == 'youtube_video') {
+      this.youtube.player.playVideo()
+    }
   }
 
   /**
@@ -56,7 +63,17 @@ export default class ihap {
    * @return {Boolean} returns true on successfull pause
    */
   pause() {
-    return this.audio.pause()
+    console.log('this.pause')
+    let type = this.getCurrentSong().type
+    if (type == 'song') {
+      this.audio.pause()
+    } else if (type == 'youtube_video') {
+      console.log('yt video')
+      if (this.youtube.player) {
+        console.log('player exists')
+        this.youtube.player.pauseVideo()
+      }
+    }
   }
 
   /**
@@ -117,7 +134,16 @@ export default class ihap {
    */
   changeSong(song) {
     if (this.playlist.songs.indexOf(song) != undefined) {
+      // pause current element
+      if (this.audio.playing || (this.youtube.player && (this.youtube.player.getPlayerState() == 1)))
+        this.pause()
+      // set current song
       this.playlist.current_song_index = this.playlist.songs.indexOf(song)
+      // empty song info
+      this.song_information.emptyMeta()
+      // set new element: set audio or load yt
+      //
+
       if (song.type == 'song') {
         this.audio.setSong(song)
       } else {
@@ -302,6 +328,12 @@ export default class ihap {
           console.log('State: ' + data.data)
           if (data.data == 1) {
             that.song_information.updateMeta(that.youtube.player.getVideoData().title, '')
+            let duration = that.youtube.player.getDuration()
+            that.progress_bar.element.setAttribute('aria-valuemax', duration)
+            // update progressbar every 500ms
+            setInterval(function () {
+              that._updateProgressBar(that.youtube.player.getCurrentTime())
+            }, 500)
           } else {
             console.log('wrong state: ' + data.data)
           }
@@ -442,4 +474,9 @@ export default class ihap {
 function calculate_progress(layerX, offsetLeft, offsetWidth, duration) {
   let p = ((layerX - offsetLeft) / offsetWidth)
   return duration * p
+}
+
+export {
+  ihap as
+    default
 }

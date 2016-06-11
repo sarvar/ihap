@@ -1,5 +1,6 @@
 /**
  * ihap audio module
+ * @private
  */
 class ihapAudio {
   /**

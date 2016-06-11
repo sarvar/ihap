@@ -1,3 +1,7 @@
+/**
+ * module to handle controls
+ * @private
+ */
 class ihapControls {
   /**
    * the module for the player controls
