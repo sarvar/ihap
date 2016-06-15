@@ -1,4 +1,5 @@
 'use strict';
+
 /**
  * module imports
  */
@@ -28,6 +29,7 @@ class ihap {
 
     // props
     this.moving_progress = false
+    this.playing = false
     this.youtube = {
       player: null,
       iframe_api_loaded: false
@@ -122,7 +124,7 @@ class ihap {
    */
   changeSong(song, pause = true) {
     // pause current playback
-    if (pause && this.audio.playing)
+    if (pause && this.playing)
       this.pause()
 
     // reset the progress bar
@@ -134,11 +136,10 @@ class ihap {
 
     switch (song.type) {
       case 'youtube':
-        if (this.youtubeIframeApiLoaded()) {
-          this.youtube.player.loadVideoByUrl(song.url)
-        } else {
+        if (!this.youtubeIframeApiLoaded()) {
           this.loadYoutubeIframeApi()
         }
+        this.youtube.player.loadVideoById(song.getYoutubeId())
         break;
       default:
         this.audio.setSong(song)
@@ -304,16 +305,20 @@ class ihap {
       default:
         this.audio.play()
     }
+    this.playing = true
   }
 
   pauseSong(song) {
+    console.log(song.type)
     switch (song.type) {
       case 'youtube':
+        console.log('yay')
         this.youtube.player.pauseVideo()
         break
       default:
         this.audio.pause()
     }
+    this.playing = false
   }
 
   /**
@@ -353,7 +358,7 @@ class ihap {
     this.youtube.player = new YT.Player('youtube_player', {
       height: '390',
       width: '640',
-      videoId: song.getYoutubeId(),
+      //videoId: song.getYoutubeId(),
       events: {
         'onReady': function (event) {
           event.target.playVideo();
