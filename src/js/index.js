@@ -136,10 +136,11 @@ class ihap {
 
     switch (song.type) {
       case 'youtube':
-        if (!this.youtubeIframeApiLoaded()) {
+        if (this.youtubeIframeApiLoaded()) {
+          this.youtube.player.loadVideoById(song.getYoutubeId())
+        } else {
           this.loadYoutubeIframeApi()
         }
-        this.youtube.player.loadVideoById(song.getYoutubeId())
         break;
       default:
         this.audio.setSong(song)
@@ -147,35 +148,6 @@ class ihap {
 
     // set current song
     this.playlist.current_song_index = this.playlist.songs.indexOf(song)
-
-
-    // if (this.playlist.songs.indexOf(song) != undefined) {
-    //   // pause current element
-    //   if (this.audio.playing || (this.youtube.player && (this.youtube.player.getPlayerState() == 1)))
-    //     this.pause()
-    //   // set current song
-    //   this.playlist.current_song_index = this.playlist.songs.indexOf(song)
-    //   // empty song info
-    //   this.song_information.emptyMeta()
-    //   // set new element: set audio or load yt
-    //   //
-    //
-    //   if (song.type == 'song') {
-    //     this.audio.setSong(song)
-    //   } else {
-    //     if (!this.youtubeIframeApiLoaded()) {
-    //       this.loadYoutubeIframeApi()
-    //     } else {
-    //       this.youtube.player.loadVideoById(song.getYoutubeId())
-    //     }
-    //   }
-    //
-    //   this.audio.pause()
-    //   this._resetProgressBar()
-    //   this._updateProgressBar(0)
-    //   if (this.audio.playing)
-    //     this.audio.play()
-    // }
   }
 
   /**
@@ -309,10 +281,8 @@ class ihap {
   }
 
   pauseSong(song) {
-    console.log(song.type)
     switch (song.type) {
       case 'youtube':
-        console.log('yay')
         this.youtube.player.pauseVideo()
         break
       default:
@@ -358,7 +328,7 @@ class ihap {
     this.youtube.player = new YT.Player('youtube_player', {
       height: '390',
       width: '640',
-      //videoId: song.getYoutubeId(),
+      videoId: song.getYoutubeId(),
       events: {
         'onReady': function (event) {
           event.target.playVideo();
