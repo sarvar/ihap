@@ -62,6 +62,7 @@ class ihap {
    * @return {Boolean} returns true on successfull pause
    */
   pause() {
+    console.log('this.pause1')
     this.pauseSong(this.getCurrentSong())
   }
 
@@ -335,21 +336,17 @@ class ihap {
           that._resetProgressBar(that.youtube.player.getDuration())
         },
         'onStateChange': function (data) {
-          console.log('State: ' + data.data)
           if (data.data == 1) {
             that.song_information.updateMeta(that.youtube.player.getVideoData().title, '')
             // update progressbar every 500ms
             setInterval(function () {
               that._updateProgressBar(that.youtube.player.getCurrentTime())
             }, 500)
-          } else {
-            console.log('wrong state: ' + data.data)
           }
-          console.log('state changed')
         }
       }
     });
-
+    this.playing = true
   }
 
 
@@ -452,8 +449,16 @@ class ihap {
     })
 
     this.progress_bar.markup.addEventListener('mouseup', function (e) {
+      let song = self.getCurrentSong()
       let duration = self.progress_bar.element.getAttribute('aria-valuemax')
-      self.audio.element.currentTime = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration)
+      let time = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration)
+      switch (song.type) {
+        case 'youtube':
+          self.youtube.player.seekTo(time)
+          break;
+        default:
+          self.audio.element.currentTime = time
+      }
       self.moving_progress = false
     })
   }
