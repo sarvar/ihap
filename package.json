@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.config.dev --inline --hot --content-base src",
     "build": "node_modules/webpack/bin/webpack.js --config webpack.config.prod && cp src/css/ihap.css dist/css/",
-    "doc": "jsdoc -c .jsdoc.conf.json -d doc -R README.MD -r",
+    "doc": "node_modules/jsdoc/jsdoc.js -c .jsdoc.conf.json -d doc -R README.MD -r -t node_modules/minami",
     "release:minor": "npm version minor && npm publish && git push --follow-tags",
     "test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha --"
   },
@@ -22,7 +22,9 @@
     "eslint": "^2.11.1",
     "eslint-config-defaults": "^9.0.0",
     "istanbul": "^1.0.0-alpha",
+    "jsdoc": "^3.4.0",
     "jsdom": "^9.0.0",
+    "minami": "^1.1.1",
     "mocha": "^2.4.5",
     "mocha-jsdom": "^1.1.0",
     "webpack": "^1.12.9",

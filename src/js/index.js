@@ -62,7 +62,6 @@ class ihap {
    * @return {Boolean} returns true on successfull pause
    */
   pause() {
-    console.log('this.pause1')
     this.pauseSong(this.getCurrentSong())
   }
 

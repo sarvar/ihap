@@ -2,22 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: index.js</title>
+    <title>index.js - Documentation</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Source: index.js</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ihap.html">ihap</a><ul class='methods'><li data-type='method'><a href="ihap.html#appendToPlaylist">appendToPlaylist</a></li><li data-type='method'><a href="ihap.html#changeSong">changeSong</a></li><li data-type='method'><a href="ihap.html#emptyPlaylist">emptyPlaylist</a></li><li data-type='method'><a href="ihap.html#getCurrentSong">getCurrentSong</a></li><li data-type='method'><a href="ihap.html#getCurrentSongIndex">getCurrentSongIndex</a></li><li data-type='method'><a href="ihap.html#getNextSong">getNextSong</a></li><li data-type='method'><a href="ihap.html#getPlaylist">getPlaylist</a></li><li data-type='method'><a href="ihap.html#getPreviousSong">getPreviousSong</a></li><li data-type='method'><a href="ihap.html#loadYoutubeIframeApi">loadYoutubeIframeApi</a></li><li data-type='method'><a href="ihap.html#onYoutubeIframeApiReady">onYoutubeIframeApiReady</a></li><li data-type='method'><a href="ihap.html#pause">pause</a></li><li data-type='method'><a href="ihap.html#play">play</a></li><li data-type='method'><a href="ihap.html#playSong">playSong</a></li><li data-type='method'><a href="ihap.html#prependToPlaylist">prependToPlaylist</a></li><li data-type='method'><a href="ihap.html#removeFromPlaylist">removeFromPlaylist</a></li><li data-type='method'><a href="ihap.html#setPlaylist">setPlaylist</a></li><li data-type='method'><a href="ihap.html#skip_next">skip_next</a></li><li data-type='method'><a href="ihap.html#skip_prev">skip_prev</a></li><li data-type='method'><a href="ihap.html#youtubeIframeApiLoaded">youtubeIframeApiLoaded</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#calculate_progress">calculate_progress</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">index.js</h1>
+    
 
     
 
@@ -26,10 +38,12 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+/**
  * module imports
  */
-import ihapAudio from './modules/ihap_audio'
+import ihapAudio from './modules/ihap_source_player/ihap_audio'
 import ihapControls from './modules/ihap_controls'
 import ihapPlaylist from './modules/ihap_playlist'
 import ihapProgressBar from './modules/ihap_progress_bar'
@@ -42,6 +56,7 @@ import ihapSongInformation from './modules/ihap_song_information'
 class ihap {
   /**
    * @constructor
+   * @param {Object} data settings / songs
    */
   constructor(data) {
     // modules
@@ -54,6 +69,7 @@ class ihap {
 
     // props
     this.moving_progress = false
+    this.playing = false
     this.youtube = {
       player: null,
       iframe_api_loaded: false
@@ -78,12 +94,7 @@ class ihap {
    * plays the current song
    */
   play() {
-    let type = this.getCurrentSong().type
-    if (type == 'song') {
-      this.audio.play()
-    } else if (type == 'youtube_video') {
-      this.youtube.player.playVideo()
-    }
+    this.playSong(this.getCurrentSong())
   }
 
   /**
@@ -91,17 +102,7 @@ class ihap {
    * @return {Boolean} returns true on successfull pause
    */
   pause() {
-    console.log('this.pause')
-    let type = this.getCurrentSong().type
-    if (type == 'song') {
-      this.audio.pause()
-    } else if (type == 'youtube_video') {
-      console.log('yt video')
-      if (this.youtube.player) {
-        console.log('player exists')
-        this.youtube.player.pauseVideo()
-      }
-    }
+    this.pauseSong(this.getCurrentSong())
   }
 
   /**
@@ -152,42 +153,41 @@ class ihap {
   emptyPlaylist() {
     this.playlist.empty()
     this.audio.empty()
-    this._resetProgressBar()
+    this._resetProgressBar(0)
     this._updateProgressBar(0)
   }
 
   /**
    * sets a song from the playlist to be the current song
    * @param {Object} song
+   * @param {Boolean} pause
    */
-  changeSong(song) {
-    if (this.playlist.songs.indexOf(song) != undefined) {
-      // pause current element
-      if (this.audio.playing || (this.youtube.player &amp;&amp; (this.youtube.player.getPlayerState() == 1)))
-        this.pause()
-      // set current song
-      this.playlist.current_song_index = this.playlist.songs.indexOf(song)
-      // empty song info
-      this.song_information.emptyMeta()
-      // set new element: set audio or load yt
-      //
+  changeSong(song, pause = true) {
+    // pause current playback
+    if (pause &amp;&amp; this.playing)
+      this.pause()
 
-      if (song.type == 'song') {
-        this.audio.setSong(song)
-      } else {
-        if (!this.youtubeIframeApiLoaded()) {
-          this.loadYoutubeIframeApi()
-        } else {
+    // reset the progress bar
+    this._resetProgressBar(0)
+    this._updateProgressBar(0)
+
+    // empty song info
+    this.song_information.emptyMeta()
+
+    switch (song.type) {
+      case 'youtube':
+        if (this.youtubeIframeApiLoaded()) {
           this.youtube.player.loadVideoById(song.getYoutubeId())
+        } else {
+          this.loadYoutubeIframeApi()
         }
-      }
-
-      this.audio.pause()
-      this._resetProgressBar()
-      this._updateProgressBar(0)
-      if (this.audio.playing)
-        this.audio.play()
+        break;
+      default:
+        this.audio.setSong(song)
     }
+
+    // set current song
+    this.playlist.current_song_index = this.playlist.songs.indexOf(song)
   }
 
   /**
@@ -294,10 +294,10 @@ class ihap {
 
   /**
    * resets the progressbars values to 0
+   * @param {number} song_duration
    * @private
    */
-  _resetProgressBar() {
-    let song_duration = this.audio.element.duration
+  _resetProgressBar(song_duration) {
     if (song_duration == undefined) {
       this.progress_bar.reset(0.0)
     } else {
@@ -309,6 +309,27 @@ class ihap {
    * ==================== yt
    */
 
+  playSong(song) {
+    switch (song.type) {
+      case 'youtube':
+        this.youtube.player.playVideo()
+        break
+      default:
+        this.audio.play()
+    }
+    this.playing = true
+  }
+
+  pauseSong(song) {
+    switch (song.type) {
+      case 'youtube':
+        this.youtube.player.pauseVideo()
+        break
+      default:
+        this.audio.pause()
+    }
+    this.playing = false
+  }
 
   /**
    * check if the youtube iframe api is loaded
@@ -351,25 +372,20 @@ class ihap {
       events: {
         'onReady': function (event) {
           event.target.playVideo();
+          that._resetProgressBar(that.youtube.player.getDuration())
         },
         'onStateChange': function (data) {
-          console.log('State: ' + data.data)
           if (data.data == 1) {
             that.song_information.updateMeta(that.youtube.player.getVideoData().title, '')
-            let duration = that.youtube.player.getDuration()
-            that.progress_bar.element.setAttribute('aria-valuemax', duration)
             // update progressbar every 500ms
             setInterval(function () {
               that._updateProgressBar(that.youtube.player.getCurrentTime())
             }, 500)
-          } else {
-            console.log('wrong state: ' + data.data)
           }
-          console.log('state changed')
         }
       }
     });
-
+    this.playing = true
   }
 
 
@@ -393,7 +409,7 @@ class ihap {
    */
   _loadFirstSong() {
     if (this.playlist.songs != undefined &amp;&amp; this.playlist.songs.length != 0) {
-      if (this.audio.is_empty())
+      if (this.audio.isEmpty())
         this.changeSong(this.playlist.songs[0])
     }
   }
@@ -422,7 +438,8 @@ class ihap {
     })
     // reload the progress_bar after the song changed
     this.audio.element.addEventListener('canplay', function () {
-      self._resetProgressBar()
+      let duration = self.audio.element.duration
+      self._resetProgressBar(duration)
       self._updateSongInformation()
     })
     // autoplay next song on finishing one
@@ -471,8 +488,16 @@ class ihap {
     })
 
     this.progress_bar.markup.addEventListener('mouseup', function (e) {
+      let song = self.getCurrentSong()
       let duration = self.progress_bar.element.getAttribute('aria-valuemax')
-      self.audio.element.currentTime = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration)
+      let time = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration)
+      switch (song.type) {
+        case 'youtube':
+          self.youtube.player.seekTo(time)
+          break;
+        default:
+          self.audio.element.currentTime = time
+      }
       self.moving_progress = false
     })
   }
@@ -516,17 +541,13 @@ export {
 
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ihap.html">ihap</a></li></ul><h3>Global</h3><ul><li><a href="global.html#calculate_progress">calculate_progress</a></li></ul>
-</nav>
-
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sat Jun 11 2016 15:29:37 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Jun 19 2016 21:27:06 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
 </body>
 </html>
