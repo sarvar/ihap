@@ -4,6 +4,7 @@
  * module imports
  */
 import ihapAudio from './modules/ihap_source_player/ihap_audio'
+import ihapYoutube from './modules/ihap_source_player/ihap_youtube'
 import ihapControls from './modules/ihap_controls'
 import ihapPlaylist from './modules/ihap_playlist'
 import ihapProgressBar from './modules/ihap_progress_bar'
@@ -21,7 +22,7 @@ class ihap {
   constructor(data) {
     // modules
     this.settings = new ihapSettings(data.settings)
-    this.audio = new ihapAudio()
+    //this.audio = new ihapAudio()
     this.controls = new ihapControls()
     this.playlist = new ihapPlaylist(data.songs)
     this.progress_bar = new ihapProgressBar()
@@ -34,6 +35,8 @@ class ihap {
       player: null,
       iframe_api_loaded: false
     }
+
+    this.player = null
 
     this._initializeihap()
   }
@@ -111,10 +114,10 @@ class ihap {
    * removes all songs from the playlist (visually and in the background) and stops playback
    */
   emptyPlaylist() {
-    this.playlist.empty()
-    this.audio.empty()
-    this._resetProgressBar(0)
-    this._updateProgressBar(0)
+    this.playlist.empty();
+    //this.audio.empty()
+    this._resetProgressBar(0);
+    this._updateProgressBar(0);
   }
 
   /**
@@ -125,26 +128,27 @@ class ihap {
   changeSong(song, pause = true) {
     // pause current playback
     if (pause && this.playing)
-      this.pause()
+      this.pause();
 
     // reset the progress bar
-    this._resetProgressBar(0)
-    this._updateProgressBar(0)
+    this._resetProgressBar(0);
+    this._updateProgressBar(0);
 
     // empty song info
-    this.song_information.emptyMeta()
-
+    this.song_information.emptyMeta();
     switch (song.type) {
       case 'youtube':
-        if (this.youtubeIframeApiLoaded()) {
-          this.youtube.player.loadVideoById(song.getYoutubeId())
-        } else {
-          this.loadYoutubeIframeApi()
-        }
+        this.player = new ihapYoutube(song);
+        // if (this.youtubeIframeApiLoaded()) {
+        //   this.youtube.player.loadVideoById(song.getYoutubeId())
+        // } else {
+        //   this.loadYoutubeIframeApi()
+        // }
         break;
       default:
-        this.audio.setSong(song)
+        this.player = new ihapAudio(song);
     }
+    //this.player.setSong(song);
 
     // set current song
     this.playlist.current_song_index = this.playlist.songs.indexOf(song)
@@ -244,7 +248,7 @@ class ihap {
    * @private
    */
   _createComponents() {
-    this.settings.container.appendChild(this.audio.markup)
+//    this.settings.container.appendChild(this.audio.markup)
     this.settings.container.appendChild(this.controls.markup)
     this.settings.container.appendChild(this.progress_bar.markup)
     this.settings.container.appendChild(this.song_information.markup)
@@ -269,25 +273,36 @@ class ihap {
    * ==================== yt
    */
 
+  loadPlayer() {
+    // load player
+    // init module
+    // append to dom
+  }
+
+  unloadPlayer() {
+    this.player.unload()
+    // remove event listeners
+  }
+
   playSong(song) {
-    switch (song.type) {
-      case 'youtube':
-        this.youtube.player.playVideo()
-        break
-      default:
-        this.audio.play()
-    }
+    this.player.play()
+    // switch (song.type) {
+    //   case 'youtube':
+    //     this.youtube.player.playVideo()
+    //     break
+    //   default:
+    // }
     this.playing = true
   }
 
   pauseSong(song) {
-    switch (song.type) {
-      case 'youtube':
-        this.youtube.player.pauseVideo()
-        break
-      default:
-        this.audio.pause()
-    }
+    this.player.pause()
+    // switch (song.type) {
+    //   case 'youtube':
+    //     this.youtube.player.pauseVideo()
+    //     break
+    //   default:
+    // }
     this.playing = false
   }
 
@@ -369,8 +384,8 @@ class ihap {
    */
   _loadFirstSong() {
     if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
-      if (this.audio.isEmpty())
-        this.changeSong(this.playlist.songs[0])
+//      if (this.audio.isEmpty())
+      this.changeSong(this.playlist.songs[0])
     }
   }
 
@@ -379,7 +394,7 @@ class ihap {
    * @private
    */
   _addListeners() {
-    this._addAudioListeners()
+    //this._addAudioListeners()
     this._addControlsListeners()
     this._addProgressListeners()
   }

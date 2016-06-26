@@ -1,48 +1,80 @@
 /**
- * general source player. audio and youtube inherit from this class
+ * General source player, acts as an abstract class.
+ * Audio and youtube inherit from this class.
  * @private
  */
 class ihapSourcePlayer {
   /**
-   * the source player module
+   * The source player module
    * @constructor
+   * @param {Object} song
    * @private
    */
-  constructor() {
-    this.markup = null
-    this.element = null
+  constructor(song) {
+    // emulate abstract class behaviour
+    if (new.target === ihapSourcePlayer) {
+      throw new TypeError("Cannot construct abstract instances directly");
+    }
+
+    this.markup = null;
+    this.element = null;
+    this.song = song;
+    this.playing = false;
   }
 
   /**
-   * stub for the createMarkup method
+   * Stub for the createMarkup method
    */
   createMarkup() {}
 
   /**
-   * stub for the play method
+   * Stub for the play method. Responsibilites:
+   * * Play the current song
+   * * Do nothing if no song is set or song is already playing
+   * @return {Boolean} true if song is playing
    */
   play() {}
 
   /**
-   * stub for the pause method
+   * Stub for the pause method. Responsibilites:
+   * * Pause the current song
+   * * Do nothing if no song is set or song is already playing
+   * @return {Boolean} true if song is paused
    */
   pause() {}
 
   /**
-   * stub for the empty method
+   * Stub for the empty method. Responsibilites:
+   * * Unload currentSong
+   * * Reset timers
+   * @return {Boolean} isEmpty
    */
   empty() {}
 
   /**
-   * stub for the isEmpty method
+   * Stub for the isEmpty method. Responsibilites:
+   * * Check if empty worked
+   * @return {Boolean} isEmpty
    */
   isEmpty() {}
 
   /**
-   * stub for the setSong method
+   * Stub for the setSong method. Responsibilites:
+   * * Load / set the given song to the player
+   * * Do not play automatically
+   * @param {Object} song the song to set
+   * @return {Boolean} true if given song == currentSong
    */
-  setSong() {}
+  setSong(song) {} // eslint-disable-line no-unused-vars
+
+  /**
+   * Stub for unload method. Responsibilites:
+   * * Destroy self, including event listeners
+   */
+  unload(){}
 
 }
-
+/**
+ * Export the module
+ */
 export {ihapSourcePlayer as default}

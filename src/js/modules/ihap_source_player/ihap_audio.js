@@ -1,5 +1,5 @@
 /**
- * module imports
+ * Module imports
  */
 import ihapSourcePlayer from '../ihap_source_player'
 
@@ -9,15 +9,15 @@ import ihapSourcePlayer from '../ihap_source_player'
  */
 class ihapAudio extends ihapSourcePlayer {
   /**
-   * the audio module
+   * The audio module
    * @constructor
    * @private
    */
-  constructor() {
-    super()
-    this.playing = false
+  constructor(song) {
+    super(song);
 
-    this.createMarkup()
+    this.createMarkup();
+    this.setSong(song);
   }
 
   /**
@@ -25,19 +25,19 @@ class ihapAudio extends ihapSourcePlayer {
    */
   createMarkup() {
     // wrapper
-    let player_wrapper = document.createElement('div')
-    player_wrapper.setAttribute('id', 'ihap_player_wrapper')
+    let player_wrapper = document.createElement('div');
+    player_wrapper.setAttribute('id', 'ihap_player_wrapper');
 
     // actual audio element
-    let audio_player = document.createElement('audio')
-    audio_player.setAttribute('id', 'ihap_player')
-    audio_player.setAttribute('src', '')
+    let audio_player = document.createElement('audio');
+    audio_player.setAttribute('id', 'ihap_player');
+    audio_player.setAttribute('src', '');
 
     // combine wrapper & audio element
-    player_wrapper.appendChild(audio_player)
+    player_wrapper.appendChild(audio_player);
     // set object properties
-    this.markup = player_wrapper
-    this.element = audio_player
+    this.markup = player_wrapper;
+    this.element = audio_player;
   }
 
   /**
@@ -45,16 +45,16 @@ class ihapAudio extends ihapSourcePlayer {
    */
   play() {
     if (this.element.readyState == 4) {
-      this.onCanPlay()
+      this.onCanPlay();
     } else {
-      this.element.addEventListener('canplay', this.onCanPlay())
+      this.element.addEventListener('canplay', this.onCanPlay());
     }
   }
 
   onCanPlay() {
     if (!this.isEmpty()) {
-      this.element.play()
-      this.playing = true
+      this.element.play();
+      this.playing = true;
     }
   }
 
@@ -62,22 +62,22 @@ class ihapAudio extends ihapSourcePlayer {
    * pause the currently playing song
    */
   pause() {
-    this.element.pause()
-    this.playing = !this.element.paused
-    return this.element.paused
+    this.element.pause();
+    this.playing = !this.element.paused;
+    return this.element.paused;
   }
 
   /**
    * reset the audio element to inital state without src or duration
    */
   empty() {
-    this.element.currentTime = 0 // property of actual audio element
-    this.element.setAttribute('src', '') // empty src
-    this.element.setAttribute('aria-valuemax', '0') // set duration to 0
+    this.element.currentTime = 0; // property of actual audio element
+    this.element.setAttribute('src', ''); // empty src
+    this.element.setAttribute('aria-valuemax', '0'); // set duration to 0
   }
 
   isEmpty() {
-    return this.element.getAttribute('src') == ''
+    return this.element.getAttribute('src') == '';
   }
 
   /**
@@ -86,12 +86,18 @@ class ihapAudio extends ihapSourcePlayer {
    */
   setSong(song) {
     if (song != undefined && song.url != undefined) {
-      this.element.currentTime = 0
-      this.element.setAttribute('src', song.url)
-      this.element.load()
+      this.element.currentTime = 0;
+      this.element.setAttribute('src', song.url);
+      this.element.load();
     } else {
-      throw new Error('Invalid song')
+      throw new Error('Invalid song');
     }
+  }
+
+  unload(){
+    this.element.stop();
+    this.element.remove();
+    // remove event listeners
   }
 }
 export {ihapAudio as default}
