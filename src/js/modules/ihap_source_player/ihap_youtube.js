@@ -3,6 +3,7 @@
  */
 import ihapSourcePlayer from '../ihap_source_player';
 import * as YoutubeApiHelper from '../helpers/youtube_api_helper';
+import * as ihapEvents from '../helpers/custom_events'
 
 /**
  * ihap youtube module
@@ -22,12 +23,26 @@ class ihapYoutube extends ihapSourcePlayer {
   }
 
   createMarkup() {
+    let youtube_wrapper = document.createElement('div')
+    youtube_wrapper.setAttribute('id', 'youtube_wrapper')
+
+    // set properties
+    this.markup = youtube_wrapper
   }
 
   play() {
+    console.log('play clicked')
+    if (this.element != null) {
+      this.element.playVideo()
+      let event = new Event('play')
+      this.markup.dispatchEvent(event)
+    }
   }
 
   pause() {
+    if (this.element != null) {
+      this.element.pauseVideo()
+    }
   }
 
   empty() {
@@ -39,9 +54,9 @@ class ihapYoutube extends ihapSourcePlayer {
   setSong(song) {
     console.log('yt setSong')
     let that = this;
-    let p = YoutubeApiHelper.loadYoutubeApi(
+    YoutubeApiHelper.loadYoutubeApi(
       function () {
-        YoutubeApiHelper.loadYoutubeVideo(
+        that.element = YoutubeApiHelper.loadYoutubeVideo(
           'youtube_player',
           song.getYoutubeId(),
           function (e) {
@@ -67,26 +82,27 @@ class ihapYoutube extends ihapSourcePlayer {
 
   /**
    * Callback that is passed to the onReady event of the YT api
-   * @param e
+   * @param event
    */
-  onYoutubeReady(e) {
-    console.log('YT Video ready: ' + e.data)
+  onYoutubeReady(event) {
+    console.log('YT Video ready: ')
+    this.element = event.target
   }
 
   /**
    * Callback that is passed to the onStateChange event of the YT api
-   * @param e
+   * @param event
    */
-  onYoutubeStateChange(e) {
-    console.log('New state: ' + e.data)
+  onYoutubeStateChange(event) {
+    console.log('New state: ' + event.data)
   }
 
   /**
    * Callback that is passed to the onError event of the YT api
-   * @param e
+   * @param event
    */
-  onYoutubeError(e) {
-    console.log('Youtube error: ' + e.data)
+  onYoutubeError(event) {
+    console.log('Youtube error: ' + event.data)
   }
 }
 

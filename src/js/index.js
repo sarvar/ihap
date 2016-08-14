@@ -126,6 +126,7 @@ class ihap {
    * @param {Boolean} pause
    */
   changeSong(song, pause = true) {
+    let wasPlaying = this.playing
     // pause current playback
     if (pause && this.playing)
       this.pause();
@@ -139,19 +140,19 @@ class ihap {
     switch (song.type) {
       case 'youtube':
         this.player = new ihapYoutube(song);
-        // if (this.youtubeIframeApiLoaded()) {
-        //   this.youtube.player.loadVideoById(song.getYoutubeId())
-        // } else {
-        //   this.loadYoutubeIframeApi()
-        // }
         break;
       default:
         this.player = new ihapAudio(song);
+        break;
     }
-    //this.player.setSong(song);
-
+    this.player.markup.addEventListener('play', function (e) {
+      console.log('i just received the play event! yay')
+    })
     // set current song
     this.playlist.current_song_index = this.playlist.songs.indexOf(song)
+    if (wasPlaying) {
+      this.play();
+    }
   }
 
   /**
@@ -269,10 +270,6 @@ class ihap {
     }
   }
 
-  /**
-   * ==================== yt
-   */
-
   loadPlayer() {
     // load player
     // init module
@@ -286,81 +283,12 @@ class ihap {
 
   playSong(song) {
     this.player.play()
-    // switch (song.type) {
-    //   case 'youtube':
-    //     this.youtube.player.playVideo()
-    //     break
-    //   default:
-    // }
     this.playing = true
   }
 
   pauseSong(song) {
     this.player.pause()
-    // switch (song.type) {
-    //   case 'youtube':
-    //     this.youtube.player.pauseVideo()
-    //     break
-    //   default:
-    // }
     this.playing = false
-  }
-
-  /**
-   * check if the youtube iframe api is loaded
-   * @returns {boolean}
-   */
-  youtubeIframeApiLoaded() {
-    return this.youtube.iframe_api_loaded && (window.yt != undefined)
-  }
-
-  /**
-   * loads the youtube iframe api
-   */
-  loadYoutubeIframeApi() {
-    if (!this.youtubeIframeApiLoaded()) {
-      let that = this
-      // load yt api asynchronously
-      var tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      // insert iframe api before the first scripttag
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-      window.onYouTubeIframeAPIReady = function () {
-        that.youtube.iframe_api_loaded = true
-        that.onYoutubeIframeApiReady()
-      }
-    }
-  }
-
-  /**
-   * callback
-   */
-  onYoutubeIframeApiReady() {
-    let that = this
-    let song = this.getCurrentSong()
-    this.youtube.player = new YT.Player('youtube_player', {
-      height: '390',
-      width: '640',
-      videoId: song.getYoutubeId(),
-      events: {
-        'onReady': function (event) {
-          event.target.playVideo();
-          that._resetProgressBar(that.youtube.player.getDuration())
-        },
-        'onStateChange': function (data) {
-          if (data.data == 1) {
-            that.song_information.updateMeta(that.youtube.player.getVideoData().title, '')
-            // update progressbar every 500ms
-            setInterval(function () {
-              that._updateProgressBar(that.youtube.player.getCurrentTime())
-            }, 500)
-          }
-        }
-      }
-    });
-    this.playing = true
   }
 
 

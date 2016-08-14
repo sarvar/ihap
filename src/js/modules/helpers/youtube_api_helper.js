@@ -17,13 +17,13 @@ export function loadYoutubeApi(callback) {
     // insert iframe api before the first scripttag
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    // fired then api is loaded successfully
+    // fired when api is loaded successfully
     window.onYouTubeIframeAPIReady = function () {
       console.log('callback will come!')
       return callback()
     }
   } else {
-    return callback
+    return callback()
   }
 }
 
@@ -38,7 +38,6 @@ export function loadYoutubeApi(callback) {
  */
 export function loadYoutubeVideo(wrapper, videoId, onReady, onStateChange, onError) {
   console.log('loadYoutubeVideo')
-  console.log(arguments)
   // eslint-disable-next-line
   return new YT.Player(wrapper, {
     height: '390',
