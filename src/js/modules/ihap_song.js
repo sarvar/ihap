@@ -9,10 +9,12 @@ class ihapSong {
    * @private
    */
   constructor(song) {
-    this.title = song.title
-    this.artist = song.artist
-    this.id = song.id
-    this.url = song.url
+    this.title = song.title;
+    this.artist = song.artist;
+    this.id = song.id;
+    this.url = song.url;
+
+    this.container = song.container; // container for yt
 
     this.type = this._getType()
   }
@@ -23,7 +25,7 @@ class ihapSong {
    * @private
    */
   _getType() {
-    let regex = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/g
+    let regex = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/g;
     if (this.url.match(regex)) {
       return 'youtube'
     } else {

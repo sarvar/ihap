@@ -95,8 +95,8 @@ class ihapAudio extends ihapSourcePlayer {
   }
 
   unload(){
-    this.element.stop();
-    this.element.remove();
+    // this.element.stop();
+    // this.element.remove();
     // remove event listeners
   }
 }

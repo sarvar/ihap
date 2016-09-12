@@ -135,6 +135,9 @@ class ihap {
     this._resetProgressBar(0);
     this._updateProgressBar(0);
 
+    if (this.player != null)
+      this.unloadPlayer();
+
     // empty song info
     this.song_information.emptyMeta();
     switch (song.type) {
@@ -277,7 +280,7 @@ class ihap {
   }
 
   unloadPlayer() {
-    this.player.unload()
+    this.player.unload();
     // remove event listeners
   }
 
