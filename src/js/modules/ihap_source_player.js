@@ -73,6 +73,12 @@ class ihapSourcePlayer {
    */
   unload(){}
 
+  /**
+   * Stub for onTimeUpdate method
+   * @param callback
+   */
+  onTimeUpdate(callback){}
+
 }
 /**
  * Export the module

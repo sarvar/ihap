@@ -58,6 +58,13 @@ class ihapAudio extends ihapSourcePlayer {
     }
   }
 
+  onTimeUpdate(){
+    let self = this;
+    this.element.addEventListener('timeupdate', function() {
+      this.currentTime = self.element.currentTime
+    })
+  }
+
   /**
    * pause the currently playing song
    */

@@ -126,6 +126,7 @@ class ihap {
    * @param {Boolean} pause
    */
   changeSong(song, pause = true) {
+    let self = this;
     let wasPlaying = this.playing
     // pause current playback
     if (pause && this.playing)
@@ -135,11 +136,12 @@ class ihap {
     this._resetProgressBar(0);
     this._updateProgressBar(0);
 
-    if (this.player != null)
-      this.unloadPlayer();
+    // destroy existing players
+    this.unloadPlayer();
 
     // empty song info
     this.song_information.emptyMeta();
+
     switch (song.type) {
       case 'youtube':
         this.player = new ihapYoutube(song);
@@ -154,6 +156,13 @@ class ihap {
     // set current song
     this.playlist.current_song_index = this.playlist.songs.indexOf(song)
     this._updateSongInformation();
+
+
+    this.player.onTimeUpdate(function () {
+      console.log('index onTimeUpdate')
+      self._updateProgressBar();
+    })
+
     if (wasPlaying) {
       this.play();
     }
@@ -281,7 +290,8 @@ class ihap {
   }
 
   unloadPlayer() {
-    this.player.unload();
+    if (this.player != null)
+      this.player.unload();
     // remove event listeners
   }
 
@@ -307,6 +317,8 @@ class ihap {
    * @private
    */
   _updateProgressBar(current_time) {
+    console.log('index updateProgressBar')
+    console.log(arguments)
     this.progress_bar.updateBar(current_time)
   }
 
