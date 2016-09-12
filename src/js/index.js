@@ -153,6 +153,7 @@ class ihap {
     })
     // set current song
     this.playlist.current_song_index = this.playlist.songs.indexOf(song)
+    this._updateSongInformation();
     if (wasPlaying) {
       this.play();
     }

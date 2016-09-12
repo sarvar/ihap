@@ -46,7 +46,7 @@ export default class ihapSongInformation {
    * @param author
    */
   updateMeta(title, author) {
-    this.markup.innerHTML = title + ' ' + author
+    this.markup.innerHTML = title + ' - ' + author
   }
 
   updateTime() {
