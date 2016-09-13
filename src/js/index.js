@@ -144,10 +144,10 @@ class ihap {
 
     switch (song.type) {
       case 'youtube':
-        this.player = new ihapYoutube(song);
+        this.player = new ihapYoutube(song, self.progress_bar);
         break;
       default:
-        this.player = new ihapAudio(song);
+        this.player = new ihapAudio(song, self.progress_bar);
         break;
     }
     this.player.markup.addEventListener('play', function (e) {
@@ -350,17 +350,17 @@ class ihap {
   _addAudioListeners() {
     let self = this
     // update the progress_bar to match the current timestamp
-    this.audio.element.addEventListener("timeupdate", function () {
-      if (self.moving_progress == false) {
-        self._updateProgressBar(this.currentTime)
-      }
-    })
+    // this.audio.element.addEventListener("timeupdate", function () {
+    //   if (self.moving_progress == false) {
+    //     self._updateProgressBar(this.currentTime)
+    //   }
+    // })
     // reload the progress_bar after the song changed
-    this.audio.element.addEventListener('canplay', function () {
-      let duration = self.audio.element.duration
-      self._resetProgressBar(duration)
-      self._updateSongInformation()
-    })
+    // this.audio.element.addEventListener('canplay', function () {
+    //   let duration = self.audio.element.duration
+    //   self._resetProgressBar(duration)
+    //   self._updateSongInformation()
+    // })
     // autoplay next song on finishing one
     this.audio.element.addEventListener('ended', function () {
       self.skip_next()
@@ -392,31 +392,24 @@ class ihap {
    * @private
    */
   _addProgressListeners() {
-    let self = this
+    let self = this;
     this.progress_bar.markup.addEventListener('mousedown', function (e) {
-      if (e.preventDefault) e.preventDefault()
+      if (e.preventDefault) e.preventDefault();
       self.moving_progress = true
-    })
+    });
 
     this.progress_bar.markup.addEventListener('mousemove', function (e) {
       if (self.moving_progress) {
-        let duration = self.progress_bar.element.getAttribute('aria-valuemax')
-        let progress = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration)
+        let duration = self.progress_bar.element.getAttribute('aria-valuemax');
+        let progress = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration);
         self._updateProgressBar(progress)
       }
-    })
+    });
 
     this.progress_bar.markup.addEventListener('mouseup', function (e) {
-      let song = self.getCurrentSong()
-      let duration = self.progress_bar.element.getAttribute('aria-valuemax')
-      let time = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration)
-      switch (song.type) {
-        case 'youtube':
-          self.youtube.player.seekTo(time)
-          break;
-        default:
-          self.audio.element.currentTime = time
-      }
+      let duration = self.progress_bar.element.getAttribute('aria-valuemax');
+      let time = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration);
+      self.player.seekTo(time);
       self.moving_progress = false
     })
   }
@@ -426,9 +419,9 @@ class ihap {
    * @private
    */
   _updateSongInformation() {
-    let song = this.getCurrentSong()
-    let title = song.title
-    let artist = song.artist
+    let song = this.getCurrentSong();
+    let title = song.title;
+    let artist = song.artist;
 
     this.song_information.updateMeta(title, artist)
   }

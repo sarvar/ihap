@@ -13,8 +13,8 @@ class ihapAudio extends ihapSourcePlayer {
    * @constructor
    * @private
    */
-  constructor(song) {
-    super(song);
+  constructor(song, playlist) {
+    super(song, playlist);
 
     this.createMarkup();
     this.setSong(song);
@@ -53,16 +53,21 @@ class ihapAudio extends ihapSourcePlayer {
 
   onCanPlay() {
     if (!this.isEmpty()) {
+      let self = this;
       this.element.play();
       this.playing = true;
-    }
-  }
 
-  onTimeUpdate(){
-    let self = this;
-    this.element.addEventListener('timeupdate', function() {
-      this.currentTime = self.element.currentTime
-    })
+      let song_duration = self.element.duration;
+      if (song_duration == undefined) {
+        this.progress_bar.reset(0.0)
+      } else {
+        this.progress_bar.reset(song_duration)
+      }
+
+      this.element.addEventListener('timeupdate', function () {
+        self.progress_bar.updateBar(self.element.currentTime)
+      })
+    }
   }
 
   /**
@@ -101,10 +106,14 @@ class ihapAudio extends ihapSourcePlayer {
     }
   }
 
-  unload(){
+  unload() {
     // this.element.stop();
     // this.element.remove();
     // remove event listeners
+  }
+
+  seekTo(time) {
+    this.element.currentTime = time
   }
 }
 export {ihapAudio as default}

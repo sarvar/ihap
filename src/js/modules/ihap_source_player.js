@@ -8,9 +8,10 @@ class ihapSourcePlayer {
    * The source player module
    * @constructor
    * @param {Object} song
+   * @param {Object} progress_bar
    * @private
    */
-  constructor(song) {
+  constructor(song, progress_bar) {
     // emulate abstract class behaviour
     if (new.target === ihapSourcePlayer) {
       throw new TypeError("Cannot construct abstract instances directly");
@@ -19,13 +20,15 @@ class ihapSourcePlayer {
     this.markup = null;
     this.element = null;
     this.song = song;
+    this.progress_bar = progress_bar;
     this.playing = false;
   }
 
   /**
    * Stub for the createMarkup method
    */
-  createMarkup() {}
+  createMarkup() {
+  }
 
   /**
    * Stub for the play method. Responsibilites:
@@ -33,7 +36,8 @@ class ihapSourcePlayer {
    * * Do nothing if no song is set or song is already playing
    * @return {Boolean} true if song is playing
    */
-  play() {}
+  play() {
+  }
 
   /**
    * Stub for the pause method. Responsibilites:
@@ -41,7 +45,8 @@ class ihapSourcePlayer {
    * * Do nothing if no song is set or song is already playing
    * @return {Boolean} true if song is paused
    */
-  pause() {}
+  pause() {
+  }
 
   /**
    * Stub for the empty method. Responsibilites:
@@ -49,14 +54,16 @@ class ihapSourcePlayer {
    * * Reset timers
    * @return {Boolean} isEmpty
    */
-  empty() {}
+  empty() {
+  }
 
   /**
    * Stub for the isEmpty method. Responsibilites:
    * * Check if empty worked
    * @return {Boolean} isEmpty
    */
-  isEmpty() {}
+  isEmpty() {
+  }
 
   /**
    * Stub for the setSong method. Responsibilites:
@@ -65,20 +72,30 @@ class ihapSourcePlayer {
    * @param {Object} song the song to set
    * @return {Boolean} true if given song == currentSong
    */
-  setSong(song) {} // eslint-disable-line no-unused-vars
+  setSong(song) {
+  } // eslint-disable-line no-unused-vars
 
   /**
    * Stub for unload method. Responsibilites:
    * * Destroy self, including event listeners
    */
-  unload(){}
+  unload() {
+  }
 
   /**
    * Stub for onTimeUpdate method
    * @param callback
    */
-  onTimeUpdate(callback){}
+  onTimeUpdate(callback) {
+  }
 
+  /**
+   * Stub for seekTo meethod
+   * @param time
+   */
+  seekTo(time){
+
+  }
 }
 /**
  * Export the module
