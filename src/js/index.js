@@ -317,8 +317,6 @@ class ihap {
    * @private
    */
   _updateProgressBar(current_time) {
-    console.log('index updateProgressBar')
-    console.log(arguments)
     this.progress_bar.updateBar(current_time)
   }
 
