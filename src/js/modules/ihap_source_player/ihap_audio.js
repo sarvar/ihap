@@ -107,9 +107,9 @@ class ihapAudio extends ihapSourcePlayer {
   }
 
   unload() {
-    // this.element.stop();
-    // this.element.remove();
-    // remove event listeners
+    this.element.pause();
+    this.element.remove();
+    // remove event listeners? maybe not needed because element gets removed?
   }
 
   seekTo(time) {

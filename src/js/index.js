@@ -178,9 +178,12 @@ class ihap {
    * @return {Array} the new playlist
    */
   appendToPlaylist(songs) {
-    this.playlist.appendSongs(songs)
-    this._loadFirstSong()
-    return this.getPlaylist()
+    this.playlist.appendSongs(songs);
+
+    if (!this.player) {
+      this._loadFirstSong();
+    }
+    return this.getPlaylist();
   }
 
   /**
