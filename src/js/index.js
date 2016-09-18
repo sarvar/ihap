@@ -116,10 +116,10 @@ class ihap {
   /**
    * sets a song from the playlist to be the current song
    * @param {Object} song
-   * @param {Boolean} pause
    */
-  changeSong(song, pause = true) {
+  changeSong(song) {
     let self = this;
+    let was_playing = (this.player && this.player.playing) || false
 
     // reset the progress bar
     this._resetProgressBar(0);
@@ -131,6 +131,8 @@ class ihap {
     // empty song info
     this.song_information.emptyMeta();
 
+    // TODO: rework this. we do not want to pass the progressbar to the player! maybe use mediator pattern for another
+    //   class that handles communication ?
     switch (song.type) {
       case 'youtube':
         this.player = new ihapYoutube(song, self.progress_bar);
@@ -146,11 +148,8 @@ class ihap {
     this.playlist.current_song_index = this.playlist.songs.indexOf(song)
     this._updateSongInformation();
 
-
-    this.player.onTimeUpdate(function () {
-      console.log('index onTimeUpdate')
-      self._updateProgressBar();
-    })
+    if (was_playing)
+      self.play();
   }
 
   /**
@@ -302,8 +301,6 @@ class ihap {
    * @private
    */
   _updateProgressBar(current_time) {
-    console.log('index updateProgressBar')
-    console.log(arguments)
     this.progress_bar.updateBar(current_time)
   }
 
@@ -357,18 +354,26 @@ class ihap {
    * @private
    */
   _addControlsListeners() {
-    let self = this
+    let self = this;
     this.controls.buttons.play.addEventListener('click', function () {
-      self.play()
+      self.play();
+      self.controls.buttons.play.classList.add('active');
+      self.controls.buttons.pause.classList.remove('active');
     })
     this.controls.buttons.pause.addEventListener('click', function () {
-      self.pause()
+      self.pause();
+      self.controls.buttons.pause.classList.add('active');
+      self.controls.buttons.play.classList.remove('active');
     })
     this.controls.buttons.skip_next.addEventListener('click', function () {
       self.skip_next()
+      self.controls.buttons.pause.classList.remove('active');
+      self.controls.buttons.play.classList.remove('active');
     })
     this.controls.buttons.skip_previous.addEventListener('click', function () {
       self.skip_prev()
+      self.controls.buttons.pause.classList.remove('active');
+      self.controls.buttons.play.classList.remove('active');
     })
   }
 
