@@ -1,3 +1,7 @@
+/**
+ * Settings module
+ * simply sets properties based on the options given by the user
+ */
 class ihapSettings {
   /**
    * the settings

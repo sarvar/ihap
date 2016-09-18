@@ -1,3 +1,7 @@
+/**
+ * Song information module
+ * responsible for displaying artist & title, will also be responsible for time 
+ */
 export default class ihapSongInformation {
   /**
    * the song information module

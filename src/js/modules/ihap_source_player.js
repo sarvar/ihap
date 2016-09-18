@@ -72,8 +72,8 @@ class ihapSourcePlayer {
    * @param {Object} song the song to set
    * @return {Boolean} true if given song == currentSong
    */
-  setSong(song) {
-  } // eslint-disable-line no-unused-vars
+  setSong(song) { // eslint-disable-line no-unused-vars
+  }
 
   /**
    * Stub for unload method. Responsibilites:
@@ -86,15 +86,14 @@ class ihapSourcePlayer {
    * Stub for onTimeUpdate method
    * @param callback
    */
-  onTimeUpdate(callback) {
+  onTimeUpdate(callback) { // eslint-disable-line no-unused-vars
   }
 
   /**
    * Stub for seekTo meethod
    * @param time
    */
-  seekTo(time){
-
+  seekTo(time) { // eslint-disable-line no-unused-vars
   }
 }
 /**
