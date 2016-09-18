@@ -20,6 +20,7 @@ class ihapYoutube extends ihapSourcePlayer {
 
     this.createMarkup();
     this.setSong(song);
+    this.progressInterval = null;
   }
 
   createMarkup() {
@@ -32,24 +33,24 @@ class ihapYoutube extends ihapSourcePlayer {
 
   play() {
     console.log('play clicked');
+    let self = this;
     if (this.element != null) {
-      let self = this;
-      this.element.playVideo();
+      self.element.playVideo();
 
       let song_duration = self.element.getDuration();
       if (song_duration == undefined) {
-        this.progress_bar.reset(0.0)
+        self.progress_bar.reset(0.0)
       } else {
-        this.progress_bar.reset(song_duration)
+        self.progress_bar.reset(song_duration)
       }
 
       // there is no listener for currentTime for youtube, we have to poll
-      setInterval(function () {
+      this.progressInterval = setInterval(function () {
         self.progress_bar.updateBar(self.element.getCurrentTime());
       }, 250);
 
       let event = new Event('play');
-      this.markup.dispatchEvent(event);
+      self.markup.dispatchEvent(event);
     }
   }
 
@@ -89,6 +90,7 @@ class ihapYoutube extends ihapSourcePlayer {
 
   unload() {
     this.element.destroy(); // yt api function that removes the iframe and rebuilds the initial dom element
+    window.clearInterval(this.progressInterval)
   }
 
   seekTo(time) {
