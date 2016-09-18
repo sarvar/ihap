@@ -1,6 +1,6 @@
 /**
  * General source player, acts as an abstract class.
- * Audio and youtube inherit from this class.
+ * Audio and youtube extend  this class.
  * @private
  */
 class ihapSourcePlayer {

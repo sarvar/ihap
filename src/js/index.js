@@ -21,24 +21,17 @@ class ihap {
    */
   constructor(data) {
     // modules
-    this.settings = new ihapSettings(data.settings)
-    //this.audio = new ihapAudio()
-    this.controls = new ihapControls()
-    this.playlist = new ihapPlaylist(data.songs)
-    this.progress_bar = new ihapProgressBar()
-    this.song_information = new ihapSongInformation()
+    this.settings = new ihapSettings(data.settings);
+    this.controls = new ihapControls();
+    this.playlist = new ihapPlaylist(data.songs);
+    this.progress_bar = new ihapProgressBar();
+    this.song_information = new ihapSongInformation();
+    this.player = null;
 
     // props
-    this.moving_progress = false
-    this.playing = false
-    this.youtube = {
-      player: null,
-      iframe_api_loaded: false
-    }
+    this.moving_progress = false;
 
-    this.player = null
-
-    this._initializeihap()
+    this._initializeihap();
   }
 
   /**
@@ -127,10 +120,6 @@ class ihap {
    */
   changeSong(song, pause = true) {
     let self = this;
-    let wasPlaying = this.playing
-    // pause current playback
-    if (pause && this.playing)
-      this.pause();
 
     // reset the progress bar
     this._resetProgressBar(0);
@@ -162,10 +151,6 @@ class ihap {
       console.log('index onTimeUpdate')
       self._updateProgressBar();
     })
-
-    if (wasPlaying) {
-      this.play();
-    }
   }
 
   /**
@@ -262,7 +247,6 @@ class ihap {
    * @private
    */
   _createComponents() {
-//    this.settings.container.appendChild(this.audio.markup)
     this.settings.container.appendChild(this.controls.markup)
     this.settings.container.appendChild(this.progress_bar.markup)
     this.settings.container.appendChild(this.song_information.markup)
@@ -297,12 +281,10 @@ class ihap {
 
   playSong(song) {
     this.player.play()
-    this.playing = true
   }
 
   pauseSong(song) {
     this.player.pause()
-    this.playing = false
   }
 
 
