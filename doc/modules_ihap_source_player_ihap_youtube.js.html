@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>modules/ihap_song_information.js - Documentation</title>
+    <title>modules/ihap_source_player/ihap_youtube.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">modules/ihap_song_information.js</h1>
+    <h1 class="page-title">modules/ihap_source_player/ihap_youtube.js</h1>
     
 
     
@@ -39,65 +39,135 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Song information module
- * responsible for displaying artist &amp; title, will also be responsible for time 
+ * module imports
  */
-export default class ihapSongInformation {
+import ihapSourcePlayer from '../ihap_source_player';
+import * as YoutubeApiHelper from '../helpers/youtube_api_helper';
+import * as ihapEvents from '../helpers/custom_events';
+
+/**
+ * ihap youtube module
+ * @private
+ */
+class ihapYoutube extends ihapSourcePlayer {
   /**
-   * the song information module
+   * the youtube module
    * @constructor
    * @private
    */
-  constructor() {
-    this.markup = null
-    this.element = null
+  constructor(song, progress_bar) {
+    super(song, progress_bar);
 
-    this.createMarkup()
+    this.createMarkup();
+    this.setSong(song);
+    this.progressInterval = null;
   }
 
-  /**
-   * creates the html markup for the song information
-   */
-	createMarkup() {
-    // wrapper
-		let song_information_wrapper = document.createElement('div')
-		song_information_wrapper.setAttribute('id', 'ihap_song_information_wrapper')
-		song_information_wrapper.setAttribute('class', 'ihap_song_information_wrapper')
-
-    // actual info div
-		let song_information = document.createElement('div')
-		song_information.setAttribute('id', 'ihap_song_information_title')
-		song_information.setAttribute('class', 'ihap_song_information_title')
-
-    // concat
-		song_information_wrapper.appendChild(song_information)
+  createMarkup() {
+    let youtube_wrapper = document.createElement('div');
+    youtube_wrapper.setAttribute('id', 'youtube_wrapper');
 
     // set properties
-		this.element = song_information
-		this.markup = song_information_wrapper
-	}
+    this.markup = youtube_wrapper
+  }
 
-  /**
-   * empty self
-   */
-  emptyMeta() {
-    this.element.innerHTML = ''
+  play() {
+    console.log('play clicked');
+    let self = this;
+    if (this.element != null) {
+      self.element.playVideo();
+
+      let song_duration = self.element.getDuration();
+      if (song_duration == undefined) {
+        self.progress_bar.reset(0.0)
+      } else {
+        self.progress_bar.reset(song_duration)
+      }
+
+      // there is no listener for currentTime for youtube, we have to poll
+      this.progressInterval = setInterval(function () {
+        self.progress_bar.updateBar(self.element.getCurrentTime());
+      }, 250);
+
+      let event = new Event('play');
+      self.markup.dispatchEvent(event);
+    }
+  }
+
+  pause() {
+    if (this.element != null) {
+      this.element.pauseVideo();
+    }
+  }
+
+  empty() {
+  }
+
+  isEmpty() {
+  }
+
+  setSong(song) {
+    console.log('yt setSong');
+    let that = this;
+    YoutubeApiHelper.loadYoutubeApi(
+      function () {
+        that.element = YoutubeApiHelper.loadYoutubeVideo(
+          song.container,
+          song.getYoutubeId(),
+          function (e) {
+            that.onYoutubeReady(e)
+          },
+          function (e) {
+            that.onYoutubeStateChange(e)
+          },
+          function (e) {
+            that.onYoutubeError(e)
+          }
+        )
+      }
+    );
+  }
+
+  unload() {
+    this.element.destroy(); // yt api function that removes the iframe and rebuilds the initial dom element
+    window.clearInterval(this.progressInterval)
+  }
+
+  seekTo(time) {
+    this.element.seekTo(time)
   }
 
   /**
-   * set title and author
-   * @param title
-   * @param author
+   * Youtube api callbacks
    */
-  updateMeta(title, author) {
-    this.markup.innerHTML = title + ' - ' + author
+
+  /**
+   * Callback that is passed to the onReady event of the YT api
+   * @param event
+   */
+  onYoutubeReady(event) {
+    console.log('YT Video ready: ');
+    this.element = event.target
   }
 
-  updateTime() {
-    //TODO implement
+  /**
+   * Callback that is passed to the onStateChange event of the YT api
+   * @param event
+   */
+  onYoutubeStateChange(event) {
+    console.log('New state: ' + event.data)
+  }
+
+  /**
+   * Callback that is passed to the onError event of the YT api
+   * @param event
+   */
+  onYoutubeError(event) {
+    console.log('Youtube error: ' + event.data)
   }
 }
-</code></pre>
+
+export {ihapYoutube as default}</code></pre>
         </article>
     </section>
 

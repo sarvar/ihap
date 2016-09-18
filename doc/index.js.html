@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ihap.html">ihap</a><ul class='methods'><li data-type='method'><a href="ihap.html#appendToPlaylist">appendToPlaylist</a></li><li data-type='method'><a href="ihap.html#changeSong">changeSong</a></li><li data-type='method'><a href="ihap.html#emptyPlaylist">emptyPlaylist</a></li><li data-type='method'><a href="ihap.html#getCurrentSong">getCurrentSong</a></li><li data-type='method'><a href="ihap.html#getCurrentSongIndex">getCurrentSongIndex</a></li><li data-type='method'><a href="ihap.html#getNextSong">getNextSong</a></li><li data-type='method'><a href="ihap.html#getPlaylist">getPlaylist</a></li><li data-type='method'><a href="ihap.html#getPreviousSong">getPreviousSong</a></li><li data-type='method'><a href="ihap.html#loadYoutubeIframeApi">loadYoutubeIframeApi</a></li><li data-type='method'><a href="ihap.html#onYoutubeIframeApiReady">onYoutubeIframeApiReady</a></li><li data-type='method'><a href="ihap.html#pause">pause</a></li><li data-type='method'><a href="ihap.html#play">play</a></li><li data-type='method'><a href="ihap.html#playSong">playSong</a></li><li data-type='method'><a href="ihap.html#prependToPlaylist">prependToPlaylist</a></li><li data-type='method'><a href="ihap.html#removeFromPlaylist">removeFromPlaylist</a></li><li data-type='method'><a href="ihap.html#setPlaylist">setPlaylist</a></li><li data-type='method'><a href="ihap.html#skip_next">skip_next</a></li><li data-type='method'><a href="ihap.html#skip_prev">skip_prev</a></li><li data-type='method'><a href="ihap.html#youtubeIframeApiLoaded">youtubeIframeApiLoaded</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#calculate_progress">calculate_progress</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ihap.html">ihap</a><ul class='methods'><li data-type='method'><a href="ihap.html#appendToPlaylist">appendToPlaylist</a></li><li data-type='method'><a href="ihap.html#changeSong">changeSong</a></li><li data-type='method'><a href="ihap.html#emptyPlaylist">emptyPlaylist</a></li><li data-type='method'><a href="ihap.html#getCurrentSong">getCurrentSong</a></li><li data-type='method'><a href="ihap.html#getCurrentSongIndex">getCurrentSongIndex</a></li><li data-type='method'><a href="ihap.html#getNextSong">getNextSong</a></li><li data-type='method'><a href="ihap.html#getPlaylist">getPlaylist</a></li><li data-type='method'><a href="ihap.html#getPreviousSong">getPreviousSong</a></li><li data-type='method'><a href="ihap.html#pause">pause</a></li><li data-type='method'><a href="ihap.html#play">play</a></li><li data-type='method'><a href="ihap.html#prependToPlaylist">prependToPlaylist</a></li><li data-type='method'><a href="ihap.html#removeFromPlaylist">removeFromPlaylist</a></li><li data-type='method'><a href="ihap.html#setPlaylist">setPlaylist</a></li><li data-type='method'><a href="ihap.html#skip_next">skip_next</a></li><li data-type='method'><a href="ihap.html#skip_prev">skip_prev</a></li></ul></li><li><a href="ihapSettings.html">ihapSettings</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#calculate_progress">calculate_progress</a></li><li><a href="global.html#dispatchIhapEvent">dispatchIhapEvent</a></li><li><a href="global.html#dispatchPlay">dispatchPlay</a></li><li><a href="global.html#loadYoutubeApi">loadYoutubeApi</a></li><li><a href="global.html#loadYoutubeVideo">loadYoutubeVideo</a></li></ul>
 </nav>
 
 <div id="main">
@@ -44,6 +44,7 @@
  * module imports
  */
 import ihapAudio from './modules/ihap_source_player/ihap_audio'
+import ihapYoutube from './modules/ihap_source_player/ihap_youtube'
 import ihapControls from './modules/ihap_controls'
 import ihapPlaylist from './modules/ihap_playlist'
 import ihapProgressBar from './modules/ihap_progress_bar'
@@ -60,22 +61,17 @@ class ihap {
    */
   constructor(data) {
     // modules
-    this.settings = new ihapSettings(data.settings)
-    this.audio = new ihapAudio()
-    this.controls = new ihapControls()
-    this.playlist = new ihapPlaylist(data.songs)
-    this.progress_bar = new ihapProgressBar()
-    this.song_information = new ihapSongInformation()
+    this.settings = new ihapSettings(data.settings);
+    this.controls = new ihapControls();
+    this.playlist = new ihapPlaylist(data.songs);
+    this.progress_bar = new ihapProgressBar();
+    this.song_information = new ihapSongInformation();
+    this.player = null;
 
     // props
-    this.moving_progress = false
-    this.playing = false
-    this.youtube = {
-      player: null,
-      iframe_api_loaded: false
-    }
+    this.moving_progress = false;
 
-    this._initializeihap()
+    this._initializeihap();
   }
 
   /**
@@ -151,43 +147,49 @@ class ihap {
    * removes all songs from the playlist (visually and in the background) and stops playback
    */
   emptyPlaylist() {
-    this.playlist.empty()
-    this.audio.empty()
-    this._resetProgressBar(0)
-    this._updateProgressBar(0)
+    this.playlist.empty();
+    //this.audio.empty()
+    this._resetProgressBar(0);
+    this._updateProgressBar(0);
   }
 
   /**
    * sets a song from the playlist to be the current song
    * @param {Object} song
-   * @param {Boolean} pause
    */
-  changeSong(song, pause = true) {
-    // pause current playback
-    if (pause &amp;&amp; this.playing)
-      this.pause()
+  changeSong(song) {
+    let self = this;
+    let was_playing = (this.player &amp;&amp; this.player.playing) || false
 
     // reset the progress bar
-    this._resetProgressBar(0)
-    this._updateProgressBar(0)
+    this._resetProgressBar(0);
+    this._updateProgressBar(0);
+
+    // destroy existing players
+    this.unloadPlayer();
 
     // empty song info
-    this.song_information.emptyMeta()
+    this.song_information.emptyMeta();
 
+    // TODO: rework this. we do not want to pass the progressbar to the player! maybe use mediator pattern for another
+    //   class that handles communication ?
     switch (song.type) {
       case 'youtube':
-        if (this.youtubeIframeApiLoaded()) {
-          this.youtube.player.loadVideoById(song.getYoutubeId())
-        } else {
-          this.loadYoutubeIframeApi()
-        }
+        this.player = new ihapYoutube(song, self.progress_bar);
         break;
       default:
-        this.audio.setSong(song)
+        this.player = new ihapAudio(song, self.progress_bar);
+        break;
     }
-
+    this.player.markup.addEventListener('play', function (e) {
+      console.log('i just received the play event! yay')
+    })
     // set current song
     this.playlist.current_song_index = this.playlist.songs.indexOf(song)
+    this._updateSongInformation();
+
+    if (was_playing)
+      self.play();
   }
 
   /**
@@ -215,9 +217,12 @@ class ihap {
    * @return {Array} the new playlist
    */
   appendToPlaylist(songs) {
-    this.playlist.appendSongs(songs)
-    this._loadFirstSong()
-    return this.getPlaylist()
+    this.playlist.appendSongs(songs);
+
+    if (!this.player) {
+      this._loadFirstSong();
+    }
+    return this.getPlaylist();
   }
 
   /**
@@ -284,7 +289,6 @@ class ihap {
    * @private
    */
   _createComponents() {
-    this.settings.container.appendChild(this.audio.markup)
     this.settings.container.appendChild(this.controls.markup)
     this.settings.container.appendChild(this.progress_bar.markup)
     this.settings.container.appendChild(this.song_information.markup)
@@ -305,87 +309,24 @@ class ihap {
     }
   }
 
-  /**
-   * ==================== yt
-   */
+  loadPlayer() {
+    // load player
+    // init module
+    // append to dom
+  }
+
+  unloadPlayer() {
+    if (this.player != null)
+      this.player.unload();
+    // remove event listeners
+  }
 
   playSong(song) {
-    switch (song.type) {
-      case 'youtube':
-        this.youtube.player.playVideo()
-        break
-      default:
-        this.audio.play()
-    }
-    this.playing = true
+    this.player.play()
   }
 
   pauseSong(song) {
-    switch (song.type) {
-      case 'youtube':
-        this.youtube.player.pauseVideo()
-        break
-      default:
-        this.audio.pause()
-    }
-    this.playing = false
-  }
-
-  /**
-   * check if the youtube iframe api is loaded
-   * @returns {boolean}
-   */
-  youtubeIframeApiLoaded() {
-    return this.youtube.iframe_api_loaded &amp;&amp; (window.yt != undefined)
-  }
-
-  /**
-   * loads the youtube iframe api
-   */
-  loadYoutubeIframeApi() {
-    if (!this.youtubeIframeApiLoaded()) {
-      let that = this
-      // load yt api asynchronously
-      var tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      // insert iframe api before the first scripttag
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-      window.onYouTubeIframeAPIReady = function () {
-        that.youtube.iframe_api_loaded = true
-        that.onYoutubeIframeApiReady()
-      }
-    }
-  }
-
-  /**
-   * callback
-   */
-  onYoutubeIframeApiReady() {
-    let that = this
-    let song = this.getCurrentSong()
-    this.youtube.player = new YT.Player('youtube_player', {
-      height: '390',
-      width: '640',
-      videoId: song.getYoutubeId(),
-      events: {
-        'onReady': function (event) {
-          event.target.playVideo();
-          that._resetProgressBar(that.youtube.player.getDuration())
-        },
-        'onStateChange': function (data) {
-          if (data.data == 1) {
-            that.song_information.updateMeta(that.youtube.player.getVideoData().title, '')
-            // update progressbar every 500ms
-            setInterval(function () {
-              that._updateProgressBar(that.youtube.player.getCurrentTime())
-            }, 500)
-          }
-        }
-      }
-    });
-    this.playing = true
+    this.player.pause()
   }
 
 
@@ -409,8 +350,8 @@ class ihap {
    */
   _loadFirstSong() {
     if (this.playlist.songs != undefined &amp;&amp; this.playlist.songs.length != 0) {
-      if (this.audio.isEmpty())
-        this.changeSong(this.playlist.songs[0])
+//      if (this.audio.isEmpty())
+      this.changeSong(this.playlist.songs[0])
     }
   }
 
@@ -419,7 +360,7 @@ class ihap {
    * @private
    */
   _addListeners() {
-    this._addAudioListeners()
+    //this._addAudioListeners()
     this._addControlsListeners()
     this._addProgressListeners()
   }
@@ -431,17 +372,17 @@ class ihap {
   _addAudioListeners() {
     let self = this
     // update the progress_bar to match the current timestamp
-    this.audio.element.addEventListener("timeupdate", function () {
-      if (self.moving_progress == false) {
-        self._updateProgressBar(this.currentTime)
-      }
-    })
+    // this.audio.element.addEventListener("timeupdate", function () {
+    //   if (self.moving_progress == false) {
+    //     self._updateProgressBar(this.currentTime)
+    //   }
+    // })
     // reload the progress_bar after the song changed
-    this.audio.element.addEventListener('canplay', function () {
-      let duration = self.audio.element.duration
-      self._resetProgressBar(duration)
-      self._updateSongInformation()
-    })
+    // this.audio.element.addEventListener('canplay', function () {
+    //   let duration = self.audio.element.duration
+    //   self._resetProgressBar(duration)
+    //   self._updateSongInformation()
+    // })
     // autoplay next song on finishing one
     this.audio.element.addEventListener('ended', function () {
       self.skip_next()
@@ -453,18 +394,26 @@ class ihap {
    * @private
    */
   _addControlsListeners() {
-    let self = this
+    let self = this;
     this.controls.buttons.play.addEventListener('click', function () {
-      self.play()
+      self.play();
+      self.controls.buttons.play.classList.add('active');
+      self.controls.buttons.pause.classList.remove('active');
     })
     this.controls.buttons.pause.addEventListener('click', function () {
-      self.pause()
+      self.pause();
+      self.controls.buttons.pause.classList.add('active');
+      self.controls.buttons.play.classList.remove('active');
     })
     this.controls.buttons.skip_next.addEventListener('click', function () {
       self.skip_next()
+      self.controls.buttons.pause.classList.remove('active');
+      self.controls.buttons.play.classList.remove('active');
     })
     this.controls.buttons.skip_previous.addEventListener('click', function () {
       self.skip_prev()
+      self.controls.buttons.pause.classList.remove('active');
+      self.controls.buttons.play.classList.remove('active');
     })
   }
 
@@ -473,31 +422,24 @@ class ihap {
    * @private
    */
   _addProgressListeners() {
-    let self = this
+    let self = this;
     this.progress_bar.markup.addEventListener('mousedown', function (e) {
-      if (e.preventDefault) e.preventDefault()
+      if (e.preventDefault) e.preventDefault();
       self.moving_progress = true
-    })
+    });
 
     this.progress_bar.markup.addEventListener('mousemove', function (e) {
       if (self.moving_progress) {
-        let duration = self.progress_bar.element.getAttribute('aria-valuemax')
-        let progress = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration)
+        let duration = self.progress_bar.element.getAttribute('aria-valuemax');
+        let progress = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration);
         self._updateProgressBar(progress)
       }
-    })
+    });
 
     this.progress_bar.markup.addEventListener('mouseup', function (e) {
-      let song = self.getCurrentSong()
-      let duration = self.progress_bar.element.getAttribute('aria-valuemax')
-      let time = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration)
-      switch (song.type) {
-        case 'youtube':
-          self.youtube.player.seekTo(time)
-          break;
-        default:
-          self.audio.element.currentTime = time
-      }
+      let duration = self.progress_bar.element.getAttribute('aria-valuemax');
+      let time = calculate_progress(e.layerX, this.offsetLeft, this.offsetWidth, duration);
+      self.player.seekTo(time);
       self.moving_progress = false
     })
   }
@@ -507,9 +449,9 @@ class ihap {
    * @private
    */
   _updateSongInformation() {
-    let song = this.getCurrentSong()
-    let title = song.title
-    let artist = song.artist
+    let song = this.getCurrentSong();
+    let title = song.title;
+    let artist = song.artist;
 
     this.song_information.updateMeta(title, artist)
   }
@@ -544,7 +486,7 @@ export {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Jun 19 2016 21:27:06 GMT+0200 (CEST) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Sep 18 2016 20:25:51 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

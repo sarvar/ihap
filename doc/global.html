@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ihap.html">ihap</a><ul class='methods'><li data-type='method'><a href="ihap.html#appendToPlaylist">appendToPlaylist</a></li><li data-type='method'><a href="ihap.html#changeSong">changeSong</a></li><li data-type='method'><a href="ihap.html#emptyPlaylist">emptyPlaylist</a></li><li data-type='method'><a href="ihap.html#getCurrentSong">getCurrentSong</a></li><li data-type='method'><a href="ihap.html#getCurrentSongIndex">getCurrentSongIndex</a></li><li data-type='method'><a href="ihap.html#getNextSong">getNextSong</a></li><li data-type='method'><a href="ihap.html#getPlaylist">getPlaylist</a></li><li data-type='method'><a href="ihap.html#getPreviousSong">getPreviousSong</a></li><li data-type='method'><a href="ihap.html#loadYoutubeIframeApi">loadYoutubeIframeApi</a></li><li data-type='method'><a href="ihap.html#onYoutubeIframeApiReady">onYoutubeIframeApiReady</a></li><li data-type='method'><a href="ihap.html#pause">pause</a></li><li data-type='method'><a href="ihap.html#play">play</a></li><li data-type='method'><a href="ihap.html#playSong">playSong</a></li><li data-type='method'><a href="ihap.html#prependToPlaylist">prependToPlaylist</a></li><li data-type='method'><a href="ihap.html#removeFromPlaylist">removeFromPlaylist</a></li><li data-type='method'><a href="ihap.html#setPlaylist">setPlaylist</a></li><li data-type='method'><a href="ihap.html#skip_next">skip_next</a></li><li data-type='method'><a href="ihap.html#skip_prev">skip_prev</a></li><li data-type='method'><a href="ihap.html#youtubeIframeApiLoaded">youtubeIframeApiLoaded</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#calculate_progress">calculate_progress</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ihap.html">ihap</a><ul class='methods'><li data-type='method'><a href="ihap.html#appendToPlaylist">appendToPlaylist</a></li><li data-type='method'><a href="ihap.html#changeSong">changeSong</a></li><li data-type='method'><a href="ihap.html#emptyPlaylist">emptyPlaylist</a></li><li data-type='method'><a href="ihap.html#getCurrentSong">getCurrentSong</a></li><li data-type='method'><a href="ihap.html#getCurrentSongIndex">getCurrentSongIndex</a></li><li data-type='method'><a href="ihap.html#getNextSong">getNextSong</a></li><li data-type='method'><a href="ihap.html#getPlaylist">getPlaylist</a></li><li data-type='method'><a href="ihap.html#getPreviousSong">getPreviousSong</a></li><li data-type='method'><a href="ihap.html#pause">pause</a></li><li data-type='method'><a href="ihap.html#play">play</a></li><li data-type='method'><a href="ihap.html#prependToPlaylist">prependToPlaylist</a></li><li data-type='method'><a href="ihap.html#removeFromPlaylist">removeFromPlaylist</a></li><li data-type='method'><a href="ihap.html#setPlaylist">setPlaylist</a></li><li data-type='method'><a href="ihap.html#skip_next">skip_next</a></li><li data-type='method'><a href="ihap.html#skip_prev">skip_prev</a></li></ul></li><li><a href="ihapSettings.html">ihapSettings</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#calculate_progress">calculate_progress</a></li><li><a href="global.html#dispatchIhapEvent">dispatchIhapEvent</a></li><li><a href="global.html#dispatchPlay">dispatchPlay</a></li><li><a href="global.html#loadYoutubeApi">loadYoutubeApi</a></li><li><a href="global.html#loadYoutubeVideo">loadYoutubeVideo</a></li></ul>
 </nav>
 
 <div id="main">
@@ -264,7 +264,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line487">line 487</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line429">line 429</a>
     </li></ul></dd>
     
 
@@ -309,6 +309,593 @@
 
 
         
+            
+
+    
+
+    <h4 class="name" id="dispatchIhapEvent"><span class="type-signature"></span>dispatchIhapEvent<span class="signature">(type)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    dispatch custom event of type type
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_helpers_custom_events.js.html">modules/helpers/custom_events.js</a>, <a href="modules_helpers_custom_events.js.html#line5">line 5</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="dispatchPlay"><span class="type-signature"></span>dispatchPlay<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    TODO add actual events
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_helpers_custom_events.js.html">modules/helpers/custom_events.js</a>, <a href="modules_helpers_custom_events.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="loadYoutubeApi"><span class="type-signature"></span>loadYoutubeApi<span class="signature">(callback)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Load youtubes iframe api
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>callback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">executed on successful load</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_helpers_youtube_api_helper.js.html">modules/helpers/youtube_api_helper.js</a>, <a href="modules_helpers_youtube_api_helper.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="loadYoutubeVideo"><span class="type-signature"></span>loadYoutubeVideo<span class="signature">(wrapper, videoId, onReady, onStateChange, onError)</span><span class="type-signature"> &rarr; {YT.Player}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Load youtube video
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>wrapper</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">HTMLElement</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">id of the dom element for the video player or an actual dom element</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>videoId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">id of the youtube video</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onReady</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback to execute once video is ready</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onStateChange</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback to execute on videos state change (e.g. play/pause)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>onError</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">callback to execute on error</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="modules_helpers_youtube_api_helper.js.html">modules/helpers/youtube_api_helper.js</a>, <a href="modules_helpers_youtube_api_helper.js.html#line39">line 39</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    the youtube player element
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">YT.Player</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
     
 
     
@@ -326,7 +913,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Jun 19 2016 21:27:06 GMT+0200 (CEST) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Sep 18 2016 20:25:51 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>modules/ihap_song_information.js - Documentation</title>
+    <title>modules/helpers/custom_events.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">modules/ihap_song_information.js</h1>
+    <h1 class="page-title">modules/helpers/custom_events.js</h1>
     
 
     
@@ -39,65 +39,45 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Song information module
- * responsible for displaying artist &amp; title, will also be responsible for time 
+ * dispatch custom event of type type
+ * @param type
  */
-export default class ihapSongInformation {
-  /**
-   * the song information module
-   * @constructor
-   * @private
-   */
-  constructor() {
-    this.markup = null
-    this.element = null
-
-    this.createMarkup()
-  }
-
-  /**
-   * creates the html markup for the song information
-   */
-	createMarkup() {
-    // wrapper
-		let song_information_wrapper = document.createElement('div')
-		song_information_wrapper.setAttribute('id', 'ihap_song_information_wrapper')
-		song_information_wrapper.setAttribute('class', 'ihap_song_information_wrapper')
-
-    // actual info div
-		let song_information = document.createElement('div')
-		song_information.setAttribute('id', 'ihap_song_information_title')
-		song_information.setAttribute('class', 'ihap_song_information_title')
-
-    // concat
-		song_information_wrapper.appendChild(song_information)
-
-    // set properties
-		this.element = song_information
-		this.markup = song_information_wrapper
-	}
-
-  /**
-   * empty self
-   */
-  emptyMeta() {
-    this.element.innerHTML = ''
-  }
-
-  /**
-   * set title and author
-   * @param title
-   * @param author
-   */
-  updateMeta(title, author) {
-    this.markup.innerHTML = title + ' - ' + author
-  }
-
-  updateTime() {
-    //TODO implement
+export function dispatchIhapEvent(type) {
+  switch (type) {
+    case "play":
+      dispatchPlay();
+      break;
+    case "pause":
+      dispatchPause();
+      break;
+    case "skip_next":
+      dispatchSkipNext();
+      break;
+    case "skip_prev":
+      dispatchSkipPrev();
+      break;
   }
 }
-</code></pre>
+
+/**
+ * TODO add actual events
+ */
+
+function dispatchPlay() {
+  console.log('"play" event dispatched')
+}
+
+function dispatchPause() {
+  console.log('"pause" event dispatched')
+}
+
+function dispatchSkipNext() {
+  console.log('"skip_next" event dispatched')
+}
+
+function dispatchSkipPrev() {
+  console.log('"skip_prev" event dispatched')
+}</code></pre>
         </article>
     </section>
 

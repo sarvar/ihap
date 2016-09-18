@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>modules/ihap_song_information.js - Documentation</title>
+    <title>modules/ihap_settings.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">modules/ihap_song_information.js</h1>
+    <h1 class="page-title">modules/ihap_settings.js</h1>
     
 
     
@@ -39,63 +39,38 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Song information module
- * responsible for displaying artist &amp; title, will also be responsible for time 
+ * Settings module
+ * simply sets properties based on the options given by the user
  */
-export default class ihapSongInformation {
+class ihapSettings {
   /**
-   * the song information module
+   * the settings
    * @constructor
    * @private
    */
-  constructor() {
-    this.markup = null
-    this.element = null
+  constructor(settings) {
+    // base
+    this.container = document.querySelector(settings.container)
 
-    this.createMarkup()
+    // playlist
+    this.playlist = {
+      enabled: settings.playlist.enabled,
+      embedded: settings.playlist.embedded,
+      container: document.querySelector(settings.playlist.container)
+    }
+
+    // youtube
+    this.youtube = {
+      enabled: settings.youtube.enabled,
+      embedded: settings.youtube.embedded,
+      container: document.querySelector(settings.youtube.container)
+    }
   }
+}
 
-  /**
-   * creates the html markup for the song information
-   */
-	createMarkup() {
-    // wrapper
-		let song_information_wrapper = document.createElement('div')
-		song_information_wrapper.setAttribute('id', 'ihap_song_information_wrapper')
-		song_information_wrapper.setAttribute('class', 'ihap_song_information_wrapper')
-
-    // actual info div
-		let song_information = document.createElement('div')
-		song_information.setAttribute('id', 'ihap_song_information_title')
-		song_information.setAttribute('class', 'ihap_song_information_title')
-
-    // concat
-		song_information_wrapper.appendChild(song_information)
-
-    // set properties
-		this.element = song_information
-		this.markup = song_information_wrapper
-	}
-
-  /**
-   * empty self
-   */
-  emptyMeta() {
-    this.element.innerHTML = ''
-  }
-
-  /**
-   * set title and author
-   * @param title
-   * @param author
-   */
-  updateMeta(title, author) {
-    this.markup.innerHTML = title + ' - ' + author
-  }
-
-  updateTime() {
-    //TODO implement
-  }
+export {
+  ihapSettings as
+  default
 }
 </code></pre>
         </article>

@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ihap.html">ihap</a><ul class='methods'><li data-type='method'><a href="ihap.html#appendToPlaylist">appendToPlaylist</a></li><li data-type='method'><a href="ihap.html#changeSong">changeSong</a></li><li data-type='method'><a href="ihap.html#emptyPlaylist">emptyPlaylist</a></li><li data-type='method'><a href="ihap.html#getCurrentSong">getCurrentSong</a></li><li data-type='method'><a href="ihap.html#getCurrentSongIndex">getCurrentSongIndex</a></li><li data-type='method'><a href="ihap.html#getNextSong">getNextSong</a></li><li data-type='method'><a href="ihap.html#getPlaylist">getPlaylist</a></li><li data-type='method'><a href="ihap.html#getPreviousSong">getPreviousSong</a></li><li data-type='method'><a href="ihap.html#loadYoutubeIframeApi">loadYoutubeIframeApi</a></li><li data-type='method'><a href="ihap.html#onYoutubeIframeApiReady">onYoutubeIframeApiReady</a></li><li data-type='method'><a href="ihap.html#pause">pause</a></li><li data-type='method'><a href="ihap.html#play">play</a></li><li data-type='method'><a href="ihap.html#playSong">playSong</a></li><li data-type='method'><a href="ihap.html#prependToPlaylist">prependToPlaylist</a></li><li data-type='method'><a href="ihap.html#removeFromPlaylist">removeFromPlaylist</a></li><li data-type='method'><a href="ihap.html#setPlaylist">setPlaylist</a></li><li data-type='method'><a href="ihap.html#skip_next">skip_next</a></li><li data-type='method'><a href="ihap.html#skip_prev">skip_prev</a></li><li data-type='method'><a href="ihap.html#youtubeIframeApiLoaded">youtubeIframeApiLoaded</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#calculate_progress">calculate_progress</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ihap.html">ihap</a><ul class='methods'><li data-type='method'><a href="ihap.html#appendToPlaylist">appendToPlaylist</a></li><li data-type='method'><a href="ihap.html#changeSong">changeSong</a></li><li data-type='method'><a href="ihap.html#emptyPlaylist">emptyPlaylist</a></li><li data-type='method'><a href="ihap.html#getCurrentSong">getCurrentSong</a></li><li data-type='method'><a href="ihap.html#getCurrentSongIndex">getCurrentSongIndex</a></li><li data-type='method'><a href="ihap.html#getNextSong">getNextSong</a></li><li data-type='method'><a href="ihap.html#getPlaylist">getPlaylist</a></li><li data-type='method'><a href="ihap.html#getPreviousSong">getPreviousSong</a></li><li data-type='method'><a href="ihap.html#pause">pause</a></li><li data-type='method'><a href="ihap.html#play">play</a></li><li data-type='method'><a href="ihap.html#prependToPlaylist">prependToPlaylist</a></li><li data-type='method'><a href="ihap.html#removeFromPlaylist">removeFromPlaylist</a></li><li data-type='method'><a href="ihap.html#setPlaylist">setPlaylist</a></li><li data-type='method'><a href="ihap.html#skip_next">skip_next</a></li><li data-type='method'><a href="ihap.html#skip_prev">skip_prev</a></li></ul></li><li><a href="ihapSettings.html">ihapSettings</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#calculate_progress">calculate_progress</a></li><li><a href="global.html#dispatchIhapEvent">dispatchIhapEvent</a></li><li><a href="global.html#dispatchPlay">dispatchPlay</a></li><li><a href="global.html#loadYoutubeApi">loadYoutubeApi</a></li><li><a href="global.html#loadYoutubeVideo">loadYoutubeVideo</a></li></ul>
 </nav>
 
 <div id="main">
@@ -39,52 +39,106 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * general source player. audio and youtube inherit from this class
+ * General source player, acts as an abstract class.
+ * Audio and youtube extend  this class.
  * @private
  */
 class ihapSourcePlayer {
   /**
-   * the source player module
+   * The source player module
    * @constructor
+   * @param {Object} song
+   * @param {Object} progress_bar
    * @private
    */
-  constructor() {
-    this.markup = null
-    this.element = null
+  constructor(song, progress_bar) {
+    // emulate abstract class behaviour
+    if (new.target === ihapSourcePlayer) {
+      throw new TypeError("Cannot construct abstract instances directly");
+    }
+
+    this.markup = null;
+    this.element = null;
+    this.song = song;
+    this.progress_bar = progress_bar;
+    this.playing = false;
   }
 
   /**
-   * stub for the createMarkup method
+   * Stub for the createMarkup method
    */
-  createMarkup() {}
+  createMarkup() {
+  }
 
   /**
-   * stub for the play method
+   * Stub for the play method. Responsibilites:
+   * * Play the current song
+   * * Do nothing if no song is set or song is already playing
+   * @return {Boolean} true if song is playing
    */
-  play() {}
+  play() {
+  }
 
   /**
-   * stub for the pause method
+   * Stub for the pause method. Responsibilites:
+   * * Pause the current song
+   * * Do nothing if no song is set or song is already playing
+   * @return {Boolean} true if song is paused
    */
-  pause() {}
+  pause() {
+  }
 
   /**
-   * stub for the empty method
+   * Stub for the empty method. Responsibilites:
+   * * Unload currentSong
+   * * Reset timers
+   * @return {Boolean} isEmpty
    */
-  empty() {}
+  empty() {
+  }
 
   /**
-   * stub for the isEmpty method
+   * Stub for the isEmpty method. Responsibilites:
+   * * Check if empty worked
+   * @return {Boolean} isEmpty
    */
-  isEmpty() {}
+  isEmpty() {
+  }
 
   /**
-   * stub for the setSong method
+   * Stub for the setSong method. Responsibilites:
+   * * Load / set the given song to the player
+   * * Do not play automatically
+   * @param {Object} song the song to set
+   * @return {Boolean} true if given song == currentSong
    */
-  setSong() {}
+  setSong(song) { // eslint-disable-line no-unused-vars
+  }
 
+  /**
+   * Stub for unload method. Responsibilites:
+   * * Destroy self, including event listeners
+   */
+  unload() {
+  }
+
+  /**
+   * Stub for onTimeUpdate method
+   * @param callback
+   */
+  onTimeUpdate(callback) { // eslint-disable-line no-unused-vars
+  }
+
+  /**
+   * Stub for seekTo meethod
+   * @param time
+   */
+  seekTo(time) { // eslint-disable-line no-unused-vars
+  }
 }
-
+/**
+ * Export the module
+ */
 export {ihapSourcePlayer as default}</code></pre>
         </article>
     </section>
@@ -97,7 +151,7 @@ export {ihapSourcePlayer as default}</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Jun 19 2016 21:27:06 GMT+0200 (CEST) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Sep 18 2016 20:25:51 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

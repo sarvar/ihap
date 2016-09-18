@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ihap.html">ihap</a><ul class='methods'><li data-type='method'><a href="ihap.html#appendToPlaylist">appendToPlaylist</a></li><li data-type='method'><a href="ihap.html#changeSong">changeSong</a></li><li data-type='method'><a href="ihap.html#emptyPlaylist">emptyPlaylist</a></li><li data-type='method'><a href="ihap.html#getCurrentSong">getCurrentSong</a></li><li data-type='method'><a href="ihap.html#getCurrentSongIndex">getCurrentSongIndex</a></li><li data-type='method'><a href="ihap.html#getNextSong">getNextSong</a></li><li data-type='method'><a href="ihap.html#getPlaylist">getPlaylist</a></li><li data-type='method'><a href="ihap.html#getPreviousSong">getPreviousSong</a></li><li data-type='method'><a href="ihap.html#loadYoutubeIframeApi">loadYoutubeIframeApi</a></li><li data-type='method'><a href="ihap.html#onYoutubeIframeApiReady">onYoutubeIframeApiReady</a></li><li data-type='method'><a href="ihap.html#pause">pause</a></li><li data-type='method'><a href="ihap.html#play">play</a></li><li data-type='method'><a href="ihap.html#playSong">playSong</a></li><li data-type='method'><a href="ihap.html#prependToPlaylist">prependToPlaylist</a></li><li data-type='method'><a href="ihap.html#removeFromPlaylist">removeFromPlaylist</a></li><li data-type='method'><a href="ihap.html#setPlaylist">setPlaylist</a></li><li data-type='method'><a href="ihap.html#skip_next">skip_next</a></li><li data-type='method'><a href="ihap.html#skip_prev">skip_prev</a></li><li data-type='method'><a href="ihap.html#youtubeIframeApiLoaded">youtubeIframeApiLoaded</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#calculate_progress">calculate_progress</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ihap.html">ihap</a><ul class='methods'><li data-type='method'><a href="ihap.html#appendToPlaylist">appendToPlaylist</a></li><li data-type='method'><a href="ihap.html#changeSong">changeSong</a></li><li data-type='method'><a href="ihap.html#emptyPlaylist">emptyPlaylist</a></li><li data-type='method'><a href="ihap.html#getCurrentSong">getCurrentSong</a></li><li data-type='method'><a href="ihap.html#getCurrentSongIndex">getCurrentSongIndex</a></li><li data-type='method'><a href="ihap.html#getNextSong">getNextSong</a></li><li data-type='method'><a href="ihap.html#getPlaylist">getPlaylist</a></li><li data-type='method'><a href="ihap.html#getPreviousSong">getPreviousSong</a></li><li data-type='method'><a href="ihap.html#pause">pause</a></li><li data-type='method'><a href="ihap.html#play">play</a></li><li data-type='method'><a href="ihap.html#prependToPlaylist">prependToPlaylist</a></li><li data-type='method'><a href="ihap.html#removeFromPlaylist">removeFromPlaylist</a></li><li data-type='method'><a href="ihap.html#setPlaylist">setPlaylist</a></li><li data-type='method'><a href="ihap.html#skip_next">skip_next</a></li><li data-type='method'><a href="ihap.html#skip_prev">skip_prev</a></li></ul></li><li><a href="ihapSettings.html">ihapSettings</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#calculate_progress">calculate_progress</a></li><li><a href="global.html#dispatchIhapEvent">dispatchIhapEvent</a></li><li><a href="global.html#dispatchPlay">dispatchPlay</a></li><li><a href="global.html#loadYoutubeApi">loadYoutubeApi</a></li><li><a href="global.html#loadYoutubeVideo">loadYoutubeVideo</a></li></ul>
 </nav>
 
 <div id="main">
@@ -39,7 +39,7 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * module imports
+ * Module imports
  */
 import ihapSourcePlayer from '../ihap_source_player'
 
@@ -49,15 +49,15 @@ import ihapSourcePlayer from '../ihap_source_player'
  */
 class ihapAudio extends ihapSourcePlayer {
   /**
-   * the audio module
+   * The audio module
    * @constructor
    * @private
    */
-  constructor() {
-    super()
-    this.playing = false
+  constructor(song, playlist) {
+    super(song, playlist);
 
-    this.createMarkup()
+    this.createMarkup();
+    this.setSong(song);
   }
 
   /**
@@ -65,19 +65,19 @@ class ihapAudio extends ihapSourcePlayer {
    */
   createMarkup() {
     // wrapper
-    let player_wrapper = document.createElement('div')
-    player_wrapper.setAttribute('id', 'ihap_player_wrapper')
+    let player_wrapper = document.createElement('div');
+    player_wrapper.setAttribute('id', 'ihap_player_wrapper');
 
     // actual audio element
-    let audio_player = document.createElement('audio')
-    audio_player.setAttribute('id', 'ihap_player')
-    audio_player.setAttribute('src', '')
+    let audio_player = document.createElement('audio');
+    audio_player.setAttribute('id', 'ihap_player');
+    audio_player.setAttribute('src', '');
 
     // combine wrapper &amp; audio element
-    player_wrapper.appendChild(audio_player)
+    player_wrapper.appendChild(audio_player);
     // set object properties
-    this.markup = player_wrapper
-    this.element = audio_player
+    this.markup = player_wrapper;
+    this.element = audio_player;
   }
 
   /**
@@ -85,16 +85,28 @@ class ihapAudio extends ihapSourcePlayer {
    */
   play() {
     if (this.element.readyState == 4) {
-      this.onCanPlay()
+      this.onCanPlay();
     } else {
-      this.element.addEventListener('canplay', this.onCanPlay())
+      this.element.addEventListener('canplay', this.onCanPlay());
     }
   }
 
   onCanPlay() {
     if (!this.isEmpty()) {
-      this.element.play()
-      this.playing = true
+      let self = this;
+      this.element.play();
+      this.playing = true;
+
+      let song_duration = self.element.duration;
+      if (song_duration == undefined) {
+        this.progress_bar.reset(0.0)
+      } else {
+        this.progress_bar.reset(song_duration)
+      }
+
+      this.element.addEventListener('timeupdate', function () {
+        self.progress_bar.updateBar(self.element.currentTime)
+      })
     }
   }
 
@@ -102,22 +114,22 @@ class ihapAudio extends ihapSourcePlayer {
    * pause the currently playing song
    */
   pause() {
-    this.element.pause()
-    this.playing = !this.element.paused
-    return this.element.paused
+    this.element.pause();
+    this.playing = !this.element.paused;
+    return this.element.paused;
   }
 
   /**
    * reset the audio element to inital state without src or duration
    */
   empty() {
-    this.element.currentTime = 0 // property of actual audio element
-    this.element.setAttribute('src', '') // empty src
-    this.element.setAttribute('aria-valuemax', '0') // set duration to 0
+    this.element.currentTime = 0; // property of actual audio element
+    this.element.setAttribute('src', ''); // empty src
+    this.element.setAttribute('aria-valuemax', '0'); // set duration to 0
   }
 
   isEmpty() {
-    return this.element.getAttribute('src') == ''
+    return this.element.getAttribute('src') == '';
   }
 
   /**
@@ -126,12 +138,22 @@ class ihapAudio extends ihapSourcePlayer {
    */
   setSong(song) {
     if (song != undefined &amp;&amp; song.url != undefined) {
-      this.element.currentTime = 0
-      this.element.setAttribute('src', song.url)
-      this.element.load()
+      this.element.currentTime = 0;
+      this.element.setAttribute('src', song.url);
+      this.element.load();
     } else {
-      throw new Error('Invalid song')
+      throw new Error('Invalid song');
     }
+  }
+
+  unload() {
+    this.element.pause();
+    this.element.remove();
+    // remove event listeners? maybe not needed because element gets removed?
+  }
+
+  seekTo(time) {
+    this.element.currentTime = time
   }
 }
 export {ihapAudio as default}
@@ -147,7 +169,7 @@ export {ihapAudio as default}
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Jun 19 2016 21:27:06 GMT+0200 (CEST) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Sep 18 2016 20:25:51 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

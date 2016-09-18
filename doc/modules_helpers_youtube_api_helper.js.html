@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>modules/ihap_song_information.js - Documentation</title>
+    <title>modules/helpers/youtube_api_helper.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">modules/ihap_song_information.js</h1>
+    <h1 class="page-title">modules/helpers/youtube_api_helper.js</h1>
     
 
     
@@ -39,65 +39,57 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Song information module
- * responsible for displaying artist &amp; title, will also be responsible for time 
+ * YoutubeApiHelper provides wrapper methods to interact with the youtube api
  */
-export default class ihapSongInformation {
-  /**
-   * the song information module
-   * @constructor
-   * @private
-   */
-  constructor() {
-    this.markup = null
-    this.element = null
 
-    this.createMarkup()
-  }
+/**
+ * Load youtubes iframe api
+ * @param {Function} callback executed on successful load
+ */
+export function loadYoutubeApi(callback) {
+  // only load if undefined
+  if (window.yt == undefined) {
+    console.log('will load api')
+    // load yt api asynchronously
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    // insert iframe api before the first scripttag
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-  /**
-   * creates the html markup for the song information
-   */
-	createMarkup() {
-    // wrapper
-		let song_information_wrapper = document.createElement('div')
-		song_information_wrapper.setAttribute('id', 'ihap_song_information_wrapper')
-		song_information_wrapper.setAttribute('class', 'ihap_song_information_wrapper')
-
-    // actual info div
-		let song_information = document.createElement('div')
-		song_information.setAttribute('id', 'ihap_song_information_title')
-		song_information.setAttribute('class', 'ihap_song_information_title')
-
-    // concat
-		song_information_wrapper.appendChild(song_information)
-
-    // set properties
-		this.element = song_information
-		this.markup = song_information_wrapper
-	}
-
-  /**
-   * empty self
-   */
-  emptyMeta() {
-    this.element.innerHTML = ''
-  }
-
-  /**
-   * set title and author
-   * @param title
-   * @param author
-   */
-  updateMeta(title, author) {
-    this.markup.innerHTML = title + ' - ' + author
-  }
-
-  updateTime() {
-    //TODO implement
+    // fired when api is loaded successfully
+    window.onYouTubeIframeAPIReady = function () {
+      console.log('callback will come!')
+      return callback()
+    }
+  } else {
+    return callback()
   }
 }
-</code></pre>
+
+/**
+ * Load youtube video
+ * @param {String | HTMLElement } wrapper id of the dom element for the video player or an actual dom element
+ * @param {String} videoId id of the youtube video
+ * @param {Function} onReady callback to execute once video is ready
+ * @param {Function} onStateChange callback to execute on videos state change (e.g. play/pause)
+ * @param {Function} onError callback to execute on error
+ * @returns {YT.Player} the youtube player element
+ */
+export function loadYoutubeVideo(wrapper, videoId, onReady, onStateChange, onError) {
+  console.log('loadYoutubeVideo')
+  // eslint-disable-next-line
+  return new YT.Player(wrapper, {
+    height: '390',
+    width: '640',
+    videoId: videoId,
+    events: {
+      'onReady': onReady,
+      'onStateChange': onStateChange,
+      'onError': onError
+    }
+  });
+}</code></pre>
         </article>
     </section>
 
