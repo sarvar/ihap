@@ -119,7 +119,7 @@ class ihap {
    */
   changeSong(song) {
     let self = this;
-    let was_playing = (this.player && this.player.playing) || false
+    let was_playing = (this.player && this.player.playing) || false;
 
     // reset the progress bar
     this._resetProgressBar(0);
@@ -142,10 +142,10 @@ class ihap {
         break;
     }
     this.player.markup.addEventListener('play', function (e) {
-      console.log('i just received the play event! yay')
-    })
+      console.log('i just received the play event! yay');
+    });
     // set current song
-    this.playlist.current_song_index = this.playlist.songs.indexOf(song)
+    this.playlist.current_song_index = this.playlist.songs.indexOf(song);
     this._updateSongInformation();
 
     if (was_playing)
@@ -158,9 +158,9 @@ class ihap {
    * @return {Array} songs the new playlist
    */
   setPlaylist(songs) {
-    this.emptyPlaylist()
-    this.appendToPlaylist(songs)
-    return this.getPlaylist()
+    this.emptyPlaylist();
+    this.appendToPlaylist(songs);
+    return this.getPlaylist();
   }
 
   /**
@@ -168,7 +168,7 @@ class ihap {
    * @return {Array} the current songs in the playlist
    */
   getPlaylist() {
-    return this.playlist.songs
+    return this.playlist.songs;
   }
 
   /**
@@ -191,9 +191,9 @@ class ihap {
    * @return {Array} the new playlist
    */
   prependToPlaylist(songs) {
-    this.playlist.prependSongs(songs)
-    this._loadFirstSong()
-    return this.getPlaylist()
+    this.playlist.prependSongs(songs);
+    this._loadFirstSong();
+    return this.getPlaylist();
   }
 
   /**
@@ -201,7 +201,7 @@ class ihap {
    * @return {Object} the currently playing song
    */
   getCurrentSong() {
-    return this.playlist.songs[this.playlist.current_song_index]
+    return this.playlist.songs[this.playlist.current_song_index];
   }
 
   /**
@@ -209,7 +209,7 @@ class ihap {
    * @return {Number} index of the currently playing song in the playlist
    */
   getCurrentSongIndex() {
-    return this.playlist.current_song_index
+    return this.playlist.current_song_index;
   }
 
   /**
@@ -218,8 +218,8 @@ class ihap {
    * @return {Array}       the new playlist
    */
   removeFromPlaylist(songs) {
-    this.playlist.removeSongs(songs)
-    return this.playlist.songs
+    this.playlist.removeSongs(songs);
+    return this.playlist.songs;
   }
 
   /**
@@ -235,12 +235,12 @@ class ihap {
   _initializeihap() {
     if (this.settings.container == undefined) {
       throw ('Cannot find container "' + this.settings.container + '". ' +
-      'Please make sure self an element with this id is present.')
+      'Please make sure self an element with this id is present.');
     } else {
-      this._createComponents()
-      this._addListeners()
+      this._createComponents();
+      this._addListeners();
 
-      this._loadFirstSong()
+      this._loadFirstSong();
     }
   }
 
@@ -249,11 +249,11 @@ class ihap {
    * @private
    */
   _createComponents() {
-    this.settings.container.appendChild(this.controls.markup)
-    this.settings.container.appendChild(this.progress_bar.markup)
-    this.settings.container.appendChild(this.song_information.markup)
+    this.settings.container.appendChild(this.controls.markup);
+    this.settings.container.appendChild(this.progress_bar.markup);
+    this.settings.container.appendChild(this.song_information.markup);
     if (this.settings.playlist.container != undefined)
-      this.settings.playlist.container.appendChild(this.playlist.markup)
+      this.settings.playlist.container.appendChild(this.playlist.markup);
   }
 
   /**
@@ -263,9 +263,9 @@ class ihap {
    */
   _resetProgressBar(song_duration) {
     if (song_duration == undefined) {
-      this.progress_bar.reset(0.0)
+      this.progress_bar.reset(0.0);
     } else {
-      this.progress_bar.reset(song_duration)
+      this.progress_bar.reset(song_duration);
     }
   }
 
@@ -282,11 +282,11 @@ class ihap {
   }
 
   playSong(song) {
-    this.player.play()
+    this.player.play();
   }
 
   pauseSong(song) {
-    this.player.pause()
+    this.player.pause();
   }
 
 
@@ -301,7 +301,7 @@ class ihap {
    * @private
    */
   _updateProgressBar(current_time) {
-    this.progress_bar.updateBar(current_time)
+    this.progress_bar.updateBar(current_time);
   }
 
   /**
@@ -311,7 +311,7 @@ class ihap {
   _loadFirstSong() {
     if (this.playlist.songs != undefined && this.playlist.songs.length != 0) {
 //      if (this.audio.isEmpty())
-      this.changeSong(this.playlist.songs[0])
+      this.changeSong(this.playlist.songs[0]);
     }
   }
 
@@ -321,8 +321,8 @@ class ihap {
    */
   _addListeners() {
     //this._addAudioListeners()
-    this._addControlsListeners()
-    this._addProgressListeners()
+    this._addControlsListeners();
+    this._addProgressListeners();
   }
 
   /**
