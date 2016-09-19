@@ -192,7 +192,9 @@ class ihap {
    */
   prependToPlaylist(songs) {
     this.playlist.prependSongs(songs);
-    this._loadFirstSong();
+    if (!this.player) {
+      this._loadFirstSong();
+    }
     return this.getPlaylist();
   }
 
@@ -214,7 +216,7 @@ class ihap {
 
   /**
    * removes the given song(s) from the playlist
-   * @param  {Array} songs the song(s) to removes
+   * @param  {Array} songs the song(s) to remove
    * @return {Array}       the new playlist
    */
   removeFromPlaylist(songs) {
