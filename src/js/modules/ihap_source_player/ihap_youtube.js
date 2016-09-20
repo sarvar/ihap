@@ -15,11 +15,11 @@ class ihapYoutube extends ihapSourcePlayer {
    * @constructor
    * @private
    */
-  constructor(song, progress_bar) {
-    super(song, progress_bar);
+  constructor(song, progress_bar, auto_play) {
+    super(song, progress_bar, auto_play);
 
     this.createMarkup();
-    this.setSong(song);
+    this.setSong(song, auto_play);
     this.progressInterval = null;
   }
 
@@ -35,6 +35,7 @@ class ihapYoutube extends ihapSourcePlayer {
     console.log('play clicked');
     let self = this;
     if (this.element != null) {
+      this.playing = true;
       self.element.playVideo();
 
       let song_duration = self.element.getDuration();
@@ -57,6 +58,7 @@ class ihapYoutube extends ihapSourcePlayer {
   pause() {
     if (this.element != null) {
       this.element.pauseVideo();
+      this.playing = false;
     }
   }
 
@@ -66,7 +68,7 @@ class ihapYoutube extends ihapSourcePlayer {
   isEmpty() {
   }
 
-  setSong(song) {
+  setSong(song, auto_play) {
     console.log('yt setSong');
     let that = this;
     YoutubeApiHelper.loadYoutubeApi(
@@ -75,7 +77,7 @@ class ihapYoutube extends ihapSourcePlayer {
           song.container,
           song.getYoutubeId(),
           function (e) {
-            that.onYoutubeReady(e)
+            that.onYoutubeReady(e, auto_play)
           },
           function (e) {
             that.onYoutubeStateChange(e)
@@ -105,9 +107,13 @@ class ihapYoutube extends ihapSourcePlayer {
    * Callback that is passed to the onReady event of the YT api
    * @param event
    */
-  onYoutubeReady(event) {
+  onYoutubeReady(event, auto_play) {
     console.log('YT Video ready: ');
-    this.element = event.target
+    this.element = event.target;
+    console.log(auto_play);
+    if (auto_play){
+      this.play();
+    }
   }
 
   /**

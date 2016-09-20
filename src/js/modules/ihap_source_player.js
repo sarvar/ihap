@@ -9,9 +9,10 @@ class ihapSourcePlayer {
    * @constructor
    * @param {Object} song
    * @param {Object} progress_bar
+   * @param {Boolean} auto_play
    * @private
    */
-  constructor(song, progress_bar) {
+  constructor(song, progress_bar, auto_play) {
     // emulate abstract class behaviour
     if (new.target === ihapSourcePlayer) {
       throw new TypeError("Cannot construct abstract instances directly");
@@ -22,6 +23,7 @@ class ihapSourcePlayer {
     this.song = song;
     this.progress_bar = progress_bar;
     this.playing = false;
+    this.auto_play = false;
   }
 
   /**

@@ -50,7 +50,7 @@ class ihap {
    * plays the current song
    */
   play() {
-    this.playSong(this.getCurrentSong())
+    this.player.play();
   }
 
   /**
@@ -58,7 +58,7 @@ class ihap {
    * @return {Boolean} returns true on successfull pause
    */
   pause() {
-    this.pauseSong(this.getCurrentSong())
+    this.player.pause();
   }
 
   /**
@@ -135,10 +135,10 @@ class ihap {
     //   class that handles communication ?
     switch (song.type) {
       case 'youtube':
-        this.player = new ihapYoutube(song, self.progress_bar);
+        this.player = new ihapYoutube(song, self.progress_bar, was_playing);
         break;
       default:
-        this.player = new ihapAudio(song, self.progress_bar);
+        this.player = new ihapAudio(song, self.progress_bar, was_playing);
         break;
     }
     this.player.markup.addEventListener('play', function (e) {
@@ -147,9 +147,6 @@ class ihap {
     // set current song
     this.playlist.current_song_index = this.playlist.songs.indexOf(song);
     this._updateSongInformation();
-
-    if (was_playing)
-      self.play();
   }
 
   /**
@@ -282,15 +279,6 @@ class ihap {
       this.player.unload();
     // remove event listeners
   }
-
-  playSong(song) {
-    this.player.play();
-  }
-
-  pauseSong(song) {
-    this.player.pause();
-  }
-
 
   /**
    * ==================== yt
