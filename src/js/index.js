@@ -31,7 +31,7 @@ class ihap {
     // props
     this.moving_progress = false;
 
-    this._initializeihap();
+    this._initializeIhap();
   }
 
   /**
@@ -135,7 +135,7 @@ class ihap {
     //   class that handles communication ?
     switch (song.type) {
       case 'youtube':
-        this.player = new ihapYoutube(song, self.progress_bar, was_playing);
+        this.player = new ihapYoutube(song, self.progress_bar, was_playing, this.settings.youtube.mode, this.settings.youtube.external_container);
         break;
       default:
         this.player = new ihapAudio(song, self.progress_bar, was_playing);
@@ -231,7 +231,7 @@ class ihap {
    * initialize the plugin. create required markup and add event listeners
    * @private
    */
-  _initializeihap() {
+  _initializeIhap() {
     if (this.settings.container == undefined) {
       throw ('Cannot find container "' + this.settings.container + '". ' +
       'Please make sure self an element with this id is present.');

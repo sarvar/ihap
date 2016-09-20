@@ -56,7 +56,7 @@
             border-bottom: 1px solid grey;
         }
 
-        .card > .youtube_player {
+        .youtube_player {
             /* min dimensions required by yt */
             height: 200px;
             width: 200px;
@@ -131,7 +131,9 @@
             </div>
         </div>
     </div>
+    <div id="generic_youtube_container" class="youtube_player"></div>
 </div>
+
 
 <script src="ihap.js"></script>
 <script>
@@ -144,7 +146,9 @@
             },
             youtube: {
                 enabled: true,
-                embedded: false
+                embedded: false,
+                mode: 'per_song', // embedded || per_song || external
+                external_container: '#generic_youtube_container'
             }
         }
     });

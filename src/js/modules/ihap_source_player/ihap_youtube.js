@@ -15,12 +15,14 @@ class ihapYoutube extends ihapSourcePlayer {
    * @constructor
    * @private
    */
-  constructor(song, progress_bar, auto_play) {
+  constructor(song, progress_bar, auto_play, mode, container) {
     super(song, progress_bar, auto_play);
 
+    this.progressInterval = null;
+    this.mode = mode;
+    this.external_container = container;
     this.createMarkup();
     this.setSong(song, auto_play);
-    this.progressInterval = null;
   }
 
   createMarkup() {
@@ -70,11 +72,19 @@ class ihapYoutube extends ihapSourcePlayer {
 
   setSong(song, auto_play) {
     console.log('yt setSong');
+    console.log(this.container);
     let that = this;
+    if (this.mode == 'per_song') {
+      var container = song.container;
+    } else if (this.mode == 'external') {
+      var container = this.external_container;
+    } else if (this.mode == 'embedded') {
+      // TODO
+    }
     YoutubeApiHelper.loadYoutubeApi(
       function () {
         that.element = YoutubeApiHelper.loadYoutubeVideo(
-          song.container,
+          container,
           song.getYoutubeId(),
           function (e) {
             that.onYoutubeReady(e, auto_play)
@@ -111,7 +121,7 @@ class ihapYoutube extends ihapSourcePlayer {
     console.log('YT Video ready: ');
     this.element = event.target;
     console.log(auto_play);
-    if (auto_play){
+    if (auto_play) {
       this.play();
     }
   }
