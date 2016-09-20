@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ihap.html">ihap</a><ul class='methods'><li data-type='method'><a href="ihap.html#appendToPlaylist">appendToPlaylist</a></li><li data-type='method'><a href="ihap.html#changeSong">changeSong</a></li><li data-type='method'><a href="ihap.html#emptyPlaylist">emptyPlaylist</a></li><li data-type='method'><a href="ihap.html#getCurrentSong">getCurrentSong</a></li><li data-type='method'><a href="ihap.html#getCurrentSongIndex">getCurrentSongIndex</a></li><li data-type='method'><a href="ihap.html#getNextSong">getNextSong</a></li><li data-type='method'><a href="ihap.html#getPlaylist">getPlaylist</a></li><li data-type='method'><a href="ihap.html#getPreviousSong">getPreviousSong</a></li><li data-type='method'><a href="ihap.html#pause">pause</a></li><li data-type='method'><a href="ihap.html#play">play</a></li><li data-type='method'><a href="ihap.html#prependToPlaylist">prependToPlaylist</a></li><li data-type='method'><a href="ihap.html#removeFromPlaylist">removeFromPlaylist</a></li><li data-type='method'><a href="ihap.html#setPlaylist">setPlaylist</a></li><li data-type='method'><a href="ihap.html#skip_next">skip_next</a></li><li data-type='method'><a href="ihap.html#skip_prev">skip_prev</a></li></ul></li><li><a href="ihapSettings.html">ihapSettings</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#calculate_progress">calculate_progress</a></li><li><a href="global.html#dispatchIhapEvent">dispatchIhapEvent</a></li><li><a href="global.html#dispatchPlay">dispatchPlay</a></li><li><a href="global.html#loadYoutubeApi">loadYoutubeApi</a></li><li><a href="global.html#loadYoutubeVideo">loadYoutubeVideo</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ihap.html">ihap</a><ul class='methods'><li data-type='method'><a href="ihap.html#appendToPlaylist">appendToPlaylist</a></li><li data-type='method'><a href="ihap.html#changeSong">changeSong</a></li><li data-type='method'><a href="ihap.html#emptyPlaylist">emptyPlaylist</a></li><li data-type='method'><a href="ihap.html#getCurrentSong">getCurrentSong</a></li><li data-type='method'><a href="ihap.html#getCurrentSongIndex">getCurrentSongIndex</a></li><li data-type='method'><a href="ihap.html#getNextSong">getNextSong</a></li><li data-type='method'><a href="ihap.html#getPlaylist">getPlaylist</a></li><li data-type='method'><a href="ihap.html#getPreviousSong">getPreviousSong</a></li><li data-type='method'><a href="ihap.html#pause">pause</a></li><li data-type='method'><a href="ihap.html#play">play</a></li><li data-type='method'><a href="ihap.html#prependToPlaylist">prependToPlaylist</a></li><li data-type='method'><a href="ihap.html#removeFromPlaylist">removeFromPlaylist</a></li><li data-type='method'><a href="ihap.html#setPlaylist">setPlaylist</a></li><li data-type='method'><a href="ihap.html#skip_next">skip_next</a></li><li data-type='method'><a href="ihap.html#skip_prev">skip_prev</a></li></ul></li><li><a href="ihapSettings.html">ihapSettings</a></li><li><a href="module.exports.html">exports</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_resetPlaylist">_resetPlaylist</a></li><li><a href="global.html#_songsPresent">_songsPresent</a></li><li><a href="global.html#_updatePlaylist">_updatePlaylist</a></li><li><a href="global.html#appendSongs">appendSongs</a></li><li><a href="global.html#calculate_progress">calculate_progress</a></li><li><a href="global.html#createMarkup">createMarkup</a></li><li><a href="global.html#dispatchIhapEvent">dispatchIhapEvent</a></li><li><a href="global.html#dispatchPlay">dispatchPlay</a></li><li><a href="global.html#empty">empty</a></li><li><a href="global.html#emptyMeta">emptyMeta</a></li><li><a href="global.html#getNextSong">getNextSong</a></li><li><a href="global.html#getPreviousSong">getPreviousSong</a></li><li><a href="global.html#loadYoutubeApi">loadYoutubeApi</a></li><li><a href="global.html#loadYoutubeVideo">loadYoutubeVideo</a></li><li><a href="global.html#prependSongs">prependSongs</a></li><li><a href="global.html#reset">reset</a></li><li><a href="global.html#setSongs">setSongs</a></li><li><a href="global.html#updateBar">updateBar</a></li><li><a href="global.html#updateMeta">updateMeta</a></li></ul>
 </nav>
 
 <div id="main">
@@ -159,7 +159,7 @@ class ihap {
    */
   changeSong(song) {
     let self = this;
-    let was_playing = (this.player &amp;&amp; this.player.playing) || false
+    let was_playing = (this.player &amp;&amp; this.player.playing) || false;
 
     // reset the progress bar
     this._resetProgressBar(0);
@@ -182,10 +182,10 @@ class ihap {
         break;
     }
     this.player.markup.addEventListener('play', function (e) {
-      console.log('i just received the play event! yay')
-    })
+      console.log('i just received the play event! yay');
+    });
     // set current song
-    this.playlist.current_song_index = this.playlist.songs.indexOf(song)
+    this.playlist.current_song_index = this.playlist.songs.indexOf(song);
     this._updateSongInformation();
 
     if (was_playing)
@@ -198,9 +198,9 @@ class ihap {
    * @return {Array} songs the new playlist
    */
   setPlaylist(songs) {
-    this.emptyPlaylist()
-    this.appendToPlaylist(songs)
-    return this.getPlaylist()
+    this.emptyPlaylist();
+    this.appendToPlaylist(songs);
+    return this.getPlaylist();
   }
 
   /**
@@ -208,7 +208,7 @@ class ihap {
    * @return {Array} the current songs in the playlist
    */
   getPlaylist() {
-    return this.playlist.songs
+    return this.playlist.songs;
   }
 
   /**
@@ -231,9 +231,11 @@ class ihap {
    * @return {Array} the new playlist
    */
   prependToPlaylist(songs) {
-    this.playlist.prependSongs(songs)
-    this._loadFirstSong()
-    return this.getPlaylist()
+    this.playlist.prependSongs(songs);
+    if (!this.player) {
+      this._loadFirstSong();
+    }
+    return this.getPlaylist();
   }
 
   /**
@@ -241,7 +243,7 @@ class ihap {
    * @return {Object} the currently playing song
    */
   getCurrentSong() {
-    return this.playlist.songs[this.playlist.current_song_index]
+    return this.playlist.songs[this.playlist.current_song_index];
   }
 
   /**
@@ -249,17 +251,17 @@ class ihap {
    * @return {Number} index of the currently playing song in the playlist
    */
   getCurrentSongIndex() {
-    return this.playlist.current_song_index
+    return this.playlist.current_song_index;
   }
 
   /**
    * removes the given song(s) from the playlist
-   * @param  {Array} songs the song(s) to removes
+   * @param  {Array} songs the song(s) to remove
    * @return {Array}       the new playlist
    */
   removeFromPlaylist(songs) {
-    this.playlist.removeSongs(songs)
-    return this.playlist.songs
+    this.playlist.removeSongs(songs);
+    return this.playlist.songs;
   }
 
   /**
@@ -275,12 +277,12 @@ class ihap {
   _initializeihap() {
     if (this.settings.container == undefined) {
       throw ('Cannot find container "' + this.settings.container + '". ' +
-      'Please make sure self an element with this id is present.')
+      'Please make sure self an element with this id is present.');
     } else {
-      this._createComponents()
-      this._addListeners()
+      this._createComponents();
+      this._addListeners();
 
-      this._loadFirstSong()
+      this._loadFirstSong();
     }
   }
 
@@ -289,11 +291,11 @@ class ihap {
    * @private
    */
   _createComponents() {
-    this.settings.container.appendChild(this.controls.markup)
-    this.settings.container.appendChild(this.progress_bar.markup)
-    this.settings.container.appendChild(this.song_information.markup)
+    this.settings.container.appendChild(this.controls.markup);
+    this.settings.container.appendChild(this.progress_bar.markup);
+    this.settings.container.appendChild(this.song_information.markup);
     if (this.settings.playlist.container != undefined)
-      this.settings.playlist.container.appendChild(this.playlist.markup)
+      this.settings.playlist.container.appendChild(this.playlist.markup);
   }
 
   /**
@@ -303,9 +305,9 @@ class ihap {
    */
   _resetProgressBar(song_duration) {
     if (song_duration == undefined) {
-      this.progress_bar.reset(0.0)
+      this.progress_bar.reset(0.0);
     } else {
-      this.progress_bar.reset(song_duration)
+      this.progress_bar.reset(song_duration);
     }
   }
 
@@ -322,11 +324,11 @@ class ihap {
   }
 
   playSong(song) {
-    this.player.play()
+    this.player.play();
   }
 
   pauseSong(song) {
-    this.player.pause()
+    this.player.pause();
   }
 
 
@@ -341,7 +343,7 @@ class ihap {
    * @private
    */
   _updateProgressBar(current_time) {
-    this.progress_bar.updateBar(current_time)
+    this.progress_bar.updateBar(current_time);
   }
 
   /**
@@ -351,7 +353,7 @@ class ihap {
   _loadFirstSong() {
     if (this.playlist.songs != undefined &amp;&amp; this.playlist.songs.length != 0) {
 //      if (this.audio.isEmpty())
-      this.changeSong(this.playlist.songs[0])
+      this.changeSong(this.playlist.songs[0]);
     }
   }
 
@@ -361,8 +363,8 @@ class ihap {
    */
   _addListeners() {
     //this._addAudioListeners()
-    this._addControlsListeners()
-    this._addProgressListeners()
+    this._addControlsListeners();
+    this._addProgressListeners();
   }
 
   /**
@@ -486,7 +488,7 @@ export {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Sun Sep 18 2016 20:25:51 GMT+0200 (CEST) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.1</a> on Tue Sep 20 2016 13:01:44 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
